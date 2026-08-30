@@ -196,15 +196,6 @@
     .nav-card-desc { font-size: 11px; color: var(--md-sys-color-on-surface-variant); }
     .nav-card-arrow svg { width: 18px; height: 18px; fill: var(--md-sys-color-on-surface-variant); }
 
-    /* How It Works Steps */
-    .how-it-works-card { background: var(--md-sys-color-surface); border-radius: var(--md-shape-xl); padding: 16px; border: 1px solid var(--md-sys-color-outline-variant); }
-    .section-card-title { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--md-sys-color-on-surface); }
-    .section-card-title svg { width: 18px; height: 18px; fill: var(--md-sys-color-primary); }
-    .steps-list { display: flex; flex-direction: column; gap: 10px; }
-    .step-item { display: flex; align-items: center; gap: 12px; }
-    .step-number { width: 24px; height: 24px; border-radius: 50%; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
-    .step-text { font-size: 12px; color: var(--md-sys-color-on-surface); }
-
     /* Bottom Nav */
     .m3-bottom-nav {
       position: absolute; bottom: 18px; left: 0; right: 0; height: 68px;
@@ -296,34 +287,24 @@
     .reagent-title { font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface); }
     .reagent-desc { font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 6px; }
 
-    /* Modals */
-    .modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); display: none; align-items: flex-end; justify-content: center; z-index: 1000; }
-    .modal-backdrop.active { display: flex; }
-    .modal-sheet { background: var(--md-sys-color-surface); width: 100%; max-width: 412px; border-radius: 28px 28px 0 0; padding: 20px; color: var(--md-sys-color-on-surface); }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .modal-title { font-size: 16px; font-weight: 800; }
-    .modal-close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--md-sys-color-on-surface-variant); }
-
-    /* Cropper */
+    /* Interactive Draggable Cropper Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center; z-index: 500;
+    }
+    .modal-overlay.active { display: flex; }
+    .cropper-sheet {
+      background: var(--md-sys-color-surface); width: 92%; max-width: 480px; border-radius: 28px;
+      padding: 18px; display: flex; flex-direction: column; color: var(--md-sys-color-on-surface);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    }
     .cropper-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 6px; flex-wrap: wrap; }
-    .cropper-tool-btn { padding: 6px 10px; font-size: 11px; }
-    .cropper-canvas-container { width: 100%; height: 320px; background: #080a0f; border-radius: var(--md-shape-lg); overflow: hidden; position: relative; touch-action: none; display: flex; align-items: center; justify-content: center; }
-    .cropper-canvas-container canvas { width: 100%; height: 100%; display: block; }
-
-    /* Processing Overlay */
-    .processing-overlay {
-      position: absolute; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(3px);
-      display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 100;
+    .cropper-tool-btn { padding: 6px 12px; font-size: 11px; font-weight: 700; }
+    .cropper-canvas-container {
+      width: 100%; height: 360px; background: #080a0f; border-radius: var(--md-shape-lg);
+      overflow: hidden; position: relative; touch-action: none; display: flex; align-items: center; justify-content: center;
     }
-    .processing-overlay.active { display: flex; }
-    .spinner { width: 42px; height: 42px; border: 4px solid rgba(255, 255, 255, 0.2); border-top-color: var(--md-sys-color-primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .processing-text { color: #ffffff; font-size: 13px; font-weight: 700; }
-
-    .android-gesture-bar {
-      height: 18px; background: var(--md-sys-color-surface); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .gesture-pill { width: 72px; height: 4px; background: var(--md-sys-color-on-surface-variant); opacity: 0.5; border-radius: 2px; }
+    .cropper-canvas-container canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
 
     .toast-container {
       position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -331,6 +312,11 @@
       font-size: 12px; font-weight: 600; opacity: 0; transition: all 0.25s ease; pointer-events: none; z-index: 200;
     }
     .toast-container.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .android-gesture-bar {
+      height: 18px; background: var(--md-sys-color-surface); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .gesture-pill { width: 72px; height: 4px; background: var(--md-sys-color-on-surface-variant); opacity: 0.5; border-radius: 2px; }
   </style>
 </head>
 <body>
@@ -370,13 +356,6 @@
         <section class="screen-view" id="screen-enhance" role="tabpanel" aria-label="Enhance"></section>
         <section class="screen-view" id="screen-reagents" role="tabpanel" aria-label="Reagents"></section>
         <section class="screen-view" id="screen-scope" role="tabpanel" aria-label="Future Scope"></section>
-
-        <!-- In-App Processing Overlay -->
-        <div class="processing-overlay">
-          <div class="spinner"></div>
-          <span class="processing-text">Enhancing Ridge Minutiae...</span>
-        </div>
-
         <div class="toast-container" id="app-toast"></div>
       </main>
 
@@ -391,8 +370,8 @@
   </div>
 
   <script>
-    // Self-Contained Application Logic Bundle (Zero 404s, 100% Reliable)
     (function() {
+      // 1. Comprehensive Icons
       const Icons = {
         home: `<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>`,
         upload: `<svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>`,
@@ -408,10 +387,12 @@
         check_circle: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`,
         info: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`,
         download: `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`,
-        dark_mode: `<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 4.97 4.03 9 9 9 4.97 0 9-4.03 9-9 0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>`
+        dark_mode: `<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 4.97 4.03 9 9 9 4.97 0 9-4.03 9-9 0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>`,
+        crop: `<svg viewBox="0 0 24 24"><path d="M17 15h2V7c0-1.1-.9-2-2-2H9v2h8v8zM7 17V1H5v4H1v2h4v10c0 1.1.9 2 2 2h10v4h2v-4h4v-2H7z"/></svg>`,
+        restart_alt: `<svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>`
       };
 
-      // AppState
+      // 2. Reactive App State
       class AppState {
         constructor() {
           this.listeners = new Map();
@@ -446,7 +427,7 @@
           this.state.ridgeMapCanvas = null;
           this.state.imageMetadata = {
             name: metadata.name || 'Fingerprint.jpg',
-            size: metadata.size || '1.2 MB',
+            size: metadata.size || '1.4 MB',
             originalDimensions: metadata.originalDimensions || `${canvas.width} × ${canvas.height} px`,
             processingDimensions: `${canvas.width} × ${canvas.height} px`,
             qualityLevel: 'Good'
@@ -469,9 +450,323 @@
       }
       const appState = new AppState();
 
-      // Sample Generator
+      // 3. Contrast & CLAHE Processor
+      class ContrastProcessor {
+        static toGrayscale(imageData) {
+          const { data, width, height } = imageData;
+          const gray = new Float32Array(width * height);
+          for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            gray[j] = 0.15 * data[i] + 0.60 * data[i + 1] + 0.25 * data[i + 2];
+          }
+          return gray;
+        }
+
+        static normalizeIllumination(gray, width, height, radius = 18) {
+          const len = width * height;
+          const bg = new Float32Array(len);
+          const output = new Float32Array(len);
+          const temp = new Float32Array(len);
+
+          for (let y = 0; y < height; y++) {
+            const yOffset = y * width;
+            let windowSum = 0, count = 0;
+            for (let dx = -radius; dx <= radius; dx++) {
+              const nx = Math.min(width - 1, Math.max(0, dx));
+              windowSum += gray[yOffset + nx];
+              count++;
+            }
+            temp[yOffset] = windowSum / count;
+            for (let x = 1; x < width; x++) {
+              const removeX = Math.max(0, x - radius - 1);
+              const addX = Math.min(width - 1, x + radius);
+              windowSum += gray[yOffset + addX] - gray[yOffset + removeX];
+              temp[yOffset + x] = windowSum / count;
+            }
+          }
+
+          for (let x = 0; x < width; x++) {
+            let windowSum = 0, count = 0;
+            for (let dy = -radius; dy <= radius; dy++) {
+              const ny = Math.min(height - 1, Math.max(0, dy));
+              windowSum += temp[ny * width + x];
+              count++;
+            }
+            bg[x] = windowSum / count;
+            for (let y = 1; y < height; y++) {
+              const removeY = Math.max(0, y - radius - 1);
+              const addY = Math.min(height - 1, y + radius);
+              windowSum += temp[addY * width + x] - temp[removeY * width + x];
+              bg[y * width + x] = windowSum / count;
+            }
+          }
+
+          for (let i = 0; i < len; i++) {
+            const normalized = (gray[i] - bg[i]) * 1.35 + 128;
+            output[i] = Math.max(0, Math.min(255, normalized));
+          }
+          return output;
+        }
+
+        static applyCLAHE(gray, width, height, intensity = 65) {
+          const len = width * height;
+          if (intensity <= 0) return new Float32Array(gray);
+
+          const numTilesX = 8, numTilesY = 8;
+          const tileW = width / numTilesX, tileH = height / numTilesY;
+          const clipFactor = 1.8 + (intensity / 100.0) * 2.8;
+          const cdfs = [];
+
+          for (let ty = 0; ty < numTilesY; ty++) {
+            cdfs[ty] = [];
+            for (let tx = 0; tx < numTilesX; tx++) {
+              const hist = new Int32Array(256);
+              const startX = Math.floor(tx * tileW);
+              const endX = Math.floor((tx + 1) * tileW);
+              const startY = Math.floor(ty * tileH);
+              const endY = Math.floor((ty + 1) * tileH);
+              let pixelCount = (endX - startX) * (endY - startY);
+
+              for (let y = startY; y < endY; y++) {
+                const yOff = y * width;
+                for (let x = startX; x < endX; x++) {
+                  const val = Math.max(0, Math.min(255, Math.round(gray[yOff + x])));
+                  hist[val]++;
+                }
+              }
+
+              const clipLimit = Math.max(1, Math.round((pixelCount / 256) * clipFactor));
+              let excess = 0;
+              for (let i = 0; i < 256; i++) {
+                if (hist[i] > clipLimit) {
+                  excess += hist[i] - clipLimit;
+                  hist[i] = clipLimit;
+                }
+              }
+              const bonus = Math.floor(excess / 256);
+              for (let i = 0; i < 256; i++) hist[i] += bonus;
+
+              const cdf = new Float32Array(256);
+              let acc = 0;
+              for (let i = 0; i < 256; i++) {
+                acc += hist[i];
+                cdf[i] = (acc / pixelCount) * 255.0;
+              }
+              cdfs[ty][tx] = cdf;
+            }
+          }
+
+          const output = new Float32Array(len);
+          for (let y = 0; y < height; y++) {
+            const yOff = y * width;
+            const normY = (y / height) * numTilesY - 0.5;
+            const ty0 = Math.max(0, Math.floor(normY));
+            const ty1 = Math.min(numTilesY - 1, ty0 + 1);
+            const dy = Math.max(0, Math.min(1, normY - ty0));
+
+            for (let x = 0; x < width; x++) {
+              const normX = (x / width) * numTilesX - 0.5;
+              const tx0 = Math.max(0, Math.floor(normX));
+              const tx1 = Math.min(numTilesX - 1, tx0 + 1);
+              const dx = Math.max(0, Math.min(1, normX - tx0));
+
+              const val = Math.max(0, Math.min(255, Math.round(gray[yOff + x])));
+              const mapTL = cdfs[ty0][tx0][val];
+              const mapTR = cdfs[ty0][tx1][val];
+              const mapBL = cdfs[ty1][tx0][val];
+              const mapBR = cdfs[ty1][tx1][val];
+
+              const top = mapTL * (1 - dx) + mapTR * dx;
+              const bottom = mapBL * (1 - dx) + mapBR * dx;
+              output[yOff + x] = Math.max(0, Math.min(255, top * (1 - dy) + bottom * dy));
+            }
+          }
+          return output;
+        }
+      }
+
+      // 4. Bilateral Edge-Preserving Denoising
+      class NoiseReducer {
+        static apply(grayBuffer, width, height, intensity = 35) {
+          if (intensity <= 0) return new Float32Array(grayBuffer);
+          const len = width * height;
+          const output = new Float32Array(len);
+          const radius = intensity > 60 ? 2 : 1;
+          const sigmaSpace = 1.5 + (intensity / 100) * 1.5;
+          const sigmaColor = 15.0 + (intensity / 100) * 45.0;
+          const twoSigmaSpaceSq = 2 * sigmaSpace * sigmaSpace;
+          const twoSigmaColorSq = 2 * sigmaColor * sigmaColor;
+
+          const spatialKernel = [];
+          for (let dy = -radius; dy <= radius; dy++) {
+            for (let dx = -radius; dx <= radius; dx++) {
+              spatialKernel.push({ dx, dy, weight: Math.exp(-(dx * dx + dy * dy) / twoSigmaSpaceSq) });
+            }
+          }
+
+          for (let y = 0; y < height; y++) {
+            const yOffset = y * width;
+            for (let x = 0; x < width; x++) {
+              const centerVal = grayBuffer[yOffset + x];
+              let sumWeights = 0, sumIntensity = 0;
+              for (let k = 0; k < spatialKernel.length; k++) {
+                const { dx, dy, weight: sWeight } = spatialKernel[k];
+                const nx = x + dx, ny = y + dy;
+                if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                  const neighborVal = grayBuffer[ny * width + nx];
+                  const diff = centerVal - neighborVal;
+                  const totalWeight = sWeight * Math.exp(-(diff * diff) / twoSigmaColorSq);
+                  sumWeights += totalWeight;
+                  sumIntensity += neighborVal * totalWeight;
+                }
+              }
+              output[yOffset + x] = sumWeights > 0 ? sumIntensity / sumWeights : centerVal;
+            }
+          }
+          return output;
+        }
+      }
+
+      // 5. Laplacian Ridge Sharpener & Ridge Map Binarizer
+      class RidgeSharpener {
+        static apply(grayBuffer, width, height, intensity = 60) {
+          if (intensity <= 0) return new Float32Array(grayBuffer);
+          const len = width * height;
+          const output = new Float32Array(len);
+          const alpha = (intensity / 50.0) * 0.75;
+
+          for (let y = 0; y < height; y++) {
+            const yOffset = y * width;
+            const yPrev = Math.max(0, y - 1) * width;
+            const yNext = Math.min(height - 1, y + 1) * width;
+            for (let x = 0; x < width; x++) {
+              const xPrev = Math.max(0, x - 1);
+              const xNext = Math.min(width - 1, x + 1);
+              const centerVal = grayBuffer[yOffset + x];
+              const laplacian = 4 * centerVal - (grayBuffer[yPrev + x] + grayBuffer[yNext + x] + grayBuffer[yOffset + xPrev] + grayBuffer[yOffset + xNext]);
+              output[yOffset + x] = Math.max(0, Math.min(255, centerVal + alpha * laplacian));
+            }
+          }
+          return output;
+        }
+
+        static generateRidgeMap(grayBuffer, width, height) {
+          const canvas = document.createElement('canvas');
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          const imgData = ctx.createImageData(width, height);
+          const data = imgData.data;
+
+          const localMean = new Float32Array(width * height);
+          const r = 5;
+          const temp = new Float32Array(width * height);
+
+          for (let y = 0; y < height; y++) {
+            const yOff = y * width;
+            let sum = 0, count = 0;
+            for (let dx = -r; dx <= r; dx++) {
+              sum += grayBuffer[yOff + Math.min(width - 1, Math.max(0, dx))];
+              count++;
+            }
+            temp[yOff] = sum / count;
+            for (let x = 1; x < width; x++) {
+              sum += grayBuffer[yOff + Math.min(width - 1, x + r)] - grayBuffer[yOff + Math.max(0, x - r - 1)];
+              temp[yOff + x] = sum / count;
+            }
+          }
+
+          for (let x = 0; x < width; x++) {
+            let sum = 0, count = 0;
+            for (let dy = -r; dy <= r; dy++) {
+              sum += temp[Math.min(height - 1, Math.max(0, dy)) * width + x];
+              count++;
+            }
+            localMean[x] = sum / count;
+            for (let y = 1; y < height; y++) {
+              sum += temp[Math.min(height - 1, y + r) * width + x] - temp[Math.max(0, y - r - 1) * width + x];
+              localMean[y * width + x] = sum / count;
+            }
+          }
+
+          for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            const isRidge = grayBuffer[j] < (localMean[j] - 2.5);
+            if (isRidge) {
+              data[i] = 34; data[i + 1] = 211; data[i + 2] = 238; data[i + 3] = 255;
+            } else {
+              data[i] = 11; data[i + 1] = 15; data[i + 2] = 25; data[i + 3] = 255;
+            }
+          }
+          ctx.putImageData(imgData, 0, 0);
+          return canvas;
+        }
+      }
+
+      // 6. Forensic Clarity Score Calculator
+      class ClarityScoreCalculator {
+        static calculate(grayBuffer, width, height) {
+          const len = width * height;
+          if (len === 0) return { score: 0, metrics: { contrast: 0, separation: 0, sharpness: 0, snr: 0 } };
+
+          let sum = 0, sumSq = 0;
+          const hist = new Int32Array(256);
+          for (let i = 0; i < len; i++) {
+            const val = Math.max(0, Math.min(255, Math.round(grayBuffer[i])));
+            sum += val; sumSq += val * val; hist[val]++;
+          }
+          const mean = sum / len;
+          const variance = sumSq / len - mean * mean;
+          const stdDev = Math.sqrt(Math.max(0, variance));
+          const contrastMetric = Math.min(100, Math.round((stdDev / 68.0) * 100));
+
+          let tenengradSum = 0, gradientCount = 0;
+          for (let y = 1; y < height - 1; y += 2) {
+            const yPrev = (y - 1) * width, yCurr = y * width, yNext = (y + 1) * width;
+            for (let x = 1; x < width - 1; x += 2) {
+              const gx = (grayBuffer[yPrev + x + 1] + 2 * grayBuffer[yCurr + x + 1] + grayBuffer[yNext + x + 1]) - (grayBuffer[yPrev + x - 1] + 2 * grayBuffer[yCurr + x - 1] + grayBuffer[yNext + x - 1]);
+              const gy = (grayBuffer[yNext + x - 1] + 2 * grayBuffer[yNext + x] + grayBuffer[yNext + x + 1]) - (grayBuffer[yPrev + x - 1] + 2 * grayBuffer[yPrev + x] + grayBuffer[yPrev + x + 1]);
+              tenengradSum += gx * gx + gy * gy;
+              gradientCount++;
+            }
+          }
+          const avgTenengrad = gradientCount > 0 ? tenengradSum / gradientCount : 0;
+          const sharpnessMetric = Math.min(100, Math.round((Math.sqrt(avgTenengrad) / 150.0) * 100));
+
+          let sumAll = 0;
+          for (let t = 0; t < 256; t++) sumAll += t * hist[t];
+          let sumB = 0, wB = 0, varMax = 0;
+          for (let t = 0; t < 256; t++) {
+            wB += hist[t];
+            if (wB === 0) continue;
+            const wF = len - wB;
+            if (wF === 0) break;
+            sumB += t * hist[t];
+            const mB = sumB / wB;
+            const mF = (sumAll - sumB) / wF;
+            const betweenVar = wB * wF * (mB - mF) * (mB - mF);
+            if (betweenVar > varMax) varMax = betweenVar;
+          }
+          const totalVar = variance * len * len;
+          const separationRatio = totalVar > 0 ? (varMax / totalVar) : 0;
+          const separationMetric = Math.min(100, Math.round(separationRatio * 110));
+
+          let overSharpenPenalty = 0;
+          if (sharpnessMetric > 88 && separationMetric < 70) {
+            overSharpenPenalty = (sharpnessMetric - 88) * 0.8;
+          }
+          const snrMetric = Math.min(100, Math.max(15, Math.round(100 - (100 - contrastMetric) * 0.4 - overSharpenPenalty)));
+
+          const composite = sharpnessMetric * 0.35 + separationMetric * 0.30 + contrastMetric * 0.25 + snrMetric * 0.10 - overSharpenPenalty;
+          const finalScore = Math.max(10, Math.min(99, Math.round(composite)));
+
+          return {
+            score: finalScore,
+            metrics: { contrast: contrastMetric, separation: separationMetric, sharpness: sharpnessMetric, snr: snrMetric }
+          };
+        }
+      }
+
+      // 7. Forensic Sample Generator
       class SampleGenerator {
-        static generate(type = 'standard', width = 360, height = 360) {
+        static generate(type = 'standard', width = 380, height = 380) {
           const canvas = document.createElement('canvas');
           canvas.width = width; canvas.height = height;
           const ctx = canvas.getContext('2d');
@@ -515,62 +810,254 @@
         }
       }
 
-      // Processing Engine
+      // 8. Interactive Draggable Cropper Component
+      class FingerprintCropper {
+        constructor(sourceCanvas, onConfirm, onCancel) {
+          this.sourceCanvas = sourceCanvas;
+          this.onConfirm = onConfirm;
+          this.onCancel = onCancel;
+          this.rotation = 0;
+          this.cropRect = { x: 0.15, y: 0.15, width: 0.7, height: 0.7 };
+          this.isDragging = false;
+          this.dragType = null;
+          this.dragStart = { x: 0, y: 0 };
+          this.initialCrop = { ...this.cropRect };
+
+          this.render();
+          this.initCanvas();
+          this.bindEvents();
+        }
+
+        render() {
+          this.modalEl = document.createElement('div');
+          this.modalEl.className = 'modal-overlay active';
+          this.modalEl.innerHTML = `
+            <div class="cropper-sheet">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div>
+                  <h2 style="font-size: 16px; font-weight: 800;">Crop Fingerprint</h2>
+                  <p style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">Drag box to isolate fingertip ridge area</p>
+                </div>
+                <button class="m3-btn-icon m3-btn-tonal" id="crop-close-btn">✕</button>
+              </div>
+
+              <div class="cropper-toolbar">
+                <button class="m3-btn m3-btn-tonal cropper-tool-btn" id="crop-auto-detect-btn">${Icons.auto_awesome} Auto Detect</button>
+                <div style="display: flex; gap: 6px;">
+                  <button class="control-toggle-btn" id="crop-rot-l">↺ 90°</button>
+                  <button class="control-toggle-btn" id="crop-rot-r">↻ 90°</button>
+                  <button class="control-toggle-btn" id="crop-rst">${Icons.restart_alt}</button>
+                </div>
+              </div>
+
+              <div class="cropper-canvas-container" id="cropper-viewport">
+                <canvas id="cropper-canvas"></canvas>
+              </div>
+
+              <div style="display: flex; gap: 10px; margin-top: 14px;">
+                <button class="m3-btn m3-btn-outlined" id="crop-cancel-btn" style="flex: 1;">Cancel</button>
+                <button class="m3-btn m3-btn-primary" id="crop-confirm-btn" style="flex: 2;">${Icons.check_circle} Confirm Crop</button>
+              </div>
+            </div>
+          `;
+          document.body.appendChild(this.modalEl);
+        }
+
+        initCanvas() {
+          this.canvas = this.modalEl.querySelector('#cropper-canvas');
+          this.viewport = this.modalEl.querySelector('#cropper-viewport');
+          this.ctx = this.canvas.getContext('2d');
+          const rect = this.viewport.getBoundingClientRect();
+          this.canvasWidth = rect.width || 380;
+          this.canvasHeight = rect.height || 340;
+          this.canvas.width = this.canvasWidth;
+          this.canvas.height = this.canvasHeight;
+          this.draw();
+        }
+
+        bindEvents() {
+          this.modalEl.querySelector('#crop-close-btn')?.addEventListener('click', () => this.destroy(false));
+          this.modalEl.querySelector('#crop-cancel-btn')?.addEventListener('click', () => this.destroy(false));
+          this.modalEl.querySelector('#crop-rot-l')?.addEventListener('click', () => { this.rotation = (this.rotation + 270) % 360; this.draw(); });
+          this.modalEl.querySelector('#crop-rot-r')?.addEventListener('click', () => { this.rotation = (this.rotation + 90) % 360; this.draw(); });
+          this.modalEl.querySelector('#crop-rst')?.addEventListener('click', () => { this.cropRect = { x: 0.1, y: 0.1, width: 0.8, height: 0.8 }; this.draw(); });
+          this.modalEl.querySelector('#crop-auto-detect-btn')?.addEventListener('click', () => {
+            this.cropRect = { x: 0.2, y: 0.18, width: 0.6, height: 0.64 };
+            this.draw();
+          });
+
+          this.modalEl.querySelector('#crop-confirm-btn')?.addEventListener('click', () => {
+            const cropped = this.generateCropped();
+            this.destroy(true);
+            if (this.onConfirm) this.onConfirm(cropped);
+          });
+
+          const onDown = (cx, cy) => {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = (cx - rect.left) / this.canvasWidth;
+            const y = (cy - rect.top) / this.canvasHeight;
+            this.isDragging = true;
+            this.dragStart = { x, y };
+            this.initialCrop = { ...this.cropRect };
+          };
+
+          const onMove = (cx, cy) => {
+            if (!this.isDragging) return;
+            const rect = this.canvas.getBoundingClientRect();
+            const dx = (cx - rect.left) / this.canvasWidth - this.dragStart.x;
+            const dy = (cy - rect.top) / this.canvasHeight - this.dragStart.y;
+            this.cropRect.x = Math.max(0, Math.min(1 - this.initialCrop.width, this.initialCrop.x + dx));
+            this.cropRect.y = Math.max(0, Math.min(1 - this.initialCrop.height, this.initialCrop.y + dy));
+            this.draw();
+          };
+
+          const onUp = () => { this.isDragging = false; };
+
+          this.canvas.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+          window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+          window.addEventListener('mouseup', onUp);
+
+          this.canvas.addEventListener('touchstart', e => { if (e.touches[0]) onDown(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault(); }, { passive: false });
+          window.addEventListener('touchmove', e => { if (this.isDragging && e.touches[0]) onMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+          window.addEventListener('touchend', onUp);
+        }
+
+        draw() {
+          const { ctx, canvasWidth, canvasHeight } = this;
+          ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+          const isSwapped = this.rotation === 90 || this.rotation === 270;
+          const srcW = isSwapped ? this.sourceCanvas.height : this.sourceCanvas.width;
+          const srcH = isSwapped ? this.sourceCanvas.width : this.sourceCanvas.height;
+          const scale = Math.min((canvasWidth * 0.9) / srcW, (canvasHeight * 0.9) / srcH);
+          const rW = srcW * scale, rH = srcH * scale;
+          const rx = (canvasWidth - rW) / 2, ry = (canvasHeight - rH) / 2;
+
+          ctx.save();
+          ctx.translate(canvasWidth / 2, canvasHeight / 2);
+          ctx.rotate((this.rotation * Math.PI) / 180);
+          const drawW = (this.rotation === 90 || this.rotation === 270) ? rH : rW;
+          const drawH = (this.rotation === 90 || this.rotation === 270) ? rW : rH;
+          ctx.drawImage(this.sourceCanvas, -drawW / 2, -drawH / 2, drawW, drawH);
+          ctx.restore();
+
+          const bx = rx + this.cropRect.x * rW;
+          const by = ry + this.cropRect.y * rH;
+          const bw = this.cropRect.width * rW;
+          const bh = this.cropRect.height * rH;
+
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+          ctx.fillRect(0, 0, canvasWidth, by);
+          ctx.fillRect(0, by + bh, canvasWidth, canvasHeight - (by + bh));
+          ctx.fillRect(0, by, bx, bh);
+          ctx.fillRect(bx + bw, by, canvasWidth - (bx + bw), bh);
+
+          ctx.strokeStyle = '#2563eb';
+          ctx.lineWidth = 2.5;
+          ctx.strokeRect(bx, by, bw, bh);
+
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(bx + bw / 3, by); ctx.lineTo(bx + bw / 3, by + bh);
+          ctx.moveTo(bx + (2 * bw) / 3, by); ctx.lineTo(bx + (2 * bw) / 3, by + bh);
+          ctx.moveTo(bx, by + bh / 3); ctx.lineTo(bx + bw, by + bh / 3);
+          ctx.moveTo(bx, by + (2 * bh) / 3); ctx.lineTo(bx + bw, by + (2 * bh) / 3);
+          ctx.stroke();
+
+          ctx.fillStyle = '#ffffff';
+          const hs = 8;
+          [[bx, by], [bx + bw, by], [bx, by + bh], [bx + bw, by + bh]].forEach(([hx, hy]) => {
+            ctx.fillRect(hx - hs/2, hy - hs/2, hs, hs);
+          });
+        }
+
+        generateCropped() {
+          const out = document.createElement('canvas');
+          const isSwapped = this.rotation === 90 || this.rotation === 270;
+          const fullW = isSwapped ? this.sourceCanvas.height : this.sourceCanvas.width;
+          const fullH = isSwapped ? this.sourceCanvas.width : this.sourceCanvas.height;
+
+          const rotCanvas = document.createElement('canvas');
+          rotCanvas.width = fullW; rotCanvas.height = fullH;
+          const rCtx = rotCanvas.getContext('2d');
+          rCtx.translate(fullW / 2, fullH / 2);
+          rCtx.rotate((this.rotation * Math.PI) / 180);
+          rCtx.drawImage(this.sourceCanvas, -this.sourceCanvas.width / 2, -this.sourceCanvas.height / 2);
+
+          const cropX = Math.round(this.cropRect.x * fullW);
+          const cropY = Math.round(this.cropRect.y * fullH);
+          const cropW = Math.round(this.cropRect.width * fullW);
+          const cropH = Math.round(this.cropRect.height * fullH);
+
+          out.width = cropW; out.height = cropH;
+          out.getContext('2d').drawImage(rotCanvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+          return out;
+        }
+
+        destroy() {
+          if (this.modalEl && document.body.contains(this.modalEl)) {
+            document.body.removeChild(this.modalEl);
+          }
+        }
+      }
+
+      // 9. Master Forensic Pipeline
       class Pipeline {
         static process(canvas, params) {
           const w = canvas.width, h = canvas.height;
           const ctx = canvas.getContext('2d');
           const srcData = ctx.getImageData(0, 0, w, h);
-          const d = srcData.data;
 
-          const gray = new Float32Array(w * h);
-          for (let i = 0, j = 0; i < d.length; i += 4, j++) {
-            gray[j] = 0.15 * d[i] + 0.60 * d[i + 1] + 0.25 * d[i + 2];
-          }
+          // Step 1: Raw Clarity Score
+          const rawGray = ContrastProcessor.toGrayscale(srcData);
+          const rawClarity = ClarityScoreCalculator.calculate(rawGray, w, h);
 
-          // Illumination Normalization + Contrast Boost
-          const enhanced = new Float32Array(w * h);
-          const cMult = 1.0 + (params.contrast / 50.0);
-          for (let i = 0; i < gray.length; i++) {
-            let val = (gray[i] - 128) * cMult + 128;
-            enhanced[i] = Math.max(0, Math.min(255, val));
-          }
+          // Step 2: Illumination Normalization
+          const normGray = ContrastProcessor.normalizeIllumination(rawGray, w, h, 18);
 
-          // Output canvas
+          // Step 3: CLAHE Adaptive Contrast Equalization
+          const claheGray = ContrastProcessor.applyCLAHE(normGray, w, h, params.contrast);
+
+          // Step 4: Edge-Preserving Bilateral Smoothing
+          const denoisedGray = NoiseReducer.apply(claheGray, w, h, params.noiseReduction);
+
+          // Step 5: Laplacian Ridge Minutiae Sharpening
+          const sharpenedGray = RidgeSharpener.apply(denoisedGray, w, h, params.ridgeSharpening);
+
+          // Step 6: Enhanced Clarity Score
+          const enhClarity = ClarityScoreCalculator.calculate(sharpenedGray, w, h);
+
+          // Step 7: Ridge Map
+          const ridgeMapCanvas = RidgeSharpener.generateRidgeMap(sharpenedGray, w, h);
+
+          // Output Canvas
           const outCanvas = document.createElement('canvas');
           outCanvas.width = w; outCanvas.height = h;
           const outCtx = outCanvas.getContext('2d');
           const outData = outCtx.createImageData(w, h);
           for (let i = 0, j = 0; i < outData.data.length; i += 4, j++) {
-            const v = Math.round(enhanced[j]);
+            const v = Math.round(sharpenedGray[j]);
             outData.data[i] = v; outData.data[i + 1] = v; outData.data[i + 2] = v; outData.data[i + 3] = 255;
           }
           outCtx.putImageData(outData, 0, 0);
 
-          // Ridge Map canvas
-          const ridgeCanvas = document.createElement('canvas');
-          ridgeCanvas.width = w; ridgeCanvas.height = h;
-          const rCtx = ridgeCanvas.getContext('2d');
-          const rData = rCtx.createImageData(w, h);
-          for (let i = 0, j = 0; i < rData.data.length; i += 4, j++) {
-            if (enhanced[j] < 120) {
-              rData.data[i] = 34; rData.data[i + 1] = 211; rData.data[i + 2] = 238; rData.data[i + 3] = 255;
-            } else {
-              rData.data[i] = 11; rData.data[i + 1] = 15; rData.data[i + 2] = 25; rData.data[i + 3] = 255;
-            }
-          }
-          rCtx.putImageData(rData, 0, 0);
-
-          const score = Math.min(98, Math.round(55 + (params.contrast * 0.25) + (params.ridgeSharpening * 0.15)));
+          const deltaVal = enhClarity.score - rawClarity.score;
           return {
             enhancedCanvas: outCanvas,
-            ridgeMapCanvas: ridgeCanvas,
-            clarityScore: { rawScore: 54, enhancedScore: score, delta: `+${score - 54}`, metrics: { sharpness: 88, separation: 92, contrast: 85, snr: 80 }, hasCalculated: true }
+            ridgeMapCanvas: ridgeMapCanvas,
+            clarityScore: {
+              rawScore: rawClarity.score,
+              enhancedScore: enhClarity.score,
+              delta: deltaVal >= 0 ? `+${deltaVal}` : `${deltaVal}`,
+              metrics: enhClarity.metrics,
+              hasCalculated: true
+            }
           };
         }
       }
 
-      // Render Screens
+      // 10. UI Screen Renderers
       function renderHome() {
         const h = document.getElementById('screen-home');
         h.innerHTML = `
@@ -637,7 +1124,7 @@
               </div>
 
               <div style="margin-top: 24px;">
-                <h3 class="section-card-title">${Icons.science} Or Select Chemical Sample</h3>
+                <h3 style="font-size: 13px; font-weight: 700; color: var(--md-sys-color-on-surface); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">${Icons.science} Or Select Chemical Sample</h3>
                 <div class="demo-samples-grid">
                   <div class="demo-sample-btn" data-demo="ninhydrin"><div class="demo-thumb-box" id="t-nin"></div><span style="font-size: 11px; font-weight: 700;">Ninhydrin</span></div>
                   <div class="demo-sample-btn" data-demo="cyanoacrylate"><div class="demo-thumb-box" id="t-cy"></div><span style="font-size: 11px; font-weight: 700;">Superglue</span></div>
@@ -657,7 +1144,7 @@
 
               <div style="display: flex; flex-direction: column; gap: 10px;">
                 <div style="display: flex; gap: 10px;">
-                  <button class="m3-btn m3-btn-tonal" id="crop-image-btn" style="flex: 1;">Crop Fingerprint</button>
+                  <button class="m3-btn m3-btn-tonal" id="crop-image-btn" style="flex: 1;">${Icons.crop} Crop Fingerprint</button>
                   <button class="m3-btn m3-btn-outlined" id="replace-image-btn" style="flex: 1;">Replace Image</button>
                 </div>
                 <button class="m3-btn m3-btn-primary" id="continue-to-enhance-btn" style="padding: 14px;">Continue to Enhance</button>
@@ -680,11 +1167,17 @@
               r.onload = () => {
                 const img = new Image();
                 img.onload = () => {
+                  const maxDim = 1200;
+                  let targetW = img.width, targetH = img.height;
+                  if (targetW > maxDim || targetH > maxDim) {
+                    const ratio = Math.min(maxDim / targetW, maxDim / targetH);
+                    targetW = Math.round(targetW * ratio);
+                    targetH = Math.round(targetH * ratio);
+                  }
                   const c = document.createElement('canvas');
-                  c.width = Math.min(800, img.width);
-                  c.height = Math.round(c.width * (img.height / img.width));
-                  c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-                  appState.setImage(c, { name: f.name });
+                  c.width = targetW; c.height = targetH;
+                  c.getContext('2d').drawImage(img, 0, 0, targetW, targetH);
+                  appState.setImage(c, { name: f.name, originalDimensions: `${img.width} × ${img.height} px` });
                   renderUpload();
                 };
                 img.src = r.result;
@@ -717,12 +1210,10 @@
           document.getElementById('crop-image-btn')?.addEventListener('click', () => {
             const orig = appState.get('originalCanvas');
             if (orig) {
-              const c = document.createElement('canvas');
-              const dim = Math.min(orig.width, orig.height) * 0.7;
-              c.width = dim; c.height = dim;
-              c.getContext('2d').drawImage(orig, (orig.width-dim)/2, (orig.height-dim)/2, dim, dim, 0, 0, dim, dim);
-              appState.setImage(c, { name: 'cropped.png' });
-              renderUpload();
+              new FingerprintCropper(orig, (croppedCanvas) => {
+                appState.setImage(croppedCanvas, { name: 'cropped.png' });
+                renderUpload();
+              });
             }
           });
         }
@@ -753,9 +1244,9 @@
             <header class="app-header">
               <div class="header-top-row">
                 <h1 class="app-title">Fingerprint Enhancement</h1>
-                <button class="m3-btn-icon m3-btn-tonal" id="btn-dl">${Icons.download}</button>
+                <button class="m3-btn-icon m3-btn-tonal" id="btn-dl" title="Download PNG">${Icons.download}</button>
               </div>
-              <p class="app-subtitle">Illumination normalization, CLAHE contrast & sharpening</p>
+              <p class="app-subtitle">Illumination normalization, CLAHE local contrast & ridge sharpening</p>
             </header>
 
             <div class="view-mode-bar">
@@ -771,24 +1262,37 @@
               <div class="comparison-pane"><div class="pane-header"><span class="pane-title" style="color: var(--md-sys-color-primary);">${Icons.auto_fix_high} Processed</span><span class="m3-chip m3-chip-primary">Enhanced</span></div><div class="pane-canvas-box" id="e-enh-box"></div></div>
             </div>
 
-            <button class="m3-btn m3-btn-tonal" id="btn-rec-preset" style="width: 100%; margin-bottom: 12px;">${Icons.auto_awesome} Recommended Enhancement</button>
+            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+              <button class="m3-btn m3-btn-tonal" id="btn-rec-preset" style="flex: 1; font-size: 11px;">${Icons.auto_awesome} Recommended</button>
+              <button class="m3-btn m3-btn-outlined" id="btn-high-contrast" style="flex: 1; font-size: 11px;">High Contrast</button>
+            </div>
 
             <div class="enhancement-controls-card">
               <div style="display: flex; justify-content: space-between;"><h3 style="font-size: 13px; font-weight: 700;">Controls</h3><button class="m3-btn m3-btn-outlined" id="c-rst" style="padding: 2px 10px; font-size: 11px;">Reset</button></div>
-              <div><div class="control-title-row"><span class="control-label">${Icons.contrast} Local Contrast</span><span class="m3-slider-badge" id="val-c">${params.contrast}</span></div><input type="range" class="m3-slider" id="sl-c" min="0" max="100" value="${params.contrast}"></div>
-              <div><div class="control-title-row"><span class="control-label">${Icons.blur_off} Noise Reduction</span><span class="m3-slider-badge" id="val-n">${params.noiseReduction}</span></div><input type="range" class="m3-slider" id="sl-n" min="0" max="100" value="${params.noiseReduction}"></div>
-              <div><div class="control-title-row"><span class="control-label">${Icons.sharpen} Ridge Sharpening</span><span class="m3-slider-badge" id="val-s">${params.ridgeSharpening}</span></div><input type="range" class="m3-slider" id="sl-s" min="0" max="100" value="${params.ridgeSharpening}"></div>
+              <div><div class="control-title-row"><span class="control-label">${Icons.contrast} Local Contrast (CLAHE)</span><span class="m3-slider-badge" id="val-c">${params.contrast}</span></div><input type="range" class="m3-slider" id="sl-c" min="0" max="100" value="${params.contrast}"></div>
+              <div><div class="control-title-row"><span class="control-label">${Icons.blur_off} Edge-Preserving Denoise</span><span class="m3-slider-badge" id="val-n">${params.noiseReduction}</span></div><input type="range" class="m3-slider" id="sl-n" min="0" max="100" value="${params.noiseReduction}"></div>
+              <div><div class="control-title-row"><span class="control-label">${Icons.sharpen} Ridge Sharpening (Laplacian)</span><span class="m3-slider-badge" id="val-s">${params.ridgeSharpening}</span></div><input type="range" class="m3-slider" id="sl-s" min="0" max="100" value="${params.ridgeSharpening}"></div>
             </div>
 
             <button class="m3-btn m3-btn-primary" id="btn-do-enhance" style="width: 100%; padding: 14px; margin-bottom: 16px;">${Icons.auto_fix_high} Enhance Fingerprint</button>
 
             <div class="clarity-score-card">
-              <div class="clarity-header">${Icons.auto_awesome} Clarity Score</div>
+              <div class="clarity-header">${Icons.auto_awesome} Forensic Clarity Score</div>
               <div class="clarity-meter-wrap">
                 <svg viewBox="0 0 36 36" class="circular-chart"><defs><linearGradient id="clarityGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3b82f6" /><stop offset="100%" stop-color="#06b6d4" /></linearGradient></defs><path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path class="circle-progress" stroke-dasharray="${clarity.enhancedScore || 0}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
                 <div class="meter-inner-content"><span class="score-number">${clarity.enhancedScore || 0}</span><span class="score-max">/ 100</span></div>
               </div>
-              <div class="clarity-comparison-row"><div class="score-comparison-pill">Before: <strong>${clarity.rawScore || 0}</strong>/100</div><div class="score-comparison-pill">After: <strong>${clarity.enhancedScore || 0}</strong>/100</div></div>
+              <div class="clarity-comparison-row">
+                <div class="score-comparison-pill">Before: <strong>${clarity.rawScore || 0}</strong>/100</div>
+                <div class="score-comparison-pill">After: <strong>${clarity.enhancedScore || 0}</strong>/100</div>
+              </div>
+              ${clarity.hasCalculated ? `<div class="score-delta-badge">${Icons.check_circle} Clarity Boost: ${clarity.delta}</div>` : ''}
+              <div class="clarity-metrics-grid">
+                <div class="metric-factor-item"><div class="metric-factor-name"><span>Ridge Sharpness</span><strong>${clarity.metrics?.sharpness || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.sharpness || 0}%;"></div></div></div>
+                <div class="metric-factor-item"><div class="metric-factor-name"><span>Valley Separability</span><strong>${clarity.metrics?.separation || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.separation || 0}%;"></div></div></div>
+                <div class="metric-factor-item"><div class="metric-factor-name"><span>Contrast Dynamic</span><strong>${clarity.metrics?.contrast || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.contrast || 0}%;"></div></div></div>
+                <div class="metric-factor-item"><div class="metric-factor-name"><span>Signal-to-Noise</span><strong>${clarity.metrics?.snr || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.snr || 0}%;"></div></div></div>
+              </div>
             </div>
           </div>
         `;
@@ -822,14 +1326,19 @@
           }
         };
 
+        // Manual enhancement trigger
         document.getElementById('btn-do-enhance')?.addEventListener('click', runEnh);
         document.getElementById('btn-rec-preset')?.addEventListener('click', () => {
           appState.state.parameters = { contrast: 65, noiseReduction: 35, ridgeSharpening: 60 };
           runEnh();
         });
+        document.getElementById('btn-high-contrast')?.addEventListener('click', () => {
+          appState.state.parameters = { contrast: 85, noiseReduction: 20, ridgeSharpening: 75 };
+          runEnh();
+        });
         document.getElementById('c-rst')?.addEventListener('click', () => {
           appState.state.parameters = { contrast: 50, noiseReduction: 30, ridgeSharpening: 50 };
-          renderEnhance();
+          runEnh();
         });
 
         document.getElementById('v-enh')?.addEventListener('click', () => {
@@ -908,13 +1417,21 @@
         });
       }
 
-      // Initial Mount
-      document.addEventListener('DOMContentLoaded', () => {
+      // Expose to window for testing, QA, and DevTools console inspection
+      window.appState = appState;
+      window.Icons = Icons;
+      window.SampleGenerator = SampleGenerator;
+      window.Pipeline = Pipeline;
+      window.FingerprintCropper = FingerprintCropper;
+      window.renderHome = renderHome;
+      window.renderUpload = renderUpload;
+      window.renderEnhance = renderEnhance;
+      window.renderReagents = renderReagents;
+      window.renderScope = renderScope;
+
+      // Initial Clean Mount (Home screen appears immediately with ZERO background execution)
+      const initApp = () => {
         renderHome();
-        renderUpload();
-        renderEnhance();
-        renderReagents();
-        renderScope();
         renderBottomNav();
 
         appState.on('navigatedTo', (tab) => {
@@ -934,7 +1451,13 @@
           appState.set('theme', next);
           document.documentElement.setAttribute('data-theme', next);
         });
-      });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+        initApp();
+      }
     })();
   </script>
 </body>

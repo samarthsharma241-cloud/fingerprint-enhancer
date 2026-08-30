@@ -1,0 +1,9 @@
+{
+  "name": "Fingerprint Enhancer",
+  "short_name": "FPEnhancer",
+  "description": "AI-Assisted Digital Fingerprint Image Enhancement",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1a56db"
+}

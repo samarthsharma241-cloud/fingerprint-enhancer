@@ -1,0 +1,98 @@
+.device-stage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 60%, #020617 100%);
+}
+.desktop-controls {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 6px 16px;
+  border-radius: var(--md-shape-full);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.desktop-controls span { color: #94a3b8; font-size: 12px; }
+.control-toggle-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f1f5f9;
+  border: none;
+  padding: 6px 12px;
+  border-radius: var(--md-shape-full);
+  font-size: 12px;
+  cursor: pointer;
+}
+.phone-mockup {
+  position: relative;
+  width: 100%;
+  max-width: 412px;
+  height: 870px;
+  max-height: 94vh;
+  background: var(--md-sys-color-background);
+  border-radius: 46px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 12px #1e293b;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.phone-mockup.fullscreen { max-width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; }
+.android-status-bar {
+  height: 38px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  font-size: 12px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+.status-camera-punchhole {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background-color: #000000;
+  border-radius: 50%;
+}
+.status-icon-svg { width: 14px; height: 14px; fill: currentColor; }
+.app-screen-container {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--md-sys-color-background);
+}
+.android-gesture-bar {
+  height: 18px;
+  background: var(--md-sys-color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gesture-pill {
+  width: 72px;
+  height: 4px;
+  background: var(--md-sys-color-on-surface-variant);
+  opacity: 0.5;
+  border-radius: 2px;
+}
+@media (max-width: 480px) {
+  .device-stage { padding: 0; }
+  .desktop-controls { display: none; }
+  .phone-mockup { max-width: 100vw; height: 100vh; border-radius: 0; }
+}

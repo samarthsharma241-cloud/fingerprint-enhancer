@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Fingerprint Enhancer — AI-Assisted Digital Enhancement for Chemically Developed Latent Friction Ridge Impressions.">
+  <meta name="theme-color" content="#1a56db">
+  <title>Fingerprint Enhancer — AI-Assisted Enhancement</title>
+
+  <!-- Google Fonts: Roboto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/material3.css">
+  <link rel="stylesheet" href="css/mobile-frame.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+  <div class="device-stage">
+    <!-- Desktop Toolbar Controls -->
+    <div class="desktop-controls">
+      <span>Android Device Simulation</span>
+      <button class="control-toggle-btn" id="toggle-frame-btn">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+        Full View
+      </button>
+      <button class="control-toggle-btn" id="toggle-theme-desktop-btn">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 4.97 4.03 9 9 9 4.97 0 9-4.03 9-9 0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+        Dark Mode
+      </button>
+    </div>
+
+    <!-- Android Smartphone Shell -->
+    <div class="phone-mockup">
+      <!-- Android Status Bar -->
+      <div class="android-status-bar">
+        <div class="status-bar-left">
+          <span id="status-time">9:41</span>
+        </div>
+        <div class="status-camera-punchhole"></div>
+        <div class="status-bar-right">
+          <svg class="status-icon-svg" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"/></svg>
+          <svg class="status-icon-svg" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+        </div>
+      </div>
+
+      <!-- App Screen Scrollable Body -->
+      <main class="app-screen-container" id="app-screen-container">
+        <section class="screen-view active" id="screen-home" role="tabpanel" aria-label="Home"></section>
+        <section class="screen-view" id="screen-upload" role="tabpanel" aria-label="Upload"></section>
+        <section class="screen-view" id="screen-enhance" role="tabpanel" aria-label="Enhance"></section>
+        <section class="screen-view" id="screen-reagents" role="tabpanel" aria-label="Reagents"></section>
+        <section class="screen-view" id="screen-scope" role="tabpanel" aria-label="Future Scope"></section>
+
+        <!-- In-App Processing Overlay -->
+        <div class="processing-overlay">
+          <div class="spinner"></div>
+          <span class="processing-text">Enhancing Ridge Minutiae...</span>
+        </div>
+
+        <div class="toast-container" id="app-toast"></div>
+      </main>
+
+      <!-- Persistent M3 Bottom Navigation Bar -->
+      <div id="bottom-nav-container"></div>
+
+      <!-- Android Gesture Navigation Pill -->
+      <div class="android-gesture-bar">
+        <div class="gesture-pill"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

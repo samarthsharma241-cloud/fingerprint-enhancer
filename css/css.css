@@ -1,0 +1,79 @@
+/* =========================================
+       DESKTOP & LAPTOP OVERRIDES
+       ========================================= */
+    @media (min-width: 768px) {
+      /* 1. Center everything and stop infinite stretching */
+      .screen-view {
+        padding: 40px 5% 100px 5% !important;
+        display: flex;
+        justify-content: center;
+      }
+      .screen-content {
+        width: 100%;
+        max-width: 1000px !important; 
+      }
+
+      /* 2. Hide the fake Android top/bottom bars on a laptop */
+      .phone-mockup.fullscreen .android-status-bar,
+      .phone-mockup.fullscreen .android-gesture-bar {
+        display: none !important;
+      }
+
+      /* 3. Force Original and Enhanced images side-by-side */
+      .comparison-container {
+        flex-direction: row !important;
+        gap: 20px !important;
+      }
+      .comparison-pane {
+        flex: 1;
+        width: 50%;
+      }
+
+      /* 4. Fix massive image zooming (keeps proper aspect ratio) */
+      .pane-canvas-box {
+        height: 380px !important; 
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        background: #080a0f !important;
+      }
+      .pane-canvas-box canvas {
+        max-width: 100% !important;
+        max-height: 100% !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain;
+      }
+
+      /* 5. Force Sliders and Clarity Score side-by-side */
+      .desktop-controls-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 20px !important;
+        align-items: stretch !important;
+        margin-bottom: 20px;
+      }
+      .desktop-controls-wrapper > div {
+        flex: 1;
+        width: 50%;
+      }
+
+      /* 6. Fix Bottom Navigation Spacing */
+      .m3-bottom-nav {
+        justify-content: center !important;
+        gap: 50px !important;
+      }
+      
+      /* 7. Fix Home & Reagents Grid */
+      .home-cards-grid, .reagents-grid {
+        flex-direction: row !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 16px;
+      }
+      .nav-feature-card, .reagent-card {
+        flex-direction: column !important;
+        text-align: center !important;
+        align-items: center !important;
+      }
+    }

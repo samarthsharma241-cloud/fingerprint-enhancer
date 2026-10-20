@@ -1057,6 +1057,102 @@
         }
       }
 
+      // 9b. AI Chemical Reagent Auto-Detector
+      class ChemicalDetector {
+        static analyze(imageData) {
+          if (!imageData) return 'Unknown/Standard Powder';
+
+          let data = imageData.data;
+          let width = imageData.width;
+          let height = imageData.height;
+
+          // Support passing either an ImageData object or an HTMLCanvasElement
+          if (!data && imageData.getContext) {
+            const ctx = imageData.getContext('2d');
+            width = imageData.width;
+            height = imageData.height;
+            data = ctx.getImageData(0, 0, width, height).data;
+          }
+
+          if (!data || data.length === 0) return 'Unknown/Standard Powder';
+
+          let totalR = 0, totalG = 0, totalB = 0;
+          let purpleCount = 0;
+          let darkCount = 0;
+          let brightCount = 0;
+          let darkRidgeCount = 0;
+          let validPixels = 0;
+
+          // Performance-optimized sampling stride
+          const step = data.length > 400000 ? 16 : 4;
+
+          for (let i = 0; i < data.length; i += step) {
+            const a = data[i + 3];
+            if (a < 128) continue; // Skip transparent pixels
+
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const lum = (r + g + b) / 3;
+
+            totalR += r;
+            totalG += g;
+            totalB += b;
+            validPixels++;
+
+            // High Red & Blue + Low Green (Ruhemann's Purple)
+            if (r > g + 18 && b > g + 12 && r > 50 && b > 50) {
+              purpleCount++;
+            }
+
+            // Dark background pixels
+            if (lum < 70) {
+              darkCount++;
+            }
+
+            // High RGB / bright white-grey pixels
+            if (lum > 145) {
+              brightCount++;
+            }
+
+            // Low RGB pixels (Dark Brown / Black)
+            if (lum < 100) {
+              darkRidgeCount++;
+            }
+          }
+
+          if (validPixels === 0) return 'Unknown/Standard Powder';
+
+          const avgR = totalR / validPixels;
+          const avgG = totalG / validPixels;
+          const avgB = totalB / validPixels;
+          const avgLum = (avgR + avgG + avgB) / 3;
+
+          const purpleRatio = purpleCount / validPixels;
+          const darkRatio = darkCount / validPixels;
+          const brightRatio = brightCount / validPixels;
+          const darkRidgeRatio = darkRidgeCount / validPixels;
+
+          // 1. High Red/Blue + Low Green (Purple) = Ninhydrin
+          if (purpleRatio > 0.04 || (avgR > avgG + 15 && avgB > avgG + 12)) {
+            return 'Ninhydrin';
+          }
+
+          // 2. High RGB overall on dark background (White/Grey) = Cyanoacrylate
+          if (darkRatio > 0.30 && brightRatio > 0.06) {
+            return 'Cyanoacrylate';
+          }
+
+          // 3. Low RGB overall (Dark Brown/Black) = Silver Nitrate
+          if (avgLum < 105 || (avgLum < 135 && avgR > avgB + 6) || (darkRidgeRatio > 0.22 && avgR > avgB + 8)) {
+            return 'Silver Nitrate';
+          }
+
+          // 4. Fallback / Standard powder
+          return 'Unknown/Standard Powder';
+        }
+      }
+
       // 10. UI Screen Renderers
       function renderHome() {
         const h = document.getElementById('screen-home');
@@ -1224,6 +1320,8 @@
         const hasImg = appState.get('hasImage');
         const params = appState.get('parameters');
         const clarity = appState.get('clarityScore');
+        const origCanvas = appState.get('originalCanvas');
+        const detectedReagent = origCanvas ? ChemicalDetector.analyze(origCanvas) : 'Unknown/Standard Powder';
 
         if (!hasImg) {
           e.innerHTML = `
@@ -1247,6 +1345,12 @@
                 <button class="m3-btn-icon m3-btn-tonal" id="btn-dl" title="Download PNG">${Icons.download}</button>
               </div>
               <p class="app-subtitle">Illumination normalization, CLAHE local contrast & ridge sharpening</p>
+              <div style="margin-top: 8px;">
+                <span class="brand-badge" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border: 1px solid rgba(59, 130, 246, 0.3);">
+                  <span style="display: inline-flex; width: 14px; height: 14px; fill: currentColor;">${Icons.science}</span>
+                  AI Detected: ${detectedReagent}
+                </span>
+              </div>
             </header>
 
             <div class="view-mode-bar">
@@ -1423,6 +1527,7 @@
       window.SampleGenerator = SampleGenerator;
       window.Pipeline = Pipeline;
       window.FingerprintCropper = FingerprintCropper;
+      window.ChemicalDetector = ChemicalDetector;
       window.renderHome = renderHome;
       window.renderUpload = renderUpload;
       window.renderEnhance = renderEnhance;

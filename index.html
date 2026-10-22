@@ -511,6 +511,316 @@
         display: none !important;
       }
     }
+    /* ========================================================
+       ALTERNATE LIGHT SOURCE (UV FLUORESCENCE 365nm) MODE
+       ======================================================== */
+    body.uv-mode {
+      background-color: #030712 !important;
+      color: #f3e8ff !important;
+    }
+
+    /* Ambient Forensic Blackout Overlay with Flicker */
+    body.uv-mode::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      background: radial-gradient(circle at 55% 45%, rgba(168, 85, 247, 0.08) 0%, rgba(59, 130, 246, 0.05) 45%, rgba(3, 7, 18, 0.35) 100%);
+      animation: uvAtmosphereFlicker 8s infinite alternate ease-in-out;
+    }
+
+    @keyframes uvAtmosphereFlicker {
+      0% { opacity: 0.82; }
+      20% { opacity: 0.98; }
+      40% { opacity: 0.85; }
+      60% { opacity: 1.0; }
+      80% { opacity: 0.88; }
+      100% { opacity: 0.92; }
+    }
+
+    /* Blackout Device & Mockup Shell */
+    body.uv-mode .device-stage {
+      background: radial-gradient(circle at 50% 30%, #150826 0%, #070312 60%, #030712 100%) !important;
+    }
+
+    body.uv-mode .phone-mockup {
+      background: #030712 !important;
+      border: 1px solid rgba(168, 85, 247, 0.5) !important;
+      box-shadow: 0 0 50px rgba(147, 51, 234, 0.28), 0 25px 70px rgba(0, 0, 0, 0.95), inset 0 0 35px rgba(88, 28, 135, 0.22) !important;
+    }
+
+    body.uv-mode .app-screen-container {
+      background: #030712 !important;
+      color: #f3e8ff !important;
+    }
+
+    /* Cards with Electric Purple & Blue Neon Glow */
+    body.uv-mode .m3-card,
+    body.uv-mode .enhancement-controls-card,
+    body.uv-mode .clarity-score-card,
+    body.uv-mode .comparison-pane,
+    body.uv-mode .reagent-card,
+    body.uv-mode .nav-feature-card,
+    body.uv-mode .m3-bottom-nav {
+      background: #080d1e !important;
+      border: 1px solid rgba(168, 85, 247, 0.45) !important;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.18), inset 0 0 14px rgba(88, 28, 135, 0.15) !important;
+    }
+
+    /* Neon UI Texts (Except score number) */
+    body.uv-mode .app-title {
+      color: #f5d0fe !important;
+      text-shadow: 0 0 10px rgba(192, 132, 252, 0.8), 0 0 22px rgba(168, 85, 247, 0.5) !important;
+    }
+
+    body.uv-mode .app-subtitle,
+    body.uv-mode .control-label,
+    body.uv-mode .pane-title,
+    body.uv-mode .reagent-title,
+    body.uv-mode .section-card-title {
+      color: #e9d5ff !important;
+      text-shadow: 0 0 8px rgba(192, 132, 252, 0.6) !important;
+    }
+
+    body.uv-mode .m3-slider {
+      accent-color: #c084fc !important;
+    }
+
+    body.uv-mode .m3-slider-badge {
+      background: rgba(168, 85, 247, 0.3) !important;
+      color: #f0abfc !important;
+      border: 1px solid #c084fc !important;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.5) !important;
+    }
+
+    body.uv-mode .metric-bar-bg {
+      background: rgba(168, 85, 247, 0.2) !important;
+    }
+
+    body.uv-mode .metric-bar-fill {
+      background: linear-gradient(90deg, #a855f7, #3b82f6) !important;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.6) !important;
+    }
+
+    /* Score in UV Mode: Crisp Glowing Neon Green */
+    body.uv-mode .score-number {
+      color: #00ff66 !important;
+      text-shadow: 0 0 16px rgba(0, 255, 102, 0.95), 0 0 32px rgba(0, 255, 102, 0.6) !important;
+    }
+
+    /* Toggle Button Styling & Pulsing Animation */
+    .uv-toggle-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .uv-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      border-radius: var(--md-shape-full);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: rgba(168, 85, 247, 0.12);
+      color: #c084fc;
+      border: 1.5px solid rgba(168, 85, 247, 0.45);
+      transition: all 0.25s ease;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.2);
+    }
+
+    .uv-toggle-btn:hover {
+      background: rgba(168, 85, 247, 0.25);
+      color: #ffffff;
+      border-color: #d8b4fe;
+      box-shadow: 0 0 22px rgba(168, 85, 247, 0.55);
+      transform: translateY(-1.5px);
+    }
+
+    .uv-toggle-btn.active {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(59, 130, 246, 0.4));
+      color: #ffffff;
+      border-color: #e879f9;
+      animation: uvPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes uvPulse {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.7), 0 0 30px rgba(59, 130, 246, 0.5), inset 0 0 10px rgba(168, 85, 247, 0.4);
+        border-color: #c084fc;
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(168, 85, 247, 0.95), 0 0 45px rgba(59, 130, 246, 0.8), inset 0 0 18px rgba(168, 85, 247, 0.6);
+        border-color: #f0abfc;
+      }
+    }
+
+    .uv-explainer-label {
+      font-size: 11px;
+      color: var(--md-sys-color-on-surface-variant);
+      max-width: 420px;
+      text-align: right;
+      line-height: 1.35;
+    }
+
+    body.uv-mode .uv-explainer-label {
+      color: #c084fc !important;
+      text-shadow: 0 0 6px rgba(192, 132, 252, 0.45);
+    }
+
+    /* UV Canvas Box Styling */
+    body.uv-mode .pane-canvas-box {
+      background: #020408 !important;
+      border: 1px solid rgba(168, 85, 247, 0.5) !important;
+      box-shadow: inset 0 0 30px rgba(88, 28, 135, 0.45), 0 0 22px rgba(168, 85, 247, 0.22) !important;
+      position: relative;
+    }
+
+    /* Fluorescent Canvas Transformations (Default Neon Green / Ardrox) */
+    body.uv-mode .pane-canvas-box canvas {
+      filter: invert(1) grayscale(1) brightness(1.75) contrast(2.65) sepia(1) hue-rotate(75deg) saturate(950%) drop-shadow(0 0 16px rgba(0, 255, 102, 0.85)) !important;
+      transition: filter 0.3s ease;
+    }
+
+    /* Rhodamine 6G (Neon Yellow/Orange/Green Duotone Glow) */
+    body.uv-mode[data-uv-dye="rhodamine"] .pane-canvas-box canvas {
+      filter: invert(1) grayscale(1) brightness(1.85) contrast(2.8) sepia(1) hue-rotate(35deg) saturate(950%) drop-shadow(0 0 18px rgba(255, 110, 0, 0.8)) drop-shadow(0 0 6px rgba(0, 255, 102, 0.6)) !important;
+    }
+
+    /* Ardrox (Pure Laser Neon Green) */
+    body.uv-mode[data-uv-dye="ardrox"] .pane-canvas-box canvas {
+      filter: invert(1) grayscale(1) brightness(1.75) contrast(2.65) sepia(1) hue-rotate(85deg) saturate(1000%) drop-shadow(0 0 18px rgba(0, 255, 102, 0.95)) !important;
+    }
+
+    /* For Prints that already have dark backgrounds (Cyanoacrylate) */
+    body.uv-mode .pane-canvas-box.dark-bg-raw canvas {
+      filter: grayscale(1) brightness(1.85) contrast(2.8) sepia(1) hue-rotate(75deg) saturate(950%) drop-shadow(0 0 16px rgba(0, 255, 102, 0.85)) !important;
+    }
+    body.uv-mode[data-uv-dye="rhodamine"] .pane-canvas-box.dark-bg-raw canvas {
+      filter: grayscale(1) brightness(1.9) contrast(2.9) sepia(1) hue-rotate(35deg) saturate(950%) drop-shadow(0 0 18px rgba(255, 110, 0, 0.85)) drop-shadow(0 0 6px rgba(0, 255, 102, 0.6)) !important;
+    }
+
+    /* Forensic Lens Reticle & Laser Sweep Overlay */
+    .canvas-lens-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    body.uv-mode .canvas-lens-overlay {
+      display: flex;
+    }
+
+    .lens-reticle-ring {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      max-width: 86%;
+      max-height: 86%;
+      border-radius: 50%;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.22), inset 0 0 15px rgba(168, 85, 247, 0.15);
+    }
+
+    .lens-reticle-ring-inner {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      max-width: 55%;
+      max-height: 55%;
+      border-radius: 50%;
+      border: 1px dashed rgba(59, 130, 246, 0.35);
+    }
+
+    .lens-crosshair-h {
+      position: absolute;
+      width: 92%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.4) 20%, rgba(59, 130, 246, 0.7) 50%, rgba(168, 85, 247, 0.4) 80%, transparent);
+    }
+
+    .lens-crosshair-v {
+      position: absolute;
+      height: 92%;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.4) 20%, rgba(59, 130, 246, 0.7) 50%, rgba(168, 85, 247, 0.4) 80%, transparent);
+    }
+
+    .lens-diag-1 {
+      position: absolute;
+      width: 86%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.25) 25%, rgba(168, 85, 247, 0.25) 75%, transparent);
+      transform: rotate(45deg);
+    }
+
+    .lens-diag-2 {
+      position: absolute;
+      width: 86%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.25) 25%, rgba(168, 85, 247, 0.25) 75%, transparent);
+      transform: rotate(-45deg);
+    }
+
+    .uv-laser-scan {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 102, 0.8) 30%, rgba(0, 255, 102, 1) 50%, rgba(0, 255, 102, 0.8) 70%, transparent);
+      box-shadow: 0 0 15px rgba(0, 255, 102, 0.95), 0 0 30px rgba(0, 255, 102, 0.6);
+      animation: uvLaserSweep 4.5s ease-in-out infinite alternate;
+      opacity: 0.85;
+    }
+
+    @keyframes uvLaserSweep {
+      0% { top: 6%; }
+      100% { top: 92%; }
+    }
+
+    /* UV Excitation Banner */
+    .uv-excitation-banner {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 28px;
+      margin: 16px auto 0 auto;
+      width: fit-content;
+      border-radius: var(--md-shape-full);
+      background: rgba(168, 85, 247, 0.22);
+      border: 1.5px solid #c084fc;
+      color: #f5d0fe;
+      font-size: 13.5px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.55), inset 0 0 12px rgba(168, 85, 247, 0.35);
+      animation: uvBadgeGlow 2.5s infinite alternate ease-in-out;
+    }
+
+    body.uv-mode .uv-excitation-banner {
+      display: flex;
+    }
+
+    @keyframes uvBadgeGlow {
+      0% {
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.4), inset 0 0 8px rgba(168, 85, 247, 0.2);
+        border-color: #c084fc;
+      }
+      100% {
+        box-shadow: 0 0 32px rgba(168, 85, 247, 0.85), 0 0 55px rgba(59, 130, 246, 0.55), inset 0 0 16px rgba(168, 85, 247, 0.55);
+        border-color: #f0abfc;
+      }
+    }
   </style>
 </head>
 <body>
@@ -591,12 +901,25 @@
         constructor() {
           this.listeners = new Map();
           this.state = {
-            activeTab: 'home', theme: 'light', hasImage: false,
+            activeTab: 'home', theme: 'light', hasImage: false, uvMode: false, uvDye: 'rhodamine',
             originalCanvas: null, enhancedCanvas: null, ridgeMapCanvas: null,
             imageMetadata: { name: '', size: '', originalDimensions: '', processingDimensions: '', qualityLevel: 'Good' },
             parameters: { contrast: 65, noiseReduction: 35, ridgeSharpening: 60 },
             clarityScore: { rawScore: 0, enhancedScore: 0, delta: '+0', metrics: { contrast: 0, separation: 0, sharpness: 0, snr: 0 }, hasCalculated: false }
           };
+        }
+        toggleUVMode() {
+          const next = !this.state.uvMode;
+          this.state.uvMode = next;
+          document.body.classList.toggle('uv-mode', next);
+          document.body.setAttribute('data-uv-dye', this.state.uvDye);
+          if (next) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', this.state.theme);
+          }
+          this.emit('uvModeChanged', next);
+          return next;
         }
         get(k) { return this.state[k]; }
         set(k, v) { this.state[k] = v; this.emit(k, v); }
@@ -1509,13 +1832,20 @@
         }
       }
 
-            function renderEnhance() {
+                  function renderEnhance() {
         const e = document.getElementById('screen-enhance');
         const hasImg = appState.get('hasImage');
         const params = appState.get('parameters');
         const clarity = appState.get('clarityScore');
         const origCanvas = appState.get('originalCanvas');
         const detectedReagent = origCanvas ? ChemicalDetector.analyze(origCanvas) : 'Unknown/Standard Powder';
+        const isUV = !!appState.get('uvMode');
+        const uvDye = appState.get('uvDye') || 'rhodamine';
+        const isCyano = detectedReagent === 'Cyanoacrylate';
+
+        // Synchronize body classes and dataset for UV fluorescence
+        document.body.classList.toggle('uv-mode', isUV);
+        document.body.setAttribute('data-uv-dye', uvDye);
 
         if (!hasImg) {
           e.innerHTML = `
@@ -1536,11 +1866,17 @@
             <header class="app-header">
               <div class="header-top-row">
                 <div>
-                  <h1 class="app-title">Fingerprint Enhancement Studio</h1>
-                  <p class="app-subtitle">Adaptive illumination normalization, CLAHE local contrast & ridge sharpening</p>
+                  <h1 class="app-title">${isUV ? 'Fingerprint Enhancer Demo' : 'Fingerprint Enhancement Studio'}</h1>
+                  <p class="app-subtitle">${isUV ? 'Alternate Light Source / UV Fluorescence (365nm Excitation)' : 'Adaptive illumination normalization, CLAHE local contrast & ridge sharpening'}</p>
                 </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <button class="m3-btn m3-btn-tonal" id="btn-dl" title="Download Enhanced PNG" style="font-size: 12px; padding: 8px 16px;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div class="uv-toggle-container">
+                    <button class="uv-toggle-btn ${isUV ? 'active' : ''}" id="btn-toggle-uv" title="Toggle Alternate Light Source (UV Mode)">
+                      <span>ðŸ•¶ï¸</span> Toggle UV Forensic Light (ALS)
+                    </button>
+                    <span class="uv-explainer-label">Simulates 365nm UV excitation of fluorescent powders & dyes (like Rhodamine 6G & Ardrox)</span>
+                  </div>
+                  <button class="m3-btn m3-btn-tonal" id="btn-dl" title="Download Enhanced PNG" style="font-size: 12px; padding: 9px 16px;">
                     ${Icons.download} Export PNG
                   </button>
                 </div>
@@ -1548,7 +1884,7 @@
             </header>
 
             <div class="enhancer-dashboard">
-              <!-- Left Fixed-Width Sidebar (Controls, Quick Upload, Clarity Score) -->
+              <!-- Left Fixed-Width Sidebar (Controls, Upload, Clarity Score) -->
               <aside class="enhancer-sidebar">
                 <!-- Source Reagent & Quick Upload Box -->
                 <div class="m3-card" style="padding: 14px 16px; margin-bottom: 0;">
@@ -1567,6 +1903,21 @@
                     <button class="m3-btn m3-btn-tonal" id="enh-btn-crop" style="flex: 1; padding: 7px 12px; font-size: 11px;">
                       ${Icons.crop} Crop
                     </button>
+                  </div>
+
+                  <!-- ALS Fluorescent Dye Selector (Visible in UV Mode) -->
+                  <div class="uv-dye-selector-box" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(168, 85, 247, 0.25); display: ${isUV ? 'flex' : 'none'}; flex-direction: column; gap: 6px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #c084fc; display: flex; align-items: center; gap: 4px;">
+                      ${Icons.science} Fluorescent Dye Emission
+                    </span>
+                    <div style="display: flex; gap: 6px;">
+                      <button class="m3-btn ${uvDye === 'rhodamine' ? 'm3-btn-primary' : 'm3-btn-outlined'}" id="btn-dye-rhodamine" style="flex: 1; padding: 5px 8px; font-size: 11px;">
+                        Rhodamine 6G
+                      </button>
+                      <button class="m3-btn ${uvDye === 'ardrox' ? 'm3-btn-primary' : 'm3-btn-outlined'}" id="btn-dye-ardrox" style="flex: 1; padding: 5px 8px; font-size: 11px;">
+                        Ardrox (Green)
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -1614,6 +1965,16 @@
                 <!-- Forensic Clarity Score Card -->
                 <div class="clarity-score-card" style="margin-bottom: 0;">
                   <div class="clarity-header">${Icons.auto_awesome} Forensic Clarity Score</div>
+
+                  ${isUV ? `
+                    <div style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 9999px; background: rgba(168, 85, 247, 0.25); border: 1.5px solid #c084fc; color: #f5d0fe; font-size: 11px; font-weight: 800; margin-bottom: 8px; box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);">
+                      ðŸ”¦ UV EXCITATION: ACTIVE (Visualization Boosted)
+                    </div>
+                    <p style="font-size: 10.5px; color: #c084fc; margin-bottom: 12px; line-height: 1.35; text-align: center;">
+                      Certain latent prints require ALS/UV excitation to be even barely visible. 365nm UV excitation stimulates fluorophore emission across faint ridge residues.
+                    </p>
+                  ` : ''}
+
                   <div class="clarity-meter-wrap">
                     <svg viewBox="0 0 36 36" class="circular-chart">
                       <defs>
@@ -1647,7 +2008,9 @@
               <!-- Right Main Viewing Area (Canvases Side-by-Side) -->
               <main class="enhancer-main-view">
                 <div class="view-mode-bar">
-                  <span style="font-size: 12px; font-weight: 700; color: var(--md-sys-color-on-surface-variant); text-transform: uppercase; letter-spacing: 0.5px;">CANVAS VIEWPORT</span>
+                  <span style="font-size: 12px; font-weight: 700; color: var(--md-sys-color-on-surface-variant); text-transform: uppercase; letter-spacing: 0.5px;">
+                    ${isUV ? 'âš¡ ALS 365nm FLUORESCENCE VIEWPORT' : 'CANVAS VIEWPORT'}
+                  </span>
                   <div class="view-toggle-group">
                     <button class="view-toggle-btn active" id="v-enh">Enhanced</button>
                     <button class="view-toggle-btn" id="v-ridge">Ridge Map</button>
@@ -1657,30 +2020,79 @@
                 <div class="comparison-container">
                   <div class="comparison-pane">
                     <div class="pane-header">
-                      <span class="pane-title">${Icons.fingerprint} Original Impression</span>
-                      <span class="m3-chip">Raw Data</span>
+                      <span class="pane-title">${Icons.fingerprint} ${isUV ? 'Original Image (Ambient)' : 'Original Impression'}</span>
+                      <span class="m3-chip">${isUV ? 'Ambient' : 'Raw Data'}</span>
                     </div>
-                    <div class="pane-canvas-box" id="e-orig-box"></div>
+                    <div class="pane-canvas-box ${isCyano ? 'dark-bg-raw' : ''}" id="e-orig-box">
+                      <div class="canvas-lens-overlay">
+                        <div class="lens-reticle-ring"></div>
+                        <div class="lens-reticle-ring-inner"></div>
+                        <div class="lens-crosshair-h"></div>
+                        <div class="lens-crosshair-v"></div>
+                        <div class="lens-diag-1"></div>
+                        <div class="lens-diag-2"></div>
+                        <div class="uv-laser-scan"></div>
+                      </div>
+                    </div>
                   </div>
                   <div class="comparison-pane">
                     <div class="pane-header">
-                      <span class="pane-title" style="color: var(--md-sys-color-primary);">${Icons.auto_fix_high} Processed Impression</span>
-                      <span class="m3-chip m3-chip-primary">Enhanced Output</span>
+                      <span class="pane-title" style="color: var(--md-sys-color-primary);">${Icons.auto_fix_high} ${isUV ? 'Enhanced Image (UV Fluorescence)' : 'Processed Impression'}</span>
+                      <span class="m3-chip m3-chip-primary">${isUV ? 'Fluorescent' : 'Enhanced Output'}</span>
                     </div>
-                    <div class="pane-canvas-box" id="e-enh-box"></div>
+                    <div class="pane-canvas-box ${isCyano ? 'dark-bg-raw' : ''}" id="e-enh-box">
+                      <div class="canvas-lens-overlay">
+                        <div class="lens-reticle-ring"></div>
+                        <div class="lens-reticle-ring-inner"></div>
+                        <div class="lens-crosshair-h"></div>
+                        <div class="lens-crosshair-v"></div>
+                        <div class="lens-diag-1"></div>
+                        <div class="lens-diag-2"></div>
+                        <div class="uv-laser-scan"></div>
+                      </div>
+                    </div>
                   </div>
+                </div>
+
+                <!-- Bottom Excitation Banner (As in Reference Photo) -->
+                <div class="uv-excitation-banner">
+                  <span>ðŸ”¦ UV EXCITATION: ACTIVE (Visualization Boosted)</span>
                 </div>
               </main>
             </div>
           </div>
         `;
 
-        document.getElementById('e-orig-box')?.appendChild(appState.get('originalCanvas'));
+        // Mount canvases in their respective boxes (before the lens overlay)
+        const origBox = document.getElementById('e-orig-box');
         const enhBox = document.getElementById('e-enh-box');
-        if (enhBox) {
-          const enhC = appState.get('enhancedCanvas');
-          if (enhC) enhBox.appendChild(enhC);
+        const origC = appState.get('originalCanvas');
+        const enhC = appState.get('enhancedCanvas');
+
+        if (origBox && origC) {
+          origBox.insertBefore(origC, origBox.firstChild);
         }
+        if (enhBox && enhC) {
+          enhBox.insertBefore(enhC, enhBox.firstChild);
+        }
+
+        // UV Mode Toggle Handler
+        document.getElementById('btn-toggle-uv')?.addEventListener('click', () => {
+          appState.toggleUVMode();
+          renderEnhance();
+        });
+
+        // Fluorescent Dye Selection Handlers
+        document.getElementById('btn-dye-rhodamine')?.addEventListener('click', () => {
+          appState.set('uvDye', 'rhodamine');
+          document.body.setAttribute('data-uv-dye', 'rhodamine');
+          renderEnhance();
+        });
+        document.getElementById('btn-dye-ardrox')?.addEventListener('click', () => {
+          appState.set('uvDye', 'ardrox');
+          document.body.setAttribute('data-uv-dye', 'ardrox');
+          renderEnhance();
+        });
 
         // Quick replace / crop inside enhancer sidebar
         document.getElementById('enh-btn-replace')?.addEventListener('click', () => {
@@ -1762,18 +2174,28 @@
           document.getElementById('v-enh').classList.add('active');
           document.getElementById('v-ridge').classList.remove('active');
           const box = document.getElementById('e-enh-box');
-          if (box) { box.innerHTML = ''; box.appendChild(appState.get('enhancedCanvas')); }
+          if (box) {
+            const overlay = box.querySelector('.canvas-lens-overlay');
+            box.innerHTML = '';
+            if (appState.get('enhancedCanvas')) box.appendChild(appState.get('enhancedCanvas'));
+            if (overlay) box.appendChild(overlay);
+          }
         });
         document.getElementById('v-ridge')?.addEventListener('click', () => {
           document.getElementById('v-ridge').classList.add('active');
           document.getElementById('v-enh').classList.remove('active');
           const box = document.getElementById('e-enh-box');
-          if (box && appState.get('ridgeMapCanvas')) { box.innerHTML = ''; box.appendChild(appState.get('ridgeMapCanvas')); }
+          if (box && appState.get('ridgeMapCanvas')) {
+            const overlay = box.querySelector('.canvas-lens-overlay');
+            box.innerHTML = '';
+            box.appendChild(appState.get('ridgeMapCanvas'));
+            if (overlay) box.appendChild(overlay);
+          }
         });
 
         document.getElementById('btn-dl')?.addEventListener('click', () => {
           const link = document.createElement('a');
-          link.download = 'enhanced_fingerprint.png';
+          link.download = isUV ? 'uv_fluorescent_fingerprint.png' : 'enhanced_fingerprint.png';
           link.href = appState.get('enhancedCanvas').toDataURL();
           link.click();
         });

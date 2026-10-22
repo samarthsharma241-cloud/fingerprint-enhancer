@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1676,7 +1676,7 @@
           if (!substrate) {
             return {
               valid: false,
-              message: 'â„¹ï¸ Please select a Target Evidence Substrate first to test chemical compatibility.'
+              message: '&#8505;&#65039; Please select a Target Evidence Substrate first to test chemical compatibility.'
             };
           }
 
@@ -1686,21 +1686,21 @@
           if (isPorous && chemical === 'cyanoacrylate') {
             return {
               valid: false,
-              message: "âš ï¸ Incompatible: Cyanoacrylate (Superglue) fuming is ineffective on porous surfaces like paper/wood. It is optimized for non-porous materials like glass, plastic, or metal."
+              message: "&#9888;&#65039; Incompatible: Cyanoacrylate (Superglue) fuming is ineffective on porous surfaces like paper/wood. It is optimized for non-porous materials like glass, plastic, or metal."
             };
           }
 
           if (isNonPorous && chemical === 'ninhydrin') {
             return {
               valid: false,
-              message: "âš ï¸ Incompatible: Ninhydrin requires amino acids absorbed into porous substrates (like paper) to react. It will not adhere to glass or metal."
+              message: "&#9888;&#65039; Incompatible: Ninhydrin requires amino acids absorbed into porous substrates (like paper) to react. It will not adhere to glass or metal."
             };
           }
 
           if (isNonPorous && chemical === 'silver_nitrate') {
             return {
               valid: false,
-              message: "âš ï¸ Incompatible: Silver Nitrate is designed for porous materials (raw wood, unglazed paper) where chloride salts are absorbed. It cannot form stable silver chloride on smooth non-porous glass or metal."
+              message: "&#9888;&#65039; Incompatible: Silver Nitrate is designed for porous materials (raw wood, unglazed paper) where chloride salts are absorbed. It cannot form stable silver chloride on smooth non-porous glass or metal."
             };
           }
 
@@ -1718,7 +1718,7 @@
 
           return {
             valid: true,
-            message: `âœ… Correct Reaction Method! Preparing fuming/absorption simulation for ${chemNames[chemical]} on ${subNames[substrate]}...`
+            message: '&#9989; Correct Reaction Method! Preparing fuming/absorption simulation for ' + chemNames[chemical] + ' on ' + subNames[substrate] + '...'
           };
         }
 
@@ -2297,7 +2297,7 @@
               <main class="enhancer-main-view">
                 <div class="view-mode-bar">
                   <span style="font-size: 12px; font-weight: 700; color: var(--md-sys-color-on-surface-variant); text-transform: uppercase; letter-spacing: 0.5px;">
-                    ${isUV ? 'âš¡ ALS 365nm FLUORESCENCE VIEWPORT' : 'CANVAS VIEWPORT'}
+                    ${isUV ? '&#9889; ALS 365nm FLUORESCENCE VIEWPORT' : 'CANVAS VIEWPORT'}
                   </span>
                   <div class="view-toggle-group">
                     <button class="view-toggle-btn active" id="v-enh">Enhanced</button>
@@ -2411,13 +2411,13 @@
             const stageEl = document.getElementById('nin-stage-text');
             if (mins <= 15) {
               simScore = Math.round(15 + (mins / 15) * 10);
-              if (stageEl) stageEl.innerHTML = 'âš ï¸ <strong>0 - 15 Mins:</strong> No reaction visible. Amino acids require time or accelerated heat to develop. (Clarity score: VERY LOW)';
+              if (stageEl) stageEl.innerHTML = '&#9888;&#65039; <strong>0 - 15 Mins:</strong> No reaction visible. Amino acids require time or accelerated heat to develop. (Clarity score: VERY LOW)';
             } else if (mins <= 45) {
               simScore = Math.round(28 + ((mins - 15) / 30) * 40);
-              if (stageEl) stageEl.innerHTML = 'âš¡ <strong>15 - 45 Mins:</strong> Partial reaction. Faint purple/pink ridges appearing. (Clarity score: MODERATE)';
+              if (stageEl) stageEl.innerHTML = '&#9889; <strong>15 - 45 Mins:</strong> Partial reaction. Faint purple/pink ridges appearing. (Clarity score: MODERATE)';
             } else {
               simScore = Math.round(72 + ((mins - 45) / 15) * 22);
-              if (stageEl) stageEl.innerHTML = 'âœ… <strong>45 - 60 Mins:</strong> Optimal Reaction! Amino acids fully bonded. Deep Ruhemannâ€™s Purple print visible. (Boost Clarity Score to 85+ / 100)';
+              if (stageEl) stageEl.innerHTML = '&#9989; <strong>45 - 60 Mins:</strong> Optimal Reaction! Amino acids fully bonded. Deep Ruhemann\'s Purple print visible. (Boost Clarity Score to 85+ / 100)';
             }
           } else if (currentChem === 'cyanoacrylate') {
             const hum = Number(appState.get('cyanoHumidity') || 80);
@@ -2430,13 +2430,13 @@
 
             if (!isAcceptableHum) {
               simScore = Math.round(30 + (time / 30) * 18);
-                      <span class="control-label" style="font-size: 11.5px;">&#128167; Chamber Humidity (0% - 100%)</span>
+              if (stageEl) stageEl.innerHTML = '&#9888;&#65039; <strong>Sub-optimal Humidity:</strong> Polymerization is faint or cluttered. Maintain 75% - 85% RH for optimal results. (Clarity score capped)';
             } else if (isOptHum && time >= 15) {
               simScore = Math.round(78 + ((time - 15) / 15) * 18);
-              if (stageEl) stageEl.innerHTML = 'âœ… <strong>Polymerization successful!</strong> White Cyanoacrylate (Polycyanoacrylate) ester has hardened over ridge patterns. (Boost Clarity Score to 90+ / 100)';
+              if (stageEl) stageEl.innerHTML = '&#9989; <strong>Polymerization successful!</strong> White Cyanoacrylate (Polycyanoacrylate) ester has hardened over ridge patterns. (Boost Clarity Score to 90+ / 100)';
             } else {
               simScore = Math.round(52 + (time / 30) * 26);
-              if (stageEl) stageEl.innerHTML = 'â³ <strong>Incipient Polymerization:</strong> White monomer esters beginning to nucleate along ridge sweat residues.';
+              if (stageEl) stageEl.innerHTML = '&#9203; <strong>Incipient Polymerization:</strong> White monomer esters beginning to nucleate along ridge sweat residues.';
             }
           } else if (currentChem === 'silver_nitrate') {
             const time = 10;

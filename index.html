@@ -788,7 +788,7 @@
     }
 
     /* UV Excitation Banner */
-    .uv-excitation-banner {
+                  <span>&#128294; UV EXCITATION: ACTIVE (Visualization Boosted)</span>
       display: none;
       align-items: center;
       justify-content: center;
@@ -807,7 +807,7 @@
       animation: uvBadgeGlow 2.5s infinite alternate ease-in-out;
     }
 
-    body.uv-mode .uv-excitation-banner {
+                  <span>&#128294; UV EXCITATION: ACTIVE (Visualization Boosted)</span>
       display: flex;
     }
 
@@ -901,7 +901,7 @@
         constructor() {
           this.listeners = new Map();
           this.state = {
-            activeTab: 'home', theme: 'light', hasImage: false, uvMode: false, uvDye: 'rhodamine',
+            activeTab: 'home', theme: 'light', hasImage: false, uvMode: false, uvDye: 'rhodamine', substrate: '', appliedChemical: null, ninhydrinTime: 45, cyanoHumidity: 80, cyanoTime: 20,
             originalCanvas: null, enhancedCanvas: null, ridgeMapCanvas: null,
             imageMetadata: { name: '', size: '', originalDimensions: '', processingDimensions: '', qualityLevel: 'Good' },
             parameters: { contrast: 65, noiseReduction: 35, ridgeSharpening: 60 },
@@ -1670,7 +1670,179 @@
         }
       }
 
-      // 10. UI Screen Renderers
+      // 9c. Forensic Chemical Reaction & Development Simulator
+      class ChemicalSimulator {
+        static validate(substrate, chemical) {
+          if (!substrate) {
+            return {
+              valid: false,
+              message: 'â„¹ï¸ Please select a Target Evidence Substrate first to test chemical compatibility.'
+            };
+          }
+
+          const isPorous = substrate === 'paper' || substrate === 'wood';
+          const isNonPorous = substrate === 'glass' || substrate === 'metal';
+
+          if (isPorous && chemical === 'cyanoacrylate') {
+            return {
+              valid: false,
+              message: "âš ï¸ Incompatible: Cyanoacrylate (Superglue) fuming is ineffective on porous surfaces like paper/wood. It is optimized for non-porous materials like glass, plastic, or metal."
+            };
+          }
+
+          if (isNonPorous && chemical === 'ninhydrin') {
+            return {
+              valid: false,
+              message: "âš ï¸ Incompatible: Ninhydrin requires amino acids absorbed into porous substrates (like paper) to react. It will not adhere to glass or metal."
+            };
+          }
+
+          if (isNonPorous && chemical === 'silver_nitrate') {
+            return {
+              valid: false,
+              message: "âš ï¸ Incompatible: Silver Nitrate is designed for porous materials (raw wood, unglazed paper) where chloride salts are absorbed. It cannot form stable silver chloride on smooth non-porous glass or metal."
+            };
+          }
+
+          const subNames = {
+            paper: 'Paper / Cardboard (Porous)',
+            wood: 'Raw Wood (Porous)',
+            glass: 'Glass / Ceramic (Non-Porous)',
+            metal: 'Plastic / Metal (Non-Porous)'
+          };
+          const chemNames = {
+            ninhydrin: 'Ninhydrin',
+            cyanoacrylate: 'Cyanoacrylate (Superglue) Fuming',
+            silver_nitrate: 'Silver Nitrate'
+          };
+
+          return {
+            valid: true,
+            message: `âœ… Correct Reaction Method! Preparing fuming/absorption simulation for ${chemNames[chemical]} on ${subNames[substrate]}...`
+          };
+        }
+
+        static simulateNinhydrin(baseCanvas, minutes) {
+          const w = baseCanvas.width, h = baseCanvas.height;
+          const out = document.createElement('canvas');
+          out.width = w; out.height = h;
+          const ctx = out.getContext('2d');
+
+          // Porous paper substrate background
+          ctx.fillStyle = '#f6f3ee';
+          ctx.fillRect(0, 0, w, h);
+
+          const baseCtx = baseCanvas.getContext('2d');
+          const srcData = baseCtx.getImageData(0, 0, w, h);
+          const d = srcData.data;
+
+          const outData = ctx.getImageData(0, 0, w, h);
+          const outD = outData.data;
+
+          const progress = Math.max(0, Math.min(1, minutes / 60));
+
+          for (let i = 0; i < d.length; i += 4) {
+            const gray = (d[i] + d[i + 1] + d[i + 2]) / 3;
+            const ridgeIntensity = Math.max(0, (255 - gray) / 255);
+            const opacity = Math.min(0.96, progress * ridgeIntensity * 1.35);
+
+            // Ruhemann's Purple: R=75, G=12, B=140
+            outD[i] = Math.round(246 * (1 - opacity) + 75 * opacity);
+            outD[i + 1] = Math.round(243 * (1 - opacity) + 12 * opacity);
+            outD[i + 2] = Math.round(238 * (1 - opacity) + 140 * opacity);
+            outD[i + 3] = 255;
+          }
+
+          ctx.putImageData(outData, 0, 0);
+          return out;
+        }
+
+        static simulateCyanoacrylate(baseCanvas, humidity, minutes) {
+          const w = baseCanvas.width, h = baseCanvas.height;
+          const out = document.createElement('canvas');
+          out.width = w; out.height = h;
+          const ctx = out.getContext('2d');
+
+          // Non-porous dark glass/metal background
+          ctx.fillStyle = '#0f172a';
+          ctx.fillRect(0, 0, w, h);
+
+          const baseCtx = baseCanvas.getContext('2d');
+          const srcData = baseCtx.getImageData(0, 0, w, h);
+          const d = srcData.data;
+
+          const outData = ctx.getImageData(0, 0, w, h);
+          const outD = outData.data;
+
+          let humOpt = 0.22;
+          if (humidity >= 75 && humidity <= 85) {
+            humOpt = 1.0;
+          } else if (humidity >= 65 && humidity <= 95) {
+            humOpt = 0.58;
+          }
+
+          const timeFactor = Math.min(1.0, minutes / 22);
+          const deposition = humOpt * timeFactor;
+          const isFuzzy = humidity < 65 || humidity > 95;
+
+          for (let i = 0; i < d.length; i += 4) {
+            const gray = (d[i] + d[i + 1] + d[i + 2]) / 3;
+            let ridgeIntensity = Math.max(0, (255 - gray) / 255);
+
+            if (isFuzzy && ridgeIntensity > 0.15) {
+              ridgeIntensity *= 0.65 + (Math.sin(i * 0.05) * 0.2);
+            }
+
+            const opacity = Math.min(0.95, deposition * ridgeIntensity * 1.25);
+
+            // Polycyanoacrylate frosted white: RGB(224, 242, 254)
+            outD[i] = Math.round(15 * (1 - opacity) + 224 * opacity);
+            outD[i + 1] = Math.round(23 * (1 - opacity) + 242 * opacity);
+            outD[i + 2] = Math.round(42 * (1 - opacity) + 254 * opacity);
+            outD[i + 3] = 255;
+          }
+
+          ctx.putImageData(outData, 0, 0);
+          return out;
+        }
+
+        static simulateSilverNitrate(baseCanvas, minutes) {
+          const w = baseCanvas.width, h = baseCanvas.height;
+          const out = document.createElement('canvas');
+          out.width = w; out.height = h;
+          const ctx = out.getContext('2d');
+
+          // Porous raw wood background
+          ctx.fillStyle = '#eddcc6';
+          ctx.fillRect(0, 0, w, h);
+
+          const baseCtx = baseCanvas.getContext('2d');
+          const srcData = baseCtx.getImageData(0, 0, w, h);
+          const d = srcData.data;
+
+          const outData = ctx.getImageData(0, 0, w, h);
+          const outD = outData.data;
+
+          const progress = Math.min(1.0, minutes / 15);
+
+          for (let i = 0; i < d.length; i += 4) {
+            const gray = (d[i] + d[i + 1] + d[i + 2]) / 3;
+            const ridgeIntensity = Math.max(0, (255 - gray) / 255);
+            const opacity = Math.min(0.92, progress * ridgeIntensity * 1.3);
+
+            // Dark silver chloride: RGB(40, 30, 25)
+            outD[i] = Math.round(237 * (1 - opacity) + 40 * opacity);
+            outD[i + 1] = Math.round(220 * (1 - opacity) + 30 * opacity);
+            outD[i + 2] = Math.round(198 * (1 - opacity) + 25 * opacity);
+            outD[i + 3] = 255;
+          }
+
+          ctx.putImageData(outData, 0, 0);
+          return out;
+        }
+      }
+
+            // 10. UI Screen Renderers
       function renderHome() {
         const h = document.getElementById('screen-home');
         h.innerHTML = `
@@ -1832,7 +2004,7 @@
         }
       }
 
-                  function renderEnhance() {
+                        function renderEnhance() {
         const e = document.getElementById('screen-enhance');
         const hasImg = appState.get('hasImage');
         const params = appState.get('parameters');
@@ -1861,6 +2033,18 @@
           return;
         }
 
+        const selectedSubstrate = appState.get('substrate') || '';
+        const selectedChemical = appState.get('appliedChemical');
+        const ninMinutes = appState.get('ninhydrinTime') !== undefined ? appState.get('ninhydrinTime') : 45;
+        const cyHumidity = appState.get('cyanoHumidity') !== undefined ? appState.get('cyanoHumidity') : 80;
+        const cyMinutes = appState.get('cyanoTime') !== undefined ? appState.get('cyanoTime') : 20;
+
+        // Run validation
+        let valResult = { valid: false, message: '' };
+        if (selectedChemical && selectedSubstrate) {
+          valResult = ChemicalSimulator.validate(selectedSubstrate, selectedChemical);
+        }
+
         e.innerHTML = `
           <div class="screen-content">
             <header class="app-header">
@@ -1886,7 +2070,8 @@
             <div class="enhancer-dashboard">
               <!-- Left Fixed-Width Sidebar (Controls, Upload, Clarity Score) -->
               <aside class="enhancer-sidebar">
-                <!-- Source Reagent & Quick Upload Box -->
+
+                <!-- 1. Source Reagent & Quick Upload Box -->
                 <div class="m3-card" style="padding: 14px 16px; margin-bottom: 0;">
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                     <span style="font-size: 11px; font-weight: 700; color: var(--md-sys-color-on-surface-variant); text-transform: uppercase; letter-spacing: 0.5px;">Reagent & Input</span>
@@ -1921,10 +2106,111 @@
                   </div>
                 </div>
 
-                <!-- Enhancement Parameters & Preset Controls -->
+                <!-- 2. Evidence Substrate Selector & Chemical Method Validation -->
+                <div class="m3-card substrate-card" style="padding: 14px 16px; margin-bottom: 0;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: var(--md-sys-color-on-surface-variant); text-transform: uppercase; letter-spacing: 0.5px;">
+                      &#127919; Evidence Surface Selector
+                    </span>
+                    <span class="m3-chip" id="substrate-chip">
+                      ${selectedSubstrate ? selectedSubstrate.toUpperCase() : 'None'}
+                    </span>
+                  </div>
+
+                  <select id="substrate-select" style="width: 100%; padding: 8px 12px; border-radius: var(--md-shape-sm); font-size: 12px; font-weight: 600; border: 1.5px solid var(--md-sys-color-outline); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); cursor: pointer; outline: none; margin-bottom: 12px;">
+                    <option value="" ${selectedSubstrate === '' ? 'selected' : ''}>Select Surface Type...</option>
+                    <option value="paper" ${selectedSubstrate === 'paper' ? 'selected' : ''}>Paper / Cardboard (Porous)</option>
+                    <option value="wood" ${selectedSubstrate === 'wood' ? 'selected' : ''}>Raw Wood (Porous)</option>
+                    <option value="glass" ${selectedSubstrate === 'glass' ? 'selected' : ''}>Glass / Ceramic (Non-Porous)</option>
+                    <option value="metal" ${selectedSubstrate === 'metal' ? 'selected' : ''}>Plastic / Metal (Non-Porous)</option>
+                  </select>
+
+                  <div style="font-size: 11px; font-weight: 700; color: var(--md-sys-color-on-surface-variant); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+                    &#9879;&#65039; Apply Chemical Method
+                  </div>
+                                    <div class="chem-buttons-grid" style="display: flex; gap: 6px; margin-bottom: 8px;">
+                    <button class="m3-btn ${selectedChemical === 'ninhydrin' ? 'm3-btn-primary' : 'm3-btn-outlined'}" id="btn-chem-ninhydrin" style="flex: 1; padding: 7px 6px; font-size: 11px;">
+                      &#128995; Ninhydrin
+                    </button>
+                    <button class="m3-btn ${selectedChemical === 'cyanoacrylate' ? 'm3-btn-primary' : 'm3-btn-outlined'}" id="btn-chem-cyano" style="flex: 1; padding: 7px 6px; font-size: 11px;">
+                      &#9898; Superglue
+                    </button>
+                    <button class="m3-btn ${selectedChemical === 'silver_nitrate' ? 'm3-btn-primary' : 'm3-btn-outlined'}" id="btn-chem-silver" style="flex: 1; padding: 7px 6px; font-size: 11px;">
+                      &#128996; Silver Nitrate
+                    </button>
+                  </div>
+
+                  <!-- Validation Notice Box -->
+                  <div id="chem-validation-box" style="display: ${valResult.message ? 'block' : 'none'}; padding: 10px 12px; border-radius: var(--md-shape-sm); font-size: 11.5px; line-height: 1.45; margin-top: 6px; border: 1px solid; ${valResult.valid ? 'background: rgba(34, 197, 94, 0.12); color: #15803d; border-color: rgba(34, 197, 94, 0.4);' : 'background: rgba(245, 158, 11, 0.12); color: #b45309; border-color: rgba(245, 158, 11, 0.4);'}">
+                    ${valResult.message}
+                  </div>
+                </div>
+
+                <!-- 3. Dynamic Chemical Development Simulator Panel -->
+                <div class="m3-card chem-simulator-panel" id="chem-simulator-panel" style="padding: 14px 16px; margin-bottom: 0; display: ${valResult.valid ? 'block' : 'none'}; border: 1.5px solid var(--md-sys-color-primary);">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3 style="font-size: 13px; font-weight: 700; color: var(--md-sys-color-on-surface); display: flex; align-items: center; gap: 6px;">
+                      &#128300; Chemical Development Parameters
+                    </h3>
+                    <span class="m3-chip m3-chip-primary" id="sim-active-chip" style="font-size: 10px;">
+                      ${selectedChemical ? selectedChemical.toUpperCase() : 'ACTIVE'}
+                    </span>
+                  </div>
+
+                  <!-- Interface A: Ninhydrin "Time & Heat" Reaction Slider -->
+                  <div id="sim-ninhydrin-controls" style="display: ${selectedChemical === 'ninhydrin' ? 'block' : 'none'};">
+                    <div class="control-title-row">
+                      <span class="control-label" style="font-size: 11.5px;">&#9203; Development Time / Heat (0 - 60 Mins)</span>
+                      <span class="m3-slider-badge" id="val-nin-time">${ninMinutes} mins</span>
+                    </div>
+                    <input type="range" class="m3-slider" id="sl-nin-time" min="0" max="60" value="${ninMinutes}">
+                    <p style="font-size: 10px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px; margin-bottom: 8px;">
+                      Reacts with amino acids to produce Ruhemann's Purple
+                    </p>
+                    <div class="sim-stage-indicator" id="nin-stage-text" style="font-size: 11px; padding: 7px 10px; border-radius: var(--md-shape-sm); background: var(--md-sys-color-surface-variant); font-weight: 600; line-height: 1.4;">
+                      <!-- Dynamic stage text -->
+                    </div>
+                  </div>
+
+                  <!-- Interface B: Cyanoacrylate Fuming Chamber -->
+                  <div id="sim-cyano-controls" style="display: ${selectedChemical === 'cyanoacrylate' ? 'block' : 'none'};">
+                    <div class="control-title-row">
+                      <span class="control-label" style="font-size: 11.5px;">&#128167; Chamber Humidity (0% - 100%)</span>
+                      <span class="m3-slider-badge" id="val-cy-humidity">${cyHumidity}% RH</span>
+                    </div>
+                    <input type="range" class="m3-slider" id="sl-cy-humidity" min="0" max="100" value="${cyHumidity}">
+                    <p style="font-size: 10px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px; margin-bottom: 8px;">
+                      Requires moisture (~80% RH) to polymerize with sweat residues.
+                    </p>
+
+                    <div class="control-title-row" style="margin-top: 8px;">
+                      <span class="control-label" style="font-size: 11.5px;">&#9203; Exposure Duration (0 - 30 Mins)</span>
+                      <span class="m3-slider-badge" id="val-cy-time">${cyMinutes} mins</span>
+                    </div>
+                    <input type="range" class="m3-slider" id="sl-cy-time" min="0" max="30" value="${cyMinutes}">
+
+                    <div class="sim-stage-indicator" id="cy-stage-text" style="font-size: 11px; padding: 7px 10px; border-radius: var(--md-shape-sm); background: var(--md-sys-color-surface-variant); font-weight: 600; line-height: 1.4; margin-top: 8px;">
+                      <!-- Dynamic stage text -->
+                    </div>
+                  </div>
+
+                  <!-- Interface C: Silver Nitrate Photoreactive Slider -->
+                  <div id="sim-silver-controls" style="display: ${selectedChemical === 'silver_nitrate' ? 'block' : 'none'};">
+                    <div class="control-title-row">
+                      <span class="control-label" style="font-size: 11.5px;">&#9728;&#65039; Light Exposure Time (0 - 15 Mins)</span>
+                      <span class="m3-slider-badge" id="val-sn-time">10 mins</span>
+                    </div>
+                    <input type="range" class="m3-slider" id="sl-sn-time" min="0" max="15" value="10">
+                    <p style="font-size: 10px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px; margin-bottom: 8px;">
+                      UV/Sunlight photoreacts silver chloride into dark metallic silver grains.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- 4. Classical Enhancement Parameters & Presets -->
                 <div class="enhancement-controls-card" style="margin-bottom: 0;">
                   <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h3 style="font-size: 13.5px; font-weight: 700;">Parameters</h3>
+                    <h3 style="font-size: 13.5px; font-weight: 700;">Filter Parameters</h3>
                     <button class="m3-btn m3-btn-outlined" id="c-rst" style="padding: 3px 10px; font-size: 11px;">Reset</button>
                   </div>
 
@@ -1962,7 +2248,7 @@
                   </button>
                 </div>
 
-                <!-- Forensic Clarity Score Card -->
+                <!-- 5. Forensic Clarity Score Card -->
                 <div class="clarity-score-card" style="margin-bottom: 0;">
                   <div class="clarity-header">${Icons.auto_awesome} Forensic Clarity Score</div>
 
@@ -1984,23 +2270,25 @@
                         </linearGradient>
                       </defs>
                       <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                      <path class="circle-progress" stroke-dasharray="${clarity.enhancedScore || 0}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                      <path class="circle-progress" id="enh-circle-progress" stroke-dasharray="${clarity.enhancedScore || 0}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
                     </svg>
                     <div class="meter-inner-content">
-                      <span class="score-number">${clarity.enhancedScore || 0}</span>
+                      <span class="score-number" id="enh-score-number">${clarity.enhancedScore || 0}</span>
                       <span class="score-max">/ 100</span>
                     </div>
                   </div>
                   <div class="clarity-comparison-row">
-                    <div class="score-comparison-pill">Before: <strong>${clarity.rawScore || 0}</strong>/100</div>
-                    <div class="score-comparison-pill">After: <strong>${clarity.enhancedScore || 0}</strong>/100</div>
+                    <div class="score-comparison-pill">Before: <strong id="enh-before-score">${clarity.rawScore || 0}</strong>/100</div>
+                    <div class="score-comparison-pill">After: <strong id="enh-after-score">${clarity.enhancedScore || 0}</strong>/100</div>
                   </div>
-                  ${clarity.hasCalculated ? `<div class="score-delta-badge">${Icons.check_circle} Clarity Boost: ${clarity.delta}</div>` : ''}
+                  <div id="enh-delta-badge-container">
+                    ${clarity.hasCalculated ? `<div class="score-delta-badge">${Icons.check_circle} Clarity Boost: ${clarity.delta}</div>` : ''}
+                  </div>
                   <div class="clarity-metrics-grid">
-                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Ridge Sharpness</span><strong>${clarity.metrics?.sharpness || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.sharpness || 0}%;"></div></div></div>
-                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Valley Separability</span><strong>${clarity.metrics?.separation || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.separation || 0}%;"></div></div></div>
-                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Contrast Dynamic</span><strong>${clarity.metrics?.contrast || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.contrast || 0}%;"></div></div></div>
-                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Signal-to-Noise</span><strong>${clarity.metrics?.snr || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.snr || 0}%;"></div></div></div>
+                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Ridge Sharpness</span><strong id="val-metric-sharp">${clarity.metrics?.sharpness || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" id="bar-metric-sharp" style="width: ${clarity.metrics?.sharpness || 0}%;"></div></div></div>
+                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Valley Separability</span><strong id="val-metric-sep">${clarity.metrics?.separation || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" id="bar-metric-sep" style="width: ${clarity.metrics?.separation || 0}%;"></div></div></div>
+                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Contrast Dynamic</span><strong id="val-metric-cont">${clarity.metrics?.contrast || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" id="bar-metric-cont" style="width: ${clarity.metrics?.contrast || 0}%;"></div></div></div>
+                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Signal-to-Noise</span><strong id="val-metric-snr">${clarity.metrics?.snr || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" id="bar-metric-snr" style="width: ${clarity.metrics?.snr || 0}%;"></div></div></div>
                   </div>
                 </div>
               </aside>
@@ -2055,25 +2343,208 @@
                 </div>
 
                 <!-- Bottom Excitation Banner (As in Reference Photo) -->
-                <div class="uv-excitation-banner">
                   <span>&#128294; UV EXCITATION: ACTIVE (Visualization Boosted)</span>
+                      &#128294; UV EXCITATION: ACTIVE (Visualization Boosted)
                 </div>
               </main>
             </div>
           </div>
         `;
 
-        // Mount canvases in their respective boxes (before the lens overlay)
+        // Mount original canvas in its box
         const origBox = document.getElementById('e-orig-box');
         const enhBox = document.getElementById('e-enh-box');
         const origC = appState.get('originalCanvas');
-        const enhC = appState.get('enhancedCanvas');
-
         if (origBox && origC) {
           origBox.insertBefore(origC, origBox.firstChild);
         }
-        if (enhBox && enhC) {
-          enhBox.insertBefore(enhC, enhBox.firstChild);
+
+        // Live Simulation Application Function
+        const updateSimulationDisplay = () => {
+          const currentChem = appState.get('appliedChemical');
+          const currentSub = appState.get('substrate');
+          const orig = appState.get('originalCanvas');
+          if (!orig) return;
+
+          const validation = ChemicalSimulator.validate(currentSub, currentChem);
+          const validationEl = document.getElementById('chem-validation-box');
+          const simPanelEl = document.getElementById('chem-simulator-panel');
+
+          if (validationEl) {
+            validationEl.style.display = currentChem && currentSub ? 'block' : 'none';
+            validationEl.innerHTML = validation.message;
+            if (validation.valid) {
+              validationEl.style.background = 'rgba(34, 197, 94, 0.12)';
+              validationEl.style.color = '#15803d';
+              validationEl.style.borderColor = 'rgba(34, 197, 94, 0.4)';
+            } else {
+              validationEl.style.background = 'rgba(245, 158, 11, 0.12)';
+              validationEl.style.color = '#b45309';
+              validationEl.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+            }
+          }
+
+          if (simPanelEl) {
+            simPanelEl.style.display = validation.valid ? 'block' : 'none';
+          }
+
+          if (!validation.valid || !currentChem) {
+            // Keep normal enhanced or original canvas
+            if (enhBox) {
+              const overlay = enhBox.querySelector('.canvas-lens-overlay');
+              enhBox.innerHTML = '';
+              const enhC = appState.get('enhancedCanvas') || orig;
+              if (enhC) enhBox.appendChild(enhC);
+              if (overlay) enhBox.appendChild(overlay);
+            }
+            return;
+          }
+
+          // Generate simulated canvas according to chemical parameters
+          let simCanvas = null;
+          let simScore = 50;
+
+          if (currentChem === 'ninhydrin') {
+            const mins = Number(appState.get('ninhydrinTime') || 45);
+            simCanvas = ChemicalSimulator.simulateNinhydrin(orig, mins);
+
+            const stageEl = document.getElementById('nin-stage-text');
+            if (mins <= 15) {
+              simScore = Math.round(15 + (mins / 15) * 10);
+              if (stageEl) stageEl.innerHTML = 'âš ï¸ <strong>0 - 15 Mins:</strong> No reaction visible. Amino acids require time or accelerated heat to develop. (Clarity score: VERY LOW)';
+            } else if (mins <= 45) {
+              simScore = Math.round(28 + ((mins - 15) / 30) * 40);
+              if (stageEl) stageEl.innerHTML = 'âš¡ <strong>15 - 45 Mins:</strong> Partial reaction. Faint purple/pink ridges appearing. (Clarity score: MODERATE)';
+            } else {
+              simScore = Math.round(72 + ((mins - 45) / 15) * 22);
+              if (stageEl) stageEl.innerHTML = 'âœ… <strong>45 - 60 Mins:</strong> Optimal Reaction! Amino acids fully bonded. Deep Ruhemannâ€™s Purple print visible. (Boost Clarity Score to 85+ / 100)';
+            }
+          } else if (currentChem === 'cyanoacrylate') {
+            const hum = Number(appState.get('cyanoHumidity') || 80);
+            const time = Number(appState.get('cyanoTime') || 20);
+            simCanvas = ChemicalSimulator.simulateCyanoacrylate(orig, hum, time);
+
+            const stageEl = document.getElementById('cy-stage-text');
+            const isOptHum = hum >= 75 && hum <= 85;
+            const isAcceptableHum = hum >= 65 && hum <= 95;
+
+            if (!isAcceptableHum) {
+              simScore = Math.round(30 + (time / 30) * 18);
+                      <span class="control-label" style="font-size: 11.5px;">&#128167; Chamber Humidity (0% - 100%)</span>
+            } else if (isOptHum && time >= 15) {
+              simScore = Math.round(78 + ((time - 15) / 15) * 18);
+              if (stageEl) stageEl.innerHTML = 'âœ… <strong>Polymerization successful!</strong> White Cyanoacrylate (Polycyanoacrylate) ester has hardened over ridge patterns. (Boost Clarity Score to 90+ / 100)';
+            } else {
+              simScore = Math.round(52 + (time / 30) * 26);
+              if (stageEl) stageEl.innerHTML = 'â³ <strong>Incipient Polymerization:</strong> White monomer esters beginning to nucleate along ridge sweat residues.';
+            }
+          } else if (currentChem === 'silver_nitrate') {
+            const time = 10;
+            simCanvas = ChemicalSimulator.simulateSilverNitrate(orig, time);
+            simScore = 84;
+          }
+
+          if (simCanvas && enhBox) {
+            const overlay = enhBox.querySelector('.canvas-lens-overlay');
+            enhBox.innerHTML = '';
+            enhBox.appendChild(simCanvas);
+            if (overlay) enhBox.appendChild(overlay);
+
+            // Update Clarity Score visually in real time
+            const scoreNum = document.getElementById('enh-score-number');
+            const circleProg = document.getElementById('enh-circle-progress');
+            const afterScore = document.getElementById('enh-after-score');
+            const rawScore = clarity.rawScore || 20;
+            const deltaBadgeContainer = document.getElementById('enh-delta-badge-container');
+
+            if (scoreNum) scoreNum.textContent = simScore;
+            if (afterScore) afterScore.textContent = simScore;
+            if (circleProg) circleProg.setAttribute('stroke-dasharray', `${simScore}, 100`);
+
+            const delta = simScore - rawScore;
+            const deltaStr = delta >= 0 ? `+${delta}` : `${delta}`;
+            if (deltaBadgeContainer) {
+              deltaBadgeContainer.innerHTML = `<div class="score-delta-badge">${Icons.check_circle} Clarity Boost: ${deltaStr}</div>`;
+            }
+
+            // Update metrics grid bars
+            const sMetric = Math.min(99, Math.round(simScore * 0.98));
+            const sepMetric = Math.min(99, Math.round(simScore * 0.95));
+            const cMetric = Math.min(99, Math.round(simScore * 1.02));
+            const snrMetric = Math.min(99, Math.round(simScore * 0.94));
+
+            document.getElementById('val-metric-sharp') && (document.getElementById('val-metric-sharp').textContent = `${sMetric}%`);
+            document.getElementById('bar-metric-sharp') && (document.getElementById('bar-metric-sharp').style.width = `${sMetric}%`);
+            document.getElementById('val-metric-sep') && (document.getElementById('val-metric-sep').textContent = `${sepMetric}%`);
+            document.getElementById('bar-metric-sep') && (document.getElementById('bar-metric-sep').style.width = `${sepMetric}%`);
+            document.getElementById('val-metric-cont') && (document.getElementById('val-metric-cont').textContent = `${cMetric}%`);
+            document.getElementById('bar-metric-cont') && (document.getElementById('bar-metric-cont').style.width = `${cMetric}%`);
+            document.getElementById('val-metric-snr') && (document.getElementById('val-metric-snr').textContent = `${snrMetric}%`);
+            document.getElementById('bar-metric-snr') && (document.getElementById('bar-metric-snr').style.width = `${snrMetric}%`);
+          }
+        };
+
+        // Mount initial canvas state
+        if (enhBox) {
+          const enhC = appState.get('enhancedCanvas');
+          if (enhC) {
+            const overlay = enhBox.querySelector('.canvas-lens-overlay');
+            enhBox.innerHTML = '';
+            enhBox.appendChild(enhC);
+            if (overlay) enhBox.appendChild(overlay);
+          }
+        }
+
+        // Substrate Select Listener
+        document.getElementById('substrate-select')?.addEventListener('change', (ev) => {
+          appState.set('substrate', ev.target.value);
+          const chip = document.getElementById('substrate-chip');
+          if (chip) chip.textContent = ev.target.value ? ev.target.value.toUpperCase() : 'None';
+          updateSimulationDisplay();
+        });
+
+        // Chemical Buttons Handlers
+                      <button class="m3-btn ${selectedChemical === 'ninhydrin' ? 'm3-btn-primary' : 'm3-btn-outlined'}" id="btn-chem-ninhydrin" style="flex: 1; padding: 7px 6px; font-size: 11px;">&#128995; Ninhydrin</button>
+          appState.set('appliedChemical', 'ninhydrin');
+          renderEnhance();
+        });
+        document.getElementById('btn-chem-cyano')?.addEventListener('click', () => {
+          appState.set('appliedChemical', 'cyanoacrylate');
+          renderEnhance();
+        });
+        document.getElementById('btn-chem-silver')?.addEventListener('click', () => {
+          appState.set('appliedChemical', 'silver_nitrate');
+          renderEnhance();
+        });
+
+        // Interactive Ninhydrin Reaction Slider Listener
+        document.getElementById('sl-nin-time')?.addEventListener('input', (ev) => {
+          const val = Number(ev.target.value);
+          appState.set('ninhydrinTime', val);
+          const badge = document.getElementById('val-nin-time');
+          if (badge) badge.textContent = `${val} mins`;
+          updateSimulationDisplay();
+        });
+
+        // Interactive Cyanoacrylate Chamber Sliders Listeners
+        document.getElementById('sl-cy-humidity')?.addEventListener('input', (ev) => {
+          const val = Number(ev.target.value);
+          appState.set('cyanoHumidity', val);
+          const badge = document.getElementById('val-cy-humidity');
+          if (badge) badge.textContent = `${val}% RH`;
+          updateSimulationDisplay();
+        });
+        document.getElementById('sl-cy-time')?.addEventListener('input', (ev) => {
+          const val = Number(ev.target.value);
+          appState.set('cyanoTime', val);
+          const badge = document.getElementById('val-cy-time');
+          if (badge) badge.textContent = `${val} mins`;
+          updateSimulationDisplay();
+        });
+
+        // If a valid simulation was already selected, run it immediately
+        if (selectedChemical && selectedSubstrate && valResult.valid) {
+          updateSimulationDisplay();
         }
 
         // UV Mode Toggle Handler
@@ -2173,13 +2644,7 @@
         document.getElementById('v-enh')?.addEventListener('click', () => {
           document.getElementById('v-enh').classList.add('active');
           document.getElementById('v-ridge').classList.remove('active');
-          const box = document.getElementById('e-enh-box');
-          if (box) {
-            const overlay = box.querySelector('.canvas-lens-overlay');
-            box.innerHTML = '';
-            if (appState.get('enhancedCanvas')) box.appendChild(appState.get('enhancedCanvas'));
-            if (overlay) box.appendChild(overlay);
-          }
+          updateSimulationDisplay();
         });
         document.getElementById('v-ridge')?.addEventListener('click', () => {
           document.getElementById('v-ridge').classList.add('active');
@@ -2196,7 +2661,7 @@
         document.getElementById('btn-dl')?.addEventListener('click', () => {
           const link = document.createElement('a');
           link.download = isUV ? 'uv_fluorescent_fingerprint.png' : 'enhanced_fingerprint.png';
-          link.href = appState.get('enhancedCanvas').toDataURL();
+          link.href = (enhBox.querySelector('canvas') || appState.get('enhancedCanvas')).toDataURL();
           link.click();
         });
       }
@@ -2265,6 +2730,7 @@
       window.Pipeline = Pipeline;
       window.FingerprintCropper = FingerprintCropper;
       window.ChemicalDetector = ChemicalDetector;
+      window.ChemicalSimulator = ChemicalSimulator;
       window.renderHome = renderHome;
       window.renderUpload = renderUpload;
       window.renderEnhance = renderEnhance;

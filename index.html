@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -317,6 +317,200 @@
       height: 18px; background: var(--md-sys-color-surface); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
     .gesture-pill { width: 72px; height: 4px; background: var(--md-sys-color-on-surface-variant); opacity: 0.5; border-radius: 2px; }
+    /* ========================================================
+       DESKTOP & WORKSTATION OPTIMIZATIONS (1080p & WIDE SCREENS)
+       ======================================================== */
+    @media (min-width: 900px) {
+      .device-stage {
+        padding: 24px 32px;
+        min-height: 100vh;
+        justify-content: flex-start;
+      }
+
+      .desktop-controls {
+        display: none !important;
+      }
+
+      .phone-mockup {
+        max-width: 1560px;
+        width: 100%;
+        height: auto;
+        min-height: 85vh;
+        max-height: none;
+        border-radius: 20px;
+        box-shadow: 0 25px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+      }
+
+      .android-status-bar,
+      .status-camera-punchhole,
+      .android-gesture-bar {
+        display: none !important;
+      }
+
+      .app-screen-container {
+        min-height: 80vh;
+        overflow-y: visible;
+      }
+
+      .screen-view {
+        padding: 30px 40px 40px 40px !important;
+        max-width: 1500px;
+        margin: 0 auto;
+      }
+
+      .app-title {
+        font-size: 26px;
+        letter-spacing: -0.3px;
+      }
+
+      .app-subtitle {
+        font-size: 14px;
+      }
+
+      /* Bottom Navigation docked as sleek desktop bar */
+      .m3-bottom-nav {
+        position: static !important;
+        height: 64px !important;
+        justify-content: center !important;
+        gap: 36px !important;
+        border-top: 1px solid var(--md-sys-color-outline-variant) !important;
+        flex-shrink: 0 !important;
+      }
+
+      .nav-item {
+        flex: none !important;
+        width: 100px !important;
+        padding: 4px 10px !important;
+        border-radius: var(--md-shape-md) !important;
+        transition: all 0.2s ease !important;
+      }
+
+      .nav-item:hover {
+        background: var(--md-sys-color-surface-variant);
+      }
+
+      /* Enhancer Dashboard: Side-by-side design */
+      .enhancer-dashboard {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: flex-start !important;
+        gap: 28px !important;
+        width: 100% !important;
+      }
+
+      .enhancer-sidebar {
+        width: 370px !important;
+        min-width: 350px !important;
+        max-width: 390px !important;
+        flex-shrink: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+      }
+
+      .enhancer-main-view {
+        flex: 1 !important;
+        min-width: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+      }
+
+      /* Viewport Utilization & Side-by-side Canvases */
+      .comparison-container {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 20px !important;
+        width: 100% !important;
+        min-height: 540px !important;
+      }
+
+      .comparison-pane {
+        flex: 1 !important;
+        width: 50% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 16px !important;
+        border-radius: var(--md-shape-xl) !important;
+      }
+
+      /* Canvas Sizing & Subtle Dark Gray Background */
+      .pane-canvas-box {
+        height: 530px !important;
+        min-height: 480px !important;
+        max-height: 65vh !important;
+        flex: 1 !important;
+        background: #11141c !important; /* Subtle dark gray background so aspect ratios pop */
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5) !important;
+        border-radius: var(--md-shape-lg) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+      }
+
+      .pane-canvas-box canvas {
+        max-width: 95% !important;
+        max-height: 95% !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain !important;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45) !important;
+        border-radius: 6px !important;
+      }
+
+      /* Reagents: 3-column row on desktop */
+      .reagents-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 24px !important;
+      }
+
+      .reagent-card {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding: 24px 20px !important;
+        border-radius: var(--md-shape-xl) !important;
+      }
+
+      .reagent-preview-box {
+        width: 130px !important;
+        height: 130px !important;
+        margin-bottom: 14px !important;
+        border-radius: var(--md-shape-lg) !important;
+      }
+
+      /* Future Scope: 2-column layout on desktop */
+      .scope-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 20px !important;
+      }
+
+      .scope-grid .m3-card:last-child:nth-child(odd) {
+        grid-column: span 2;
+      }
+
+      /* Home Cards: 3-column row on desktop */
+      .home-cards-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 20px !important;
+      }
+
+      .nav-feature-card {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding: 22px 18px !important;
+      }
+
+      .nav-card-arrow {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1315,7 +1509,7 @@
         }
       }
 
-      function renderEnhance() {
+            function renderEnhance() {
         const e = document.getElementById('screen-enhance');
         const hasImg = appState.get('hasImage');
         const params = appState.get('parameters');
@@ -1341,62 +1535,142 @@
           <div class="screen-content">
             <header class="app-header">
               <div class="header-top-row">
-                <h1 class="app-title">Fingerprint Enhancement</h1>
-                <button class="m3-btn-icon m3-btn-tonal" id="btn-dl" title="Download PNG">${Icons.download}</button>
-              </div>
-              <p class="app-subtitle">Illumination normalization, CLAHE local contrast & ridge sharpening</p>
-              <div style="margin-top: 8px;">
-                <span class="brand-badge" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border: 1px solid rgba(59, 130, 246, 0.3);">
-                  <span style="display: inline-flex; width: 14px; height: 14px; fill: currentColor;">${Icons.science}</span>
-                  AI Detected: ${detectedReagent}
-                </span>
+                <div>
+                  <h1 class="app-title">Fingerprint Enhancement Studio</h1>
+                  <p class="app-subtitle">Adaptive illumination normalization, CLAHE local contrast & ridge sharpening</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <button class="m3-btn m3-btn-tonal" id="btn-dl" title="Download Enhanced PNG" style="font-size: 12px; padding: 8px 16px;">
+                    ${Icons.download} Export PNG
+                  </button>
+                </div>
               </div>
             </header>
 
-            <div class="view-mode-bar">
-              <span style="font-size: 11px; font-weight: 700;">OUTPUT VIEW</span>
-              <div class="view-toggle-group">
-                <button class="view-toggle-btn active" id="v-enh">Enhanced</button>
-                <button class="view-toggle-btn" id="v-ridge">Ridge Map</button>
-              </div>
-            </div>
+            <div class="enhancer-dashboard">
+              <!-- Left Fixed-Width Sidebar (Controls, Quick Upload, Clarity Score) -->
+              <aside class="enhancer-sidebar">
+                <!-- Source Reagent & Quick Upload Box -->
+                <div class="m3-card" style="padding: 14px 16px; margin-bottom: 0;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span style="font-size: 11px; font-weight: 700; color: var(--md-sys-color-on-surface-variant); text-transform: uppercase; letter-spacing: 0.5px;">Reagent & Input</span>
+                    <span class="brand-badge" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border: 1px solid rgba(59, 130, 246, 0.3); font-size: 11px;">
+                      <span style="display: inline-flex; width: 14px; height: 14px; fill: currentColor;">${Icons.science}</span>
+                      AI: ${detectedReagent}
+                    </span>
+                  </div>
+                  <input type="file" id="enh-file-input" accept="image/*" style="display: none;">
+                  <div style="display: flex; gap: 8px;">
+                    <button class="m3-btn m3-btn-outlined" id="enh-btn-replace" style="flex: 1; padding: 7px 12px; font-size: 11px;">
+                      ${Icons.upload} Replace
+                    </button>
+                    <button class="m3-btn m3-btn-tonal" id="enh-btn-crop" style="flex: 1; padding: 7px 12px; font-size: 11px;">
+                      ${Icons.crop} Crop
+                    </button>
+                  </div>
+                </div>
 
-            <div class="comparison-container">
-              <div class="comparison-pane"><div class="pane-header"><span class="pane-title">${Icons.fingerprint} Original</span><span class="m3-chip">Raw</span></div><div class="pane-canvas-box" id="e-orig-box"></div></div>
-              <div class="comparison-pane"><div class="pane-header"><span class="pane-title" style="color: var(--md-sys-color-primary);">${Icons.auto_fix_high} Processed</span><span class="m3-chip m3-chip-primary">Enhanced</span></div><div class="pane-canvas-box" id="e-enh-box"></div></div>
-            </div>
+                <!-- Enhancement Parameters & Preset Controls -->
+                <div class="enhancement-controls-card" style="margin-bottom: 0;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="font-size: 13.5px; font-weight: 700;">Parameters</h3>
+                    <button class="m3-btn m3-btn-outlined" id="c-rst" style="padding: 3px 10px; font-size: 11px;">Reset</button>
+                  </div>
 
-            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-              <button class="m3-btn m3-btn-tonal" id="btn-rec-preset" style="flex: 1; font-size: 11px;">${Icons.auto_awesome} Recommended</button>
-              <button class="m3-btn m3-btn-outlined" id="btn-high-contrast" style="flex: 1; font-size: 11px;">High Contrast</button>
-            </div>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="m3-btn m3-btn-tonal" id="btn-rec-preset" style="flex: 1; font-size: 11px; padding: 6px 10px;">${Icons.auto_awesome} Recommended</button>
+                    <button class="m3-btn m3-btn-outlined" id="btn-high-contrast" style="flex: 1; font-size: 11px; padding: 6px 10px;">High Contrast</button>
+                  </div>
 
-            <div class="enhancement-controls-card">
-              <div style="display: flex; justify-content: space-between;"><h3 style="font-size: 13px; font-weight: 700;">Controls</h3><button class="m3-btn m3-btn-outlined" id="c-rst" style="padding: 2px 10px; font-size: 11px;">Reset</button></div>
-              <div><div class="control-title-row"><span class="control-label">${Icons.contrast} Local Contrast (CLAHE)</span><span class="m3-slider-badge" id="val-c">${params.contrast}</span></div><input type="range" class="m3-slider" id="sl-c" min="0" max="100" value="${params.contrast}"></div>
-              <div><div class="control-title-row"><span class="control-label">${Icons.blur_off} Edge-Preserving Denoise</span><span class="m3-slider-badge" id="val-n">${params.noiseReduction}</span></div><input type="range" class="m3-slider" id="sl-n" min="0" max="100" value="${params.noiseReduction}"></div>
-              <div><div class="control-title-row"><span class="control-label">${Icons.sharpen} Ridge Sharpening (Laplacian)</span><span class="m3-slider-badge" id="val-s">${params.ridgeSharpening}</span></div><input type="range" class="m3-slider" id="sl-s" min="0" max="100" value="${params.ridgeSharpening}"></div>
-            </div>
+                  <div>
+                    <div class="control-title-row">
+                      <span class="control-label">${Icons.contrast} Local Contrast (CLAHE)</span>
+                      <span class="m3-slider-badge" id="val-c">${params.contrast}</span>
+                    </div>
+                    <input type="range" class="m3-slider" id="sl-c" min="0" max="100" value="${params.contrast}">
+                  </div>
 
-            <button class="m3-btn m3-btn-primary" id="btn-do-enhance" style="width: 100%; padding: 14px; margin-bottom: 16px;">${Icons.auto_fix_high} Enhance Fingerprint</button>
+                  <div>
+                    <div class="control-title-row">
+                      <span class="control-label">${Icons.blur_off} Edge-Preserving Denoise</span>
+                      <span class="m3-slider-badge" id="val-n">${params.noiseReduction}</span>
+                    </div>
+                    <input type="range" class="m3-slider" id="sl-n" min="0" max="100" value="${params.noiseReduction}">
+                  </div>
 
-            <div class="clarity-score-card">
-              <div class="clarity-header">${Icons.auto_awesome} Forensic Clarity Score</div>
-              <div class="clarity-meter-wrap">
-                <svg viewBox="0 0 36 36" class="circular-chart"><defs><linearGradient id="clarityGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3b82f6" /><stop offset="100%" stop-color="#06b6d4" /></linearGradient></defs><path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path class="circle-progress" stroke-dasharray="${clarity.enhancedScore || 0}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
-                <div class="meter-inner-content"><span class="score-number">${clarity.enhancedScore || 0}</span><span class="score-max">/ 100</span></div>
-              </div>
-              <div class="clarity-comparison-row">
-                <div class="score-comparison-pill">Before: <strong>${clarity.rawScore || 0}</strong>/100</div>
-                <div class="score-comparison-pill">After: <strong>${clarity.enhancedScore || 0}</strong>/100</div>
-              </div>
-              ${clarity.hasCalculated ? `<div class="score-delta-badge">${Icons.check_circle} Clarity Boost: ${clarity.delta}</div>` : ''}
-              <div class="clarity-metrics-grid">
-                <div class="metric-factor-item"><div class="metric-factor-name"><span>Ridge Sharpness</span><strong>${clarity.metrics?.sharpness || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.sharpness || 0}%;"></div></div></div>
-                <div class="metric-factor-item"><div class="metric-factor-name"><span>Valley Separability</span><strong>${clarity.metrics?.separation || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.separation || 0}%;"></div></div></div>
-                <div class="metric-factor-item"><div class="metric-factor-name"><span>Contrast Dynamic</span><strong>${clarity.metrics?.contrast || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.contrast || 0}%;"></div></div></div>
-                <div class="metric-factor-item"><div class="metric-factor-name"><span>Signal-to-Noise</span><strong>${clarity.metrics?.snr || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.snr || 0}%;"></div></div></div>
-              </div>
+                  <div>
+                    <div class="control-title-row">
+                      <span class="control-label">${Icons.sharpen} Ridge Sharpening (Laplacian)</span>
+                      <span class="m3-slider-badge" id="val-s">${params.ridgeSharpening}</span>
+                    </div>
+                    <input type="range" class="m3-slider" id="sl-s" min="0" max="100" value="${params.ridgeSharpening}">
+                  </div>
+
+                  <button class="m3-btn m3-btn-primary" id="btn-do-enhance" style="width: 100%; padding: 12px; margin-top: 4px;">
+                    ${Icons.auto_fix_high} Enhance Fingerprint
+                  </button>
+                </div>
+
+                <!-- Forensic Clarity Score Card -->
+                <div class="clarity-score-card" style="margin-bottom: 0;">
+                  <div class="clarity-header">${Icons.auto_awesome} Forensic Clarity Score</div>
+                  <div class="clarity-meter-wrap">
+                    <svg viewBox="0 0 36 36" class="circular-chart">
+                      <defs>
+                        <linearGradient id="clarityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#3b82f6" />
+                          <stop offset="100%" stop-color="#06b6d4" />
+                        </linearGradient>
+                      </defs>
+                      <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                      <path class="circle-progress" stroke-dasharray="${clarity.enhancedScore || 0}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    </svg>
+                    <div class="meter-inner-content">
+                      <span class="score-number">${clarity.enhancedScore || 0}</span>
+                      <span class="score-max">/ 100</span>
+                    </div>
+                  </div>
+                  <div class="clarity-comparison-row">
+                    <div class="score-comparison-pill">Before: <strong>${clarity.rawScore || 0}</strong>/100</div>
+                    <div class="score-comparison-pill">After: <strong>${clarity.enhancedScore || 0}</strong>/100</div>
+                  </div>
+                  ${clarity.hasCalculated ? `<div class="score-delta-badge">${Icons.check_circle} Clarity Boost: ${clarity.delta}</div>` : ''}
+                  <div class="clarity-metrics-grid">
+                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Ridge Sharpness</span><strong>${clarity.metrics?.sharpness || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.sharpness || 0}%;"></div></div></div>
+                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Valley Separability</span><strong>${clarity.metrics?.separation || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.separation || 0}%;"></div></div></div>
+                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Contrast Dynamic</span><strong>${clarity.metrics?.contrast || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.contrast || 0}%;"></div></div></div>
+                    <div class="metric-factor-item"><div class="metric-factor-name"><span>Signal-to-Noise</span><strong>${clarity.metrics?.snr || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.snr || 0}%;"></div></div></div>
+                  </div>
+                </div>
+              </aside>
+
+              <!-- Right Main Viewing Area (Canvases Side-by-Side) -->
+              <main class="enhancer-main-view">
+                <div class="view-mode-bar">
+                  <span style="font-size: 12px; font-weight: 700; color: var(--md-sys-color-on-surface-variant); text-transform: uppercase; letter-spacing: 0.5px;">CANVAS VIEWPORT</span>
+                  <div class="view-toggle-group">
+                    <button class="view-toggle-btn active" id="v-enh">Enhanced</button>
+                    <button class="view-toggle-btn" id="v-ridge">Ridge Map</button>
+                  </div>
+                </div>
+
+                <div class="comparison-container">
+                  <div class="comparison-pane">
+                    <div class="pane-header">
+                      <span class="pane-title">${Icons.fingerprint} Original Impression</span>
+                      <span class="m3-chip">Raw Data</span>
+                    </div>
+                    <div class="pane-canvas-box" id="e-orig-box"></div>
+                  </div>
+                  <div class="comparison-pane">
+                    <div class="pane-header">
+                      <span class="pane-title" style="color: var(--md-sys-color-primary);">${Icons.auto_fix_high} Processed Impression</span>
+                      <span class="m3-chip m3-chip-primary">Enhanced Output</span>
+                    </div>
+                    <div class="pane-canvas-box" id="e-enh-box"></div>
+                  </div>
+                </div>
+              </main>
             </div>
           </div>
         `;
@@ -1407,6 +1681,45 @@
           const enhC = appState.get('enhancedCanvas');
           if (enhC) enhBox.appendChild(enhC);
         }
+
+        // Quick replace / crop inside enhancer sidebar
+        document.getElementById('enh-btn-replace')?.addEventListener('click', () => {
+          document.getElementById('enh-file-input')?.click();
+        });
+        document.getElementById('enh-file-input')?.addEventListener('change', (ev) => {
+          const file = ev.target.files?.[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+              const img = new Image();
+              img.onload = () => {
+                const maxDim = 1400;
+                let targetW = img.width, targetH = img.height;
+                if (targetW > maxDim || targetH > maxDim) {
+                  const ratio = Math.min(maxDim / targetW, maxDim / targetH);
+                  targetW = Math.round(targetW * ratio);
+                  targetH = Math.round(targetH * ratio);
+                }
+                const c = document.createElement('canvas');
+                c.width = targetW; c.height = targetH;
+                c.getContext('2d').drawImage(img, 0, 0, targetW, targetH);
+                appState.setImage(c, { name: file.name, originalDimensions: `${img.width} Ã— ${img.height} px` });
+                renderEnhance();
+              };
+              img.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+        document.getElementById('enh-btn-crop')?.addEventListener('click', () => {
+          const orig = appState.get('originalCanvas');
+          if (orig) {
+            new FingerprintCropper(orig, (croppedCanvas) => {
+              appState.setImage(croppedCanvas, { name: 'cropped.png' });
+              renderEnhance();
+            });
+          }
+        });
 
         document.getElementById('sl-c')?.addEventListener('input', (ev) => {
           appState.get('parameters').contrast = Number(ev.target.value);
@@ -1492,14 +1805,16 @@
         });
       }
 
-      function renderScope() {
+            function renderScope() {
         const s = document.getElementById('screen-scope');
         s.innerHTML = `
           <div class="screen-content">
-            <header class="app-header"><h1 class="app-title">Future Scope & AI</h1><p class="app-subtitle">Biometric & deep learning roadmap</p></header>
-            <div class="m3-card"><h3 class="section-card-title">${Icons.psychology} Neural Ridge Reconstruction</h3><p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 10px;">Deep CNNs to interpolate missing ridge flow across damaged prints.</p><span class="m3-chip m3-chip-primary">Phase 2</span></div>
-            <div class="m3-card"><h3 class="section-card-title">${Icons.auto_awesome} Automated Minutiae Extraction</h3><p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 10px;">Automatic Level 2 & Level 3 biometric feature detection.</p><span class="m3-chip m3-chip-accent">Phase 3</span></div>
-            <div class="m3-card"><h3 class="section-card-title">${Icons.fingerprint} AFIS Interoperability</h3><p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 10px;">Exporting standardized ANSI/NIST-ITL feature templates.</p><span class="m3-chip">Phase 4</span></div>
+            <header class="app-header"><h1 class="app-title">Future Scope & AI Roadmap</h1><p class="app-subtitle">Deep learning, biometrics, and forensic interoperability</p></header>
+            <div class="scope-grid">
+              <div class="m3-card"><h3 class="section-card-title">${Icons.psychology} Neural Ridge Reconstruction</h3><p style="font-size: 13px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 12px; line-height: 1.5;">Deep Convolutional Neural Networks (CNNs) to interpolate missing ridge flow across damaged, low-quality, or smudged latent prints.</p><span class="m3-chip m3-chip-primary">Phase 2</span></div>
+              <div class="m3-card"><h3 class="section-card-title">${Icons.auto_awesome} Automated Minutiae Extraction</h3><p style="font-size: 13px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 12px; line-height: 1.5;">Automatic detection of Level 2 (bifurcations, ridge endings) and Level 3 (pores, ridge contours) biometric minutiae points.</p><span class="m3-chip m3-chip-accent">Phase 3</span></div>
+              <div class="m3-card"><h3 class="section-card-title">${Icons.fingerprint} AFIS Standard Interoperability</h3><p style="font-size: 13px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 12px; line-height: 1.5;">Export standardized ANSI/NIST-ITL and ISO/IEC 19794 biometric feature packages for integration with forensic AFIS databases.</p><span class="m3-chip">Phase 4</span></div>
+            </div>
           </div>
         `;
       }

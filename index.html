@@ -901,7 +901,7 @@
         constructor() {
           this.listeners = new Map();
           this.state = {
-            activeTab: 'home', theme: 'light', hasImage: false, uvMode: false, uvDye: 'rhodamine', substrate: '', appliedChemical: null, ninhydrinTime: 45, cyanoHumidity: 80, cyanoTime: 20,
+            activeTab: 'home', theme: 'light', hasImage: false, uvMode: false, uvDye: 'rhodamine', substrate: '', appliedChemical: null, ninhydrinTime: 45, cyanoHumidity: 80, cyanoTime: 20, silverTime: 10,
             originalCanvas: null, enhancedCanvas: null, ridgeMapCanvas: null,
             imageMetadata: { name: '', size: '', originalDimensions: '', processingDimensions: '', qualityLevel: 'Good' },
             parameters: { contrast: 65, noiseReduction: 35, ridgeSharpening: 60 },
@@ -1723,6 +1723,7 @@
         }
 
         static simulateNinhydrin(baseCanvas, minutes) {
+          if (!baseCanvas || !baseCanvas.getContext) return null;
           const w = baseCanvas.width, h = baseCanvas.height;
           const out = document.createElement('canvas');
           out.width = w; out.height = h;
@@ -1758,6 +1759,7 @@
         }
 
         static simulateCyanoacrylate(baseCanvas, humidity, minutes) {
+          if (!baseCanvas || !baseCanvas.getContext) return null;
           const w = baseCanvas.width, h = baseCanvas.height;
           const out = document.createElement('canvas');
           out.width = w; out.height = h;
@@ -1807,6 +1809,7 @@
         }
 
         static simulateSilverNitrate(baseCanvas, minutes) {
+          if (!baseCanvas || !baseCanvas.getContext) return null;
           const w = baseCanvas.width, h = baseCanvas.height;
           const out = document.createElement('canvas');
           out.width = w; out.height = h;
@@ -2343,8 +2346,8 @@
                 </div>
 
                 <!-- Bottom Excitation Banner (As in Reference Photo) -->
+                <div class="uv-excitation-banner">
                   <span>&#128294; UV EXCITATION: ACTIVE (Visualization Boosted)</span>
-                      &#128294; UV EXCITATION: ACTIVE (Visualization Boosted)
                 </div>
               </main>
             </div>
@@ -2439,9 +2442,9 @@
               if (stageEl) stageEl.innerHTML = '&#9203; <strong>Incipient Polymerization:</strong> White monomer esters beginning to nucleate along ridge sweat residues.';
             }
           } else if (currentChem === 'silver_nitrate') {
-            const time = 10;
+            const time = Number(appState.get('silverTime') || 10);
             simCanvas = ChemicalSimulator.simulateSilverNitrate(orig, time);
-            simScore = 84;
+            simScore = Math.min(88, Math.round(55 + (time / 15) * 33));
           }
 
           if (simCanvas && enhBox) {
@@ -2504,7 +2507,7 @@
         });
 
         // Chemical Buttons Handlers
-                      <button class="m3-btn ${selectedChemical === 'ninhydrin' ? 'm3-btn-primary' : 'm3-btn-outlined'}" id="btn-chem-ninhydrin" style="flex: 1; padding: 7px 6px; font-size: 11px;">&#128995; Ninhydrin</button>
+        document.getElementById('btn-chem-ninhydrin')?.addEventListener('click', () => {
           appState.set('appliedChemical', 'ninhydrin');
           renderEnhance();
         });
@@ -2538,6 +2541,13 @@
           const val = Number(ev.target.value);
           appState.set('cyanoTime', val);
           const badge = document.getElementById('val-cy-time');
+          if (badge) badge.textContent = `${val} mins`;
+          updateSimulationDisplay();
+        });
+        document.getElementById('sl-sn-time')?.addEventListener('input', (ev) => {
+          const val = Number(ev.target.value);
+          appState.set('silverTime', val);
+          const badge = document.getElementById('val-sn-time');
           if (badge) badge.textContent = `${val} mins`;
           updateSimulationDisplay();
         });

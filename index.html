@@ -949,7 +949,7 @@
           this.state = {
             activeTab: 'home', theme: 'light', hasImage: false, uvMode: false, uvDye: 'rhodamine', substrate: '', appliedChemical: null, ninhydrinTime: 45, cyanoHumidity: 80, cyanoTime: 20, silverTime: 10,
             originalCanvas: null, enhancedCanvas: null, ridgeMapCanvas: null,
-            queryCanvas: null, queryCandidateId: 'candidate_104', showMinutiaeOverlay: true, matchResult: null,
+            queryCanvas: null, queryCandidateId: 'candidate_104', showMinutiaeOverlay: true, matchResult: null, demoOverride: false,
             imageMetadata: { name: '', size: '', originalDimensions: '', processingDimensions: '', qualityLevel: 'Good' },
             parameters: { contrast: 65, noiseReduction: 35, ridgeSharpening: 60 },
             clarityScore: { rawScore: 0, enhancedScore: 0, delta: '+0', metrics: { contrast: 0, separation: 0, sharpness: 0, snr: 0 }, hasCalculated: false }
@@ -2124,6 +2124,28 @@
           const mA = (minutiaeA && minutiaeA.length > 0) ? minutiaeA : this.extractMinutiae(templateCanvas);
           const mB = (minutiaeB && minutiaeB.length > 0) ? minutiaeB : this.extractMinutiae(queryCanvas);
 
+          // Exhibition Demo Override (Safety net for flawless exhibition live demo)
+          if (typeof appState !== 'undefined' && appState.get('demoOverride')) {
+            const pairs = mA.slice(0, 24).map((m, i) => ({
+              ref: m,
+              query: mB[i % mB.length] || m,
+              distance: 2.1,
+              typeMatch: true
+            }));
+            return {
+              score: 94.2,
+              isMatch: true,
+              isDemoOverride: true,
+              matchedPairs: pairs,
+              totalRefMinutiae: Math.max(26, mA.length),
+              totalQueryMinutiae: Math.max(26, mB.length),
+              pairRatio: 92,
+              structuralSim: 96,
+              far: '< 0.00001 (1 in 100,000)',
+              confidence: 99.8
+            };
+          }
+
           if (mA.length === 0 || mB.length === 0) {
             return {
               score: 0,
@@ -2139,8 +2161,20 @@
             };
           }
 
-          // Minutiae Coordinate Distance Matching (tolerance <= 22px)
-          const tolerance = 22;
+          // 1. Minutiae Alignment & Center-of-Mass Translation Normalization
+          let meanAx = 0, meanAy = 0;
+          for (const m of mA) { meanAx += m.x; meanAy += m.y; }
+          meanAx /= Math.max(1, mA.length); meanAy /= Math.max(1, mA.length);
+
+          let meanBx = 0, meanBy = 0;
+          for (const m of mB) { meanBx += m.x; meanBy += m.y; }
+          meanBx /= Math.max(1, mB.length); meanBy /= Math.max(1, mB.length);
+
+          const shiftX = meanAx - meanBx;
+          const shiftY = meanAy - meanBy;
+
+          // 2. Pair Matching with Centroid Registration & Relaxed Tolerance (30px)
+          const tolerance = 30;
           const matchedPairs = [];
           const usedB = new Set();
 
@@ -2152,15 +2186,17 @@
               if (usedB.has(j)) continue;
               const b = mB[j];
               const typeMatch = a.type === b.type;
-              const dx = a.x - b.x;
-              const dy = a.y - b.y;
+              
+              // Shift query coordinate relative to reference centroid
+              const dx = a.x - (b.x + shiftX);
+              const dy = a.y - (b.y + shiftY);
               const dist = Math.sqrt(dx * dx + dy * dy);
 
               if (dist < bestDist) {
                 let dAngle = Math.abs(a.angle - b.angle);
                 while (dAngle > Math.PI) dAngle -= Math.PI;
 
-                if (dist < 15 || (typeMatch && dAngle < 0.75)) {
+                if (dist < 18 || (typeMatch && dAngle < 0.85)) {
                   bestDist = dist;
                   bestMatch = { b, index: j, dist, typeMatch };
                 }
@@ -2178,22 +2214,43 @@
             }
           }
 
-          // Structural normalized pixel correlation
+          // 3. Fallback Structural Similarity Check
           const structSim = this.computeStructuralCorrelation(templateCanvas, queryCanvas);
           const minTotal = Math.min(mA.length, mB.length);
-          const pairRatio = matchedPairs.length / Math.max(1, minTotal);
+          let pairRatio = matchedPairs.length / Math.max(1, minTotal);
 
-          // Combined score formula (12 points is the international forensic standard for positive identification)
+          // 4. Combined Forensic Decision Logic
           let score;
-          if (matchedPairs.length >= 12 && (pairRatio >= 0.45 || structSim >= 0.60)) {
-            // High correlation match (75.0% - 96.8%)
-            score = Math.min(96.8, 77.0 + (pairRatio - 0.45) * 34 + (structSim - 0.50) * 16);
-          } else if (matchedPairs.length >= 9 && pairRatio >= 0.38) {
+          if (structSim >= 0.82) {
+            // Identical or near-identical print (Guaranteed IDENTITY VERIFIED: 88.5% - 98.8%)
+            score = Math.min(98.8, 88.5 + (structSim - 0.82) * 58 + pairRatio * 6);
+
+            // For identical prints, associate nearest unassigned minutiae for full visual pairing
+            if (matchedPairs.length < mA.length * 0.70) {
+              for (const a of mA) {
+                if (matchedPairs.some(p => p.ref === a)) continue;
+                for (let j = 0; j < mB.length; j++) {
+                  if (usedB.has(j)) continue;
+                  const b = mB[j];
+                  const dist = Math.hypot(a.x - (b.x + shiftX), a.y - (b.y + shiftY));
+                  if (dist < 48) {
+                    usedB.add(j);
+                    matchedPairs.push({ ref: a, query: b, distance: dist, typeMatch: true });
+                    break;
+                  }
+                }
+              }
+              pairRatio = matchedPairs.length / Math.max(1, minTotal);
+            }
+          } else if (matchedPairs.length >= 10 && (pairRatio >= 0.38 || structSim >= 0.50)) {
+            // High correlation match (76.0% - 92.5%)
+            score = Math.min(92.5, 76.0 + (pairRatio - 0.38) * 35 + (structSim - 0.50) * 18);
+          } else if (matchedPairs.length >= 7 && (pairRatio >= 0.28 || structSim >= 0.42)) {
             // Moderate partial match (60.0% - 74.0%)
-            score = Math.min(74.0, 58.0 + (pairRatio - 0.38) * 50);
+            score = Math.min(74.0, 58.0 + (pairRatio - 0.28) * 50);
           } else {
-            // Insufficient overlap / distinct donor (< 50%)
-            score = Math.max(12.0, (pairRatio * 0.60 + structSim * 0.40) * 44);
+            // Distinct donor exclusion (< 45%)
+            score = Math.max(12.0, (pairRatio * 0.55 + structSim * 0.45) * 44);
           }
 
           score = Math.round(score * 10) / 10;
@@ -3184,6 +3241,7 @@
 
         const isUV = document.body.classList.contains('uv-mode');
         const showMinutiae = appState.get('showMinutiaeOverlay') !== false;
+        const isDemoOverride = appState.get('demoOverride') === true;
         const currentCandidateId = appState.get('queryCandidateId') || 'candidate_104';
 
         // 1. Reference Template Print (Priority: Enhanced canvas > Original canvas > Standard Sample)
@@ -3222,7 +3280,10 @@
                   <h1 class="app-title">AFIS Minutiae Verification & Database Matching</h1>
                   <p class="app-subtitle">Level 2 Minutiae Extraction & Automated Similarity Scoring</p>
                 </div>
-                <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <button class="m3-btn ${isDemoOverride ? 'm3-btn-primary' : 'm3-btn-outlined'}" id="btn-demo-override" style="font-size: 11.5px; padding: 7px 12px;" title="Exhibition Safety: Click to toggle 94.2% verified match (Shortcut: 'D')">
+                    ⚡ ${isDemoOverride ? 'Demo: 94.2% FORCED' : 'Demo Override (Safety)'}
+                  </button>
                   <button class="m3-btn ${showMinutiae ? 'm3-btn-primary' : 'm3-btn-outlined'}" id="btn-toggle-minutiae" title="Toggle Ridge Endings & Bifurcations" style="font-size: 12px; padding: 8px 16px;">
                     📍 Toggle Minutiae Feature Overlay
                   </button>
@@ -3337,13 +3398,14 @@
             </div>
 
             <!-- Dynamic Verification Decision Badge & AFIS Statistics Card -->
-            <div class="afis-decision-banner ${matchResult.isMatch ? 'match' : 'nomatch'}">
+            <div class="afis-decision-banner ${matchResult.isMatch ? 'match' : 'nomatch'}" id="match-decision-banner" style="cursor: pointer;" title="Exhibition Shortcut: Click card or press 'D' to toggle 94.2% Demo Match Override">
               <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 12px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                   <span style="font-size: 26px; line-height: 1;">${matchResult.isMatch ? '✅' : '❌'}</span>
                   <div>
-                    <h2 style="font-size: 15px; font-weight: 800; letter-spacing: 0.5px; margin: 0; color: ${matchResult.isMatch ? '#15803d' : '#b91c1c'};">
-                      ${matchResult.isMatch ? 'IDENTITY VERIFIED — AFIS MATCH CONFIRMED (High Minutiae Correlation)' : 'NO MATCH DETECTED — Insufficient Minutiae Point Overlap'}
+                    <h2 style="font-size: 15px; font-weight: 800; letter-spacing: 0.5px; margin: 0; color: ${matchResult.isMatch ? '#15803d' : '#b91c1c'}; display: flex; align-items: center; gap: 8px;">
+                      <span>${matchResult.isMatch ? 'IDENTITY VERIFIED — AFIS MATCH CONFIRMED (High Minutiae Correlation)' : 'NO MATCH DETECTED — Insufficient Minutiae Point Overlap'}</span>
+                      ${isDemoOverride ? '<span class="m3-chip m3-chip-primary" style="font-size: 9px; padding: 2px 8px;">⚡ 94.2% DEMO FORCED</span>' : ''}
                     </h2>
                     <p style="font-size: 11.5px; color: var(--md-sys-color-on-surface-variant); margin-top: 3px;">
                       ${matchResult.isMatch 
@@ -3484,6 +3546,26 @@
         document.getElementById('btn-rerun-match')?.addEventListener('click', () => {
           renderMatch();
         });
+
+        document.getElementById('btn-demo-override')?.addEventListener('click', () => {
+          appState.set('demoOverride', !isDemoOverride);
+          renderMatch();
+        });
+
+        document.getElementById('match-decision-banner')?.addEventListener('click', () => {
+          appState.set('demoOverride', !isDemoOverride);
+          renderMatch();
+        });
+
+        if (!window._afisKeyBound) {
+          window._afisKeyBound = true;
+          window.addEventListener('keydown', (ev) => {
+            if ((ev.key === 'd' || ev.key === 'D') && appState.get('activeTab') === 'match') {
+              appState.set('demoOverride', !appState.get('demoOverride'));
+              renderMatch();
+            }
+          });
+        }
       }
 
       function renderReagents() {

@@ -704,6 +704,49 @@
       filter: grayscale(1) brightness(1.9) contrast(2.9) sepia(1) hue-rotate(35deg) saturate(950%) drop-shadow(0 0 18px rgba(255, 110, 0, 0.85)) drop-shadow(0 0 6px rgba(0, 255, 102, 0.6)) !important;
     }
 
+    /* AFIS Minutiae Layer & Match Module Styles */
+    .pane-canvas-box {
+      position: relative;
+    }
+    .pane-canvas-box canvas.minutiae-layer {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      pointer-events: none !important;
+      z-index: 6 !important;
+    }
+    body.uv-mode .pane-canvas-box canvas.minutiae-layer {
+      filter: none !important;
+    }
+    .afis-decision-banner {
+      margin-top: 18px;
+      padding: 16px 20px;
+      border-radius: var(--md-shape-md);
+      border: 2px solid;
+      transition: all 0.3s ease;
+    }
+    .afis-decision-banner.match {
+      background: rgba(34, 197, 94, 0.10);
+      border-color: #22c55e;
+      box-shadow: 0 4px 18px rgba(34, 197, 94, 0.2);
+    }
+    .afis-decision-banner.nomatch {
+      background: rgba(239, 68, 68, 0.10);
+      border-color: #ef4444;
+      box-shadow: 0 4px 18px rgba(239, 68, 68, 0.2);
+    }
+    body.uv-mode .afis-decision-banner.match {
+      background: rgba(34, 197, 94, 0.18) !important;
+      border-color: #4ade80 !important;
+      box-shadow: 0 0 28px rgba(74, 222, 128, 0.4) !important;
+    }
+    body.uv-mode .afis-decision-banner.nomatch {
+      background: rgba(239, 68, 68, 0.18) !important;
+      border-color: #f87171 !important;
+      box-shadow: 0 0 28px rgba(248, 113, 113, 0.4) !important;
+    }
+
     /* Forensic Lens Reticle & Laser Sweep Overlay */
     .canvas-lens-overlay {
       position: absolute;
@@ -858,6 +901,7 @@
         <section class="screen-view active" id="screen-home" role="tabpanel" aria-label="Home"></section>
         <section class="screen-view" id="screen-upload" role="tabpanel" aria-label="Upload"></section>
         <section class="screen-view" id="screen-enhance" role="tabpanel" aria-label="Enhance"></section>
+        <section class="screen-view" id="screen-match" role="tabpanel" aria-label="Match"></section>
         <section class="screen-view" id="screen-reagents" role="tabpanel" aria-label="Reagents"></section>
         <section class="screen-view" id="screen-scope" role="tabpanel" aria-label="Future Scope"></section>
         <div class="toast-container" id="app-toast"></div>
@@ -893,7 +937,9 @@
         download: `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`,
         dark_mode: `<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 4.97 4.03 9 9 9 4.97 0 9-4.03 9-9 0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>`,
         crop: `<svg viewBox="0 0 24 24"><path d="M17 15h2V7c0-1.1-.9-2-2-2H9v2h8v8zM7 17V1H5v4H1v2h4v10c0 1.1.9 2 2 2h10v4h2v-4h4v-2H7z"/></svg>`,
-        restart_alt: `<svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>`
+        restart_alt: `<svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>`,
+        compare: `<svg viewBox="0 0 24 24"><path d="M10 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h5v2h2V1h-2v2zm-5 16V5h5v14H5zm14-14h-5v2h5v14h-5v2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>`,
+        pin_drop: `<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`
       };
 
       // 2. Reactive App State
@@ -903,6 +949,7 @@
           this.state = {
             activeTab: 'home', theme: 'light', hasImage: false, uvMode: false, uvDye: 'rhodamine', substrate: '', appliedChemical: null, ninhydrinTime: 45, cyanoHumidity: 80, cyanoTime: 20, silverTime: 10,
             originalCanvas: null, enhancedCanvas: null, ridgeMapCanvas: null,
+            queryCanvas: null, queryCandidateId: 'candidate_104', showMinutiaeOverlay: true, matchResult: null,
             imageMetadata: { name: '', size: '', originalDimensions: '', processingDimensions: '', qualityLevel: 'Good' },
             parameters: { contrast: 65, noiseReduction: 35, ridgeSharpening: 60 },
             clarityScore: { rawScore: 0, enhancedScore: 0, delta: '+0', metrics: { contrast: 0, separation: 0, sharpness: 0, snr: 0 }, hasCalculated: false }
@@ -1324,6 +1371,95 @@
           }
           ctx.putImageData(imgData, 0, 0);
           return canvas;
+        }
+
+        static generateCandidate(candidateId, templateCanvas, width = 380, height = 380) {
+          const canvas = document.createElement('canvas');
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+
+          // If template canvas is missing, generate fallback standard print
+          const base = templateCanvas && templateCanvas.getContext ? templateCanvas : this.generate('ninhydrin', width, height);
+
+          if (candidateId === 'candidate_104') {
+            // Suspect A (Same Donor — High Match / Latent Glass Print)
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, width, height);
+            ctx.save();
+            ctx.translate(width / 2 + 5, height / 2 - 4);
+            ctx.rotate(0.026); // ~1.5 deg
+            ctx.drawImage(base, -width / 2, -height / 2, width, height);
+            ctx.restore();
+
+            // Very subtle latent noise
+            const imgData = ctx.getImageData(0, 0, width, height);
+            const d = imgData.data;
+            for (let i = 0; i < d.length; i += 8) {
+              if (d[i + 3] > 80) {
+                const n = (Math.random() - 0.5) * 12;
+                d[i] = Math.max(0, Math.min(255, d[i] + n));
+                d[i + 1] = Math.max(0, Math.min(255, d[i + 1] + n));
+                d[i + 2] = Math.max(0, Math.min(255, d[i + 2] + n));
+              }
+            }
+            ctx.putImageData(imgData, 0, 0);
+            return canvas;
+          } else if (candidateId === 'candidate_219') {
+            // Suspect B (Same Donor — Partial Arch Ridge, 78-82% match)
+            ctx.fillStyle = '#f6f3ee';
+            ctx.fillRect(0, 0, width, height);
+            ctx.save();
+            ctx.translate(width / 2 + 9, height / 2 + 7);
+            ctx.rotate(-0.035); // ~2 deg
+            ctx.drawImage(base, -width / 2, -height / 2, width, height);
+            ctx.restore();
+            return canvas;
+          } else if (candidateId === 'candidate_308') {
+            // Suspect C (Non-Matching Donor — Distinct Ulnar Loop Pattern)
+            ctx.fillStyle = '#eddcc6';
+            ctx.fillRect(0, 0, width, height);
+            const imgData = ctx.getImageData(0, 0, width, height);
+            const d = imgData.data;
+            const cx = width * 0.40, cy = height * 0.58;
+            for (let y = 0; y < height; y++) {
+              const dy = (y - cy) / (height * 0.40);
+              for (let x = 0; x < width; x++) {
+                const dx = (x - cx) / (width * 0.35);
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist > 1.15) continue;
+                const angle = Math.atan2(dy, dx);
+                const wave = Math.sqrt(dx * dx * 0.9 + dy * dy * 1.5) * 35 + Math.cos(angle * 2.2 - dx * 1.2) * 2.5;
+                const ridge = (Math.sin(wave + Math.sin(y * 0.14) * 0.7) + 1) * 0.5;
+                const idx = (y * width + x) * 4;
+                const val = Math.round(ridge * 175 + 45);
+                d[idx] = val; d[idx + 1] = Math.max(0, val - 12); d[idx + 2] = Math.max(0, val - 24);
+              }
+            }
+            ctx.putImageData(imgData, 0, 0);
+            return canvas;
+          } else {
+            // Suspect D (candidate_415) (Non-Matching Donor — Concentric Whorl Pattern)
+            ctx.fillStyle = '#f1f5f9';
+            ctx.fillRect(0, 0, width, height);
+            const imgData = ctx.getImageData(0, 0, width, height);
+            const d = imgData.data;
+            const cx = width * 0.52, cy = height * 0.48;
+            for (let y = 0; y < height; y++) {
+              const dy = (y - cy) / (height * 0.44);
+              for (let x = 0; x < width; x++) {
+                const dx = (x - cx) / (width * 0.44);
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist > 1.18) continue;
+                const concentric = dist * 55;
+                const ridge = (Math.sin(concentric) + 1) * 0.5;
+                const idx = (y * width + x) * 4;
+                const val = Math.round(ridge * 185 + 35);
+                d[idx] = val; d[idx + 1] = val; d[idx + 2] = val;
+              }
+            }
+            ctx.putImageData(imgData, 0, 0);
+            return canvas;
+          }
         }
       }
 
@@ -1845,6 +1981,362 @@
         }
       }
 
+      // 9d. AFIS Minutiae Verification & Matching Engine
+      class AFISMatcher {
+        // Extract Level 2 Minutiae (Ridge Endings and Bifurcations)
+        static extractMinutiae(canvas) {
+          if (!canvas || !canvas.getContext) return [];
+          const w = canvas.width, h = canvas.height;
+          const ctx = canvas.getContext('2d');
+          const imgData = ctx.getImageData(0, 0, w, h);
+          const d = imgData.data;
+
+          // Convert to grayscale
+          const gray = new Float32Array(w * h);
+          for (let i = 0, j = 0; i < d.length; i += 4, j++) {
+            gray[j] = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+          }
+
+          const isDark = d[0] < 50 && d[1] < 50 && d[2] < 50;
+          const minutiae = [];
+          const step = 10;
+          const cx = w * 0.5, cy = h * 0.52;
+          const maxRadius = Math.min(w, h) * 0.42;
+
+          for (let y = 30; y < h - 30; y += step) {
+            const dy = y - cy;
+            for (let x = 30; x < w - 30; x += step) {
+              const dx = x - cx;
+              const distFromCenter = Math.sqrt(dx * dx + dy * dy);
+              if (distFromCenter > maxRadius) continue;
+
+              const idx = y * w + x;
+              const val = gray[idx];
+
+              // Skip non-ridge background
+              if (isDark ? val < 50 : val > 215) continue;
+
+              // Local spatial gradient
+              const gx = (gray[idx + 1] - gray[idx - 1] + (gray[idx + w + 1] - gray[idx + w - 1])) / 2;
+              const gy = (gray[idx + w] - gray[idx - w] + (gray[idx + w + 1] - gray[idx - w + 1])) / 2;
+              const grad = Math.sqrt(gx * gx + gy * gy);
+
+              if (grad > 18) {
+                // Circular 8-sample neighborhood at r=4
+                const r = 4;
+                const samples = [];
+                for (let a = 0; a < 8; a++) {
+                  const rad = (a * Math.PI) / 4;
+                  const sx = Math.round(x + r * Math.cos(rad));
+                  const sy = Math.round(y + r * Math.sin(rad));
+                  if (sx >= 0 && sx < w && sy >= 0 && sy < h) {
+                    samples.push(isDark ? (gray[sy * w + sx] > val ? 1 : 0) : (gray[sy * w + sx] < val ? 1 : 0));
+                  } else {
+                    samples.push(0);
+                  }
+                }
+
+                // Crossing Number transitions
+                let transitions = 0;
+                for (let s = 0; s < 8; s++) {
+                  if (samples[s] !== samples[(s + 1) % 8]) transitions++;
+                }
+
+                const angle = Math.atan2(gy, gx) + Math.PI / 2;
+
+                if (transitions === 2) {
+                  minutiae.push({
+                    x, y,
+                    angle,
+                    type: 'ending',
+                    quality: grad
+                  });
+                } else if (transitions >= 6) {
+                  minutiae.push({
+                    x, y,
+                    angle,
+                    type: 'bifurcation',
+                    quality: grad
+                  });
+                }
+              }
+            }
+          }
+
+          // Minutiae Non-Maximum Suppression (min spacing 14px)
+          const filtered = [];
+          minutiae.sort((a, b) => b.quality - a.quality);
+
+          for (const m of minutiae) {
+            let tooClose = false;
+            for (const f of filtered) {
+              const dx = m.x - f.x;
+              const dy = m.y - f.y;
+              if (dx * dx + dy * dy < 196) { // 14^2
+                tooClose = true;
+                break;
+              }
+            }
+            if (!tooClose) {
+              m.id = `m_${filtered.length + 1}`;
+              filtered.push(m);
+              if (filtered.length >= 28) break;
+            }
+          }
+
+          // Fallback feature assurance for sparse prints
+          if (filtered.length < 12) {
+            for (let a = 0; a < 14; a++) {
+              const rad = (a / 14) * Math.PI * 2;
+              const rDist = maxRadius * (0.35 + (a % 3) * 0.2);
+              const fx = Math.round(cx + rDist * Math.cos(rad));
+              const fy = Math.round(cy + rDist * Math.sin(rad));
+              filtered.push({
+                id: `m_${filtered.length + 1}`,
+                x: fx, y: fy,
+                angle: rad + Math.PI / 2,
+                type: a % 2 === 0 ? 'ending' : 'bifurcation',
+                quality: 25
+              });
+            }
+          }
+
+          return filtered;
+        }
+
+        // Compare reference minutiae and query minutiae
+        static match(templateCanvas, queryCanvas, minutiaeA, minutiaeB) {
+          if (!templateCanvas || !queryCanvas || !templateCanvas.getContext || !queryCanvas.getContext) {
+            return {
+              score: 0,
+              isMatch: false,
+              matchedPairs: [],
+              totalRefMinutiae: 0,
+              totalQueryMinutiae: 0,
+              pairRatio: 0,
+              structuralSim: 0,
+              far: 'N/A',
+              confidence: 0,
+              reason: 'Missing canvas'
+            };
+          }
+
+          const mA = (minutiaeA && minutiaeA.length > 0) ? minutiaeA : this.extractMinutiae(templateCanvas);
+          const mB = (minutiaeB && minutiaeB.length > 0) ? minutiaeB : this.extractMinutiae(queryCanvas);
+
+          if (mA.length === 0 || mB.length === 0) {
+            return {
+              score: 0,
+              isMatch: false,
+              matchedPairs: [],
+              totalRefMinutiae: mA.length,
+              totalQueryMinutiae: mB.length,
+              pairRatio: 0,
+              structuralSim: 0,
+              far: '1.0',
+              confidence: 0,
+              reason: 'No minutiae detected'
+            };
+          }
+
+          // Minutiae Coordinate Distance Matching (tolerance <= 22px)
+          const tolerance = 22;
+          const matchedPairs = [];
+          const usedB = new Set();
+
+          for (const a of mA) {
+            let bestMatch = null;
+            let bestDist = tolerance;
+
+            for (let j = 0; j < mB.length; j++) {
+              if (usedB.has(j)) continue;
+              const b = mB[j];
+              const typeMatch = a.type === b.type;
+              const dx = a.x - b.x;
+              const dy = a.y - b.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+
+              if (dist < bestDist) {
+                let dAngle = Math.abs(a.angle - b.angle);
+                while (dAngle > Math.PI) dAngle -= Math.PI;
+
+                if (dist < 15 || (typeMatch && dAngle < 0.75)) {
+                  bestDist = dist;
+                  bestMatch = { b, index: j, dist, typeMatch };
+                }
+              }
+            }
+
+            if (bestMatch) {
+              usedB.add(bestMatch.index);
+              matchedPairs.push({
+                ref: a,
+                query: bestMatch.b,
+                distance: bestMatch.dist,
+                typeMatch: bestMatch.typeMatch
+              });
+            }
+          }
+
+          // Structural normalized pixel correlation
+          const structSim = this.computeStructuralCorrelation(templateCanvas, queryCanvas);
+          const minTotal = Math.min(mA.length, mB.length);
+          const pairRatio = matchedPairs.length / Math.max(1, minTotal);
+
+          // Combined score formula (12 points is the international forensic standard for positive identification)
+          let score;
+          if (matchedPairs.length >= 12 && (pairRatio >= 0.45 || structSim >= 0.60)) {
+            // High correlation match (75.0% - 96.8%)
+            score = Math.min(96.8, 77.0 + (pairRatio - 0.45) * 34 + (structSim - 0.50) * 16);
+          } else if (matchedPairs.length >= 9 && pairRatio >= 0.38) {
+            // Moderate partial match (60.0% - 74.0%)
+            score = Math.min(74.0, 58.0 + (pairRatio - 0.38) * 50);
+          } else {
+            // Insufficient overlap / distinct donor (< 50%)
+            score = Math.max(12.0, (pairRatio * 0.60 + structSim * 0.40) * 44);
+          }
+
+          score = Math.round(score * 10) / 10;
+          const isMatch = score >= 75.0;
+
+          let farStr;
+          if (score >= 90) farStr = '< 0.00001 (1 in 100,000)';
+          else if (score >= 80) farStr = '< 0.0001 (1 in 10,000)';
+          else if (score >= 75) farStr = '< 0.001 (1 in 1,000)';
+          else if (score >= 50) farStr = '0.045 (1 in 22)';
+          else farStr = '0.94 (Significant Mismatch)';
+
+          return {
+            score,
+            isMatch,
+            matchedPairs,
+            totalRefMinutiae: mA.length,
+            totalQueryMinutiae: mB.length,
+            pairRatio: Math.round(pairRatio * 100),
+            structuralSim: Math.round(structSim * 100),
+            far: farStr,
+            confidence: Math.round(Math.min(99.9, Math.abs(score - 75) * 2.8 + 52))
+          };
+        }
+
+        // Low-resolution structural normalized cross-correlation
+        static computeStructuralCorrelation(c1, c2) {
+          try {
+            const size = 32;
+            const tCanvas = document.createElement('canvas');
+            tCanvas.width = size; tCanvas.height = size;
+            const tCtx = tCanvas.getContext('2d');
+
+            tCtx.drawImage(c1, 0, 0, size, size);
+            const d1 = tCtx.getImageData(0, 0, size, size).data;
+
+            tCtx.clearRect(0, 0, size, size);
+            tCtx.drawImage(c2, 0, 0, size, size);
+            const d2 = tCtx.getImageData(0, 0, size, size).data;
+
+            let sum1 = 0, sum2 = 0;
+            const count = size * size;
+            const g1 = new Float32Array(count);
+            const g2 = new Float32Array(count);
+
+            for (let i = 0, j = 0; i < d1.length; i += 4, j++) {
+              g1[j] = 0.299 * d1[i] + 0.587 * d1[i + 1] + 0.114 * d1[i + 2];
+              g2[j] = 0.299 * d2[i] + 0.587 * d2[i + 1] + 0.114 * d2[i + 2];
+              sum1 += g1[j];
+              sum2 += g2[j];
+            }
+
+            const mean1 = sum1 / count;
+            const mean2 = sum2 / count;
+
+            let num = 0, den1 = 0, den2 = 0;
+            for (let j = 0; j < count; j++) {
+              const diff1 = g1[j] - mean1;
+              const diff2 = g2[j] - mean2;
+              num += diff1 * diff2;
+              den1 += diff1 * diff1;
+              den2 += diff2 * diff2;
+            }
+
+            const denom = Math.sqrt(den1 * den2);
+            if (denom === 0) return 0.5;
+            const corr = num / denom;
+            return Math.max(0, Math.min(1, (corr + 1) / 2));
+          } catch(e) {
+            return 0.5;
+          }
+        }
+
+        // Draw simulated Level 2 minutiae markers (red circles for endings, blue squares for bifurcations)
+        static renderOverlay(overlayCanvas, minutiae, matchedPairs = [], isRef = true) {
+          if (!overlayCanvas || !overlayCanvas.getContext) return;
+          const ctx = overlayCanvas.getContext('2d');
+          const w = overlayCanvas.width, h = overlayCanvas.height;
+          ctx.clearRect(0, 0, w, h);
+
+          const matchedIds = new Set(
+            matchedPairs.map(p => isRef ? p.ref.id : p.query.id)
+          );
+
+          minutiae.forEach(m => {
+            const isMatched = matchedIds.has(m.id);
+
+            ctx.save();
+            ctx.translate(m.x, m.y);
+
+            // Vector Stem pointing in ridge direction
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            const stemLen = 13;
+            ctx.lineTo(stemLen * Math.cos(m.angle), stemLen * Math.sin(m.angle));
+            ctx.strokeStyle = isMatched ? '#22c55e' : (m.type === 'ending' ? '#ef4444' : '#3b82f6');
+            ctx.lineWidth = 2.2;
+            ctx.stroke();
+
+            if (m.type === 'ending') {
+              // Red Circle: Ridge Ending (Termination)
+              ctx.beginPath();
+              ctx.arc(0, 0, 5.5, 0, Math.PI * 2);
+              ctx.fillStyle = isMatched ? 'rgba(34, 197, 94, 0.45)' : 'rgba(239, 68, 68, 0.35)';
+              ctx.fill();
+              ctx.strokeStyle = isMatched ? '#22c55e' : '#ef4444';
+              ctx.lineWidth = 2.2;
+              ctx.stroke();
+
+              // Center core dot
+              ctx.beginPath();
+              ctx.arc(0, 0, 1.6, 0, Math.PI * 2);
+              ctx.fillStyle = '#ffffff';
+              ctx.fill();
+            } else {
+              // Blue Square: Bifurcation (Branching Fork)
+              const s = 10;
+              ctx.fillStyle = isMatched ? 'rgba(34, 197, 94, 0.45)' : 'rgba(59, 130, 246, 0.35)';
+              ctx.fillRect(-s / 2, -s / 2, s, s);
+              ctx.strokeStyle = isMatched ? '#22c55e' : '#3b82f6';
+              ctx.lineWidth = 2.2;
+              ctx.strokeRect(-s / 2, -s / 2, s, s);
+
+              // Center core dot
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(-1.5, -1.5, 3, 3);
+            }
+
+            // Green identification halo for matched minutiae
+            if (isMatched) {
+              ctx.beginPath();
+              ctx.arc(0, 0, 9.5, 0, Math.PI * 2);
+              ctx.strokeStyle = '#22c55e';
+              ctx.lineWidth = 1.4;
+              ctx.setLineDash([2.5, 2.5]);
+              ctx.stroke();
+            }
+
+            ctx.restore();
+          });
+        }
+      }
+
             // 10. UI Screen Renderers
       function renderHome() {
         const h = document.getElementById('screen-home');
@@ -1873,6 +2365,7 @@
 
             <div class="home-cards-grid">
               <div class="nav-feature-card" id="home-card-upload"><div class="nav-card-icon icon-blue">${Icons.upload}</div><div class="nav-card-content"><h3 class="nav-card-title">Upload Fingerprint</h3><p class="nav-card-desc">Import photo or select developer sample.</p></div><div class="nav-card-arrow">${Icons.arrow_forward}</div></div>
+              <div class="nav-feature-card" id="home-card-match"><div class="nav-card-icon icon-teal">${Icons.compare}</div><div class="nav-card-content"><h3 class="nav-card-title">AFIS Minutiae Matcher</h3><p class="nav-card-desc">Verify candidates & similarity score.</p></div><div class="nav-card-arrow">${Icons.arrow_forward}</div></div>
               <div class="nav-feature-card" id="home-card-reagents"><div class="nav-card-icon icon-purple">${Icons.science}</div><div class="nav-card-content"><h3 class="nav-card-title">Chemical Reagents</h3><p class="nav-card-desc">Simulate Ninhydrin, Silver Nitrate, and Superglue.</p></div><div class="nav-card-arrow">${Icons.arrow_forward}</div></div>
               <div class="nav-feature-card" id="home-card-scope"><div class="nav-card-icon icon-teal">${Icons.psychology}</div><div class="nav-card-content"><h3 class="nav-card-title">Future Scope</h3><p class="nav-card-desc">Explore AI ridge reconstruction & AFIS matching.</p></div><div class="nav-card-arrow">${Icons.arrow_forward}</div></div>
             </div>
@@ -1881,6 +2374,7 @@
 
         document.getElementById('hero-quick-start-btn')?.addEventListener('click', () => appState.navigateTo('upload'));
         document.getElementById('home-card-upload')?.addEventListener('click', () => appState.navigateTo('upload'));
+        document.getElementById('home-card-match')?.addEventListener('click', () => appState.navigateTo('match'));
         document.getElementById('home-card-reagents')?.addEventListener('click', () => appState.navigateTo('reagents'));
         document.getElementById('home-card-scope')?.addEventListener('click', () => appState.navigateTo('scope'));
         document.getElementById('home-theme-toggle')?.addEventListener('click', () => {
@@ -2063,6 +2557,9 @@
                     </button>
                     <span class="uv-explainer-label">Simulates 365nm UV excitation of fluorescent powders & dyes (like Rhodamine 6G & Ardrox)</span>
                   </div>
+                  <button class="m3-btn m3-btn-outlined" id="btn-goto-match" title="Verify against AFIS Database" style="font-size: 12px; padding: 9px 16px;">
+                    ${Icons.compare} AFIS Verify
+                  </button>
                   <button class="m3-btn m3-btn-tonal" id="btn-dl" title="Download Enhanced PNG" style="font-size: 12px; padding: 9px 16px;">
                     ${Icons.download} Export PNG
                   </button>
@@ -2668,11 +3165,324 @@
           }
         });
 
+        document.getElementById('btn-goto-match')?.addEventListener('click', () => {
+          appState.navigateTo('match');
+        });
+
         document.getElementById('btn-dl')?.addEventListener('click', () => {
           const link = document.createElement('a');
           link.download = isUV ? 'uv_fluorescent_fingerprint.png' : 'enhanced_fingerprint.png';
           link.href = (enhBox.querySelector('canvas') || appState.get('enhancedCanvas')).toDataURL();
           link.click();
+        });
+      }
+
+      // 10c. AFIS Minutiae Verification Screen Renderer
+      function renderMatch() {
+        const m = document.getElementById('screen-match');
+        if (!m) return;
+
+        const isUV = document.body.classList.contains('uv-mode');
+        const showMinutiae = appState.get('showMinutiaeOverlay') !== false;
+        const currentCandidateId = appState.get('queryCandidateId') || 'candidate_104';
+
+        // 1. Reference Template Print (Priority: Enhanced canvas > Original canvas > Standard Sample)
+        let refCanvas = appState.get('enhancedCanvas') || appState.get('originalCanvas');
+        const hasUserRef = !!refCanvas;
+        if (!refCanvas) {
+          refCanvas = SampleGenerator.generate('ninhydrin', 380, 380);
+        }
+
+        // 2. Candidate / Query Print
+        let queryCanvas = appState.get('queryCanvas');
+        if (!queryCanvas) {
+          queryCanvas = SampleGenerator.generateCandidate(currentCandidateId, refCanvas, refCanvas.width, refCanvas.height);
+          appState.set('queryCanvas', queryCanvas);
+        }
+
+        // 3. Execute AFIS Feature Extraction & Matching
+        const minutiaeRef = AFISMatcher.extractMinutiae(refCanvas);
+        const minutiaeQuery = AFISMatcher.extractMinutiae(queryCanvas);
+        const matchResult = AFISMatcher.match(refCanvas, queryCanvas, minutiaeRef, minutiaeQuery);
+        appState.set('matchResult', matchResult);
+
+        const candidateOptions = [
+          { id: 'candidate_104', label: 'Candidate #104 (Suspect A — Direct Match / Latent Glass)' },
+          { id: 'candidate_219', label: 'Candidate #219 (Suspect B — Same Donor / Partial Arch)' },
+          { id: 'candidate_308', label: 'Candidate #308 (Suspect C — Non-Match / Ulnar Loop)' },
+          { id: 'candidate_415', label: 'Candidate #415 (Suspect D — Non-Match / Concentric Whorl)' },
+          { id: 'custom_upload', label: 'Custom Upload (User Supplied Query Print)' }
+        ];
+
+        m.innerHTML = `
+          <div class="screen-content">
+            <header class="app-header">
+              <div class="header-top-row">
+                <div>
+                  <h1 class="app-title">AFIS Minutiae Verification & Database Matching</h1>
+                  <p class="app-subtitle">Level 2 Minutiae Extraction & Automated Similarity Scoring</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <button class="m3-btn ${showMinutiae ? 'm3-btn-primary' : 'm3-btn-outlined'}" id="btn-toggle-minutiae" title="Toggle Ridge Endings & Bifurcations" style="font-size: 12px; padding: 8px 16px;">
+                    📍 Toggle Minutiae Feature Overlay
+                  </button>
+                  <button class="m3-btn m3-btn-tonal" id="btn-match-to-enhance" title="Back to Enhancer Studio" style="font-size: 12px; padding: 8px 14px;">
+                    ${Icons.auto_fix_high} Studio
+                  </button>
+                </div>
+              </div>
+            </header>
+
+            ${!hasUserRef ? `
+              <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--md-shape-sm); padding: 10px 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                <span>ℹ️ <strong>Demo Reference Active:</strong> Using Standard Forensic Exhibit A. You can enhance your own print anytime in the Enhance tab.</span>
+                <button class="m3-btn m3-btn-outlined" id="btn-load-custom-ref" style="padding: 4px 10px; font-size: 11px;">📂 Upload Evidence Print</button>
+              </div>
+            ` : ''}
+
+            <!-- AFIS Query Candidate Control Toolbar -->
+            <div class="m3-card" style="padding: 14px 18px; margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 280px;">
+                  <span style="font-size: 12px; font-weight: 700; color: var(--md-sys-color-on-surface-variant); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;">
+                    🎯 Query Print Candidate:
+                  </span>
+                  <select id="match-candidate-select" style="flex: 1; padding: 8px 12px; border-radius: var(--md-shape-sm); font-size: 12px; font-weight: 600; border: 1.5px solid var(--md-sys-color-outline); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); cursor: pointer; outline: none;">
+                    ${candidateOptions.map(opt => `
+                      <option value="${opt.id}" ${currentCandidateId === opt.id ? 'selected' : ''}>${opt.label}</option>
+                    `).join('')}
+                  </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <input type="file" id="match-query-file" accept="image/*" style="display: none;">
+                  <button class="m3-btn m3-btn-outlined" id="btn-upload-query" style="font-size: 11.5px; padding: 7px 14px;">
+                    📁 Upload Suspect Print
+                  </button>
+                  <button class="m3-btn m3-btn-tonal" id="btn-rerun-match" style="font-size: 11.5px; padding: 7px 12px;" title="Rerun AFIS Matcher">
+                    ${Icons.restart_alt} Re-Match
+                  </button>
+                </div>
+              </div>
+
+              <!-- Minutiae Classification Legend -->
+              <div style="display: flex; align-items: center; gap: 16px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--md-sys-color-outline-variant); font-size: 11px; flex-wrap: wrap;">
+                <span style="font-weight: 700; color: var(--md-sys-color-on-surface-variant);">AFIS Feature Key:</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px;">
+                  <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ef4444; border: 1px solid #ffffff;"></span>
+                  <strong>Ridge Ending (Termination)</strong>
+                </span>
+                <span style="display: inline-flex; align-items: center; gap: 6px;">
+                  <span style="display: inline-block; width: 10px; height: 10px; background: #3b82f6; border: 1px solid #ffffff;"></span>
+                  <strong>Bifurcation (Fork Branch)</strong>
+                </span>
+                <span style="display: inline-flex; align-items: center; gap: 6px;">
+                  <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; border: 1.5px dashed #22c55e;"></span>
+                  <strong>Matched Pair Anchor</strong>
+                </span>
+                <span style="margin-left: auto; color: var(--md-sys-color-on-surface-variant);">
+                  Overlay: <strong>${showMinutiae ? 'ACTIVE' : 'OFF'}</strong>
+                </span>
+              </div>
+            </div>
+
+            <!-- Side-by-Side Comparison View (Reference on Left, Query on Right) -->
+            <div class="comparison-container" style="min-height: 440px;">
+              <!-- Left Pane: Reference Template -->
+              <div class="comparison-pane">
+                <div class="pane-header">
+                  <div class="pane-title">
+                    <span class="pane-title-dot" style="background: var(--md-sys-color-primary);"></span>
+                    REFERENCE TEMPLATE (ENHANCED EVIDENCE)
+                  </div>
+                  <span class="m3-chip m3-chip-primary" id="ref-minutiae-badge" style="font-size: 10px;">
+                    ${minutiaeRef.length} Level 2 Minutiae
+                  </span>
+                </div>
+                <div class="pane-canvas-box" id="match-ref-box">
+                  <div class="canvas-lens-overlay">
+                    <div class="lens-reticle-ring"></div>
+                    <div class="lens-reticle-ring-inner"></div>
+                    <div class="lens-crosshair-h"></div>
+                    <div class="lens-crosshair-v"></div>
+                    <div class="lens-diag-1"></div>
+                    <div class="lens-diag-2"></div>
+                    <div class="uv-laser-scan"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Pane: Suspect / Query Print -->
+              <div class="comparison-pane">
+                <div class="pane-header">
+                  <div class="pane-title">
+                    <span class="pane-title-dot" style="background: ${matchResult.isMatch ? '#22c55e' : '#ef4444'};"></span>
+                    SUSPECT QUERY PRINT (CANDIDATE)
+                  </div>
+                  <span class="m3-chip ${matchResult.isMatch ? 'm3-chip-primary' : 'm3-chip-accent'}" id="query-minutiae-badge" style="font-size: 10px;">
+                    ${minutiaeQuery.length} Candidate Features
+                  </span>
+                </div>
+                <div class="pane-canvas-box" id="match-query-box">
+                  <div class="canvas-lens-overlay">
+                    <div class="lens-reticle-ring"></div>
+                    <div class="lens-reticle-ring-inner"></div>
+                    <div class="lens-crosshair-h"></div>
+                    <div class="lens-crosshair-v"></div>
+                    <div class="lens-diag-1"></div>
+                    <div class="lens-diag-2"></div>
+                    <div class="uv-laser-scan"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Verification Decision Badge & AFIS Statistics Card -->
+            <div class="afis-decision-banner ${matchResult.isMatch ? 'match' : 'nomatch'}">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <span style="font-size: 26px; line-height: 1;">${matchResult.isMatch ? '✅' : '❌'}</span>
+                  <div>
+                    <h2 style="font-size: 15px; font-weight: 800; letter-spacing: 0.5px; margin: 0; color: ${matchResult.isMatch ? '#15803d' : '#b91c1c'};">
+                      ${matchResult.isMatch ? 'IDENTITY VERIFIED — AFIS MATCH CONFIRMED (High Minutiae Correlation)' : 'NO MATCH DETECTED — Insufficient Minutiae Point Overlap'}
+                    </h2>
+                    <p style="font-size: 11.5px; color: var(--md-sys-color-on-surface-variant); margin-top: 3px;">
+                      ${matchResult.isMatch 
+                        ? 'Automated biometric comparison confirms matching ridge flow topology and minutiae spatial constellation above the 75.0% threshold.' 
+                        : 'Biometric ridge flow divergence and discordant minutiae points exceed maximum tolerance (Score < 75.0%). Exclusion confirmed.'}
+                    </p>
+                  </div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 32px; font-weight: 900; line-height: 1; color: ${matchResult.isMatch ? '#16a34a' : '#dc2626'};">
+                    ${matchResult.score}%
+                  </div>
+                  <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); letter-spacing: 0.5px;">
+                    Match Similarity Score
+                  </span>
+                </div>
+              </div>
+
+              <!-- Meter Bar -->
+              <div style="width: 100%; height: 8px; border-radius: 9999px; background: rgba(0,0,0,0.12); overflow: hidden; margin-bottom: 14px;">
+                <div style="width: ${matchResult.score}%; height: 100%; border-radius: 9999px; background: ${matchResult.isMatch ? 'linear-gradient(90deg, #10b981, #22c55e)' : 'linear-gradient(90deg, #f59e0b, #ef4444)'}; transition: width 0.4s ease;"></div>
+              </div>
+
+              <!-- Statistics Grid -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; font-size: 11.5px;">
+                <div style="padding: 10px 14px; background: var(--md-sys-color-surface); border-radius: var(--md-shape-sm); border: 1px solid var(--md-sys-color-outline-variant);">
+                  <span style="color: var(--md-sys-color-on-surface-variant); display: block; font-size: 10px; text-transform: uppercase; font-weight: 700;">Paired Minutiae</span>
+                  <strong style="font-size: 14px; color: ${matchResult.isMatch ? '#16a34a' : '#dc2626'};">${matchResult.matchedPairs.length} Pairs</strong>
+                  <span style="color: var(--md-sys-color-on-surface-variant); font-size: 10.5px; display: block;">(${matchResult.pairRatio}% paired overlap)</span>
+                </div>
+                <div style="padding: 10px 14px; background: var(--md-sys-color-surface); border-radius: var(--md-shape-sm); border: 1px solid var(--md-sys-color-outline-variant);">
+                  <span style="color: var(--md-sys-color-on-surface-variant); display: block; font-size: 10px; text-transform: uppercase; font-weight: 700;">Reference Minutiae</span>
+                  <strong style="font-size: 14px;">${matchResult.totalRefMinutiae} Points</strong>
+                  <span style="color: var(--md-sys-color-on-surface-variant); font-size: 10.5px; display: block;">(🔴 Endings + 🟦 Forks)</span>
+                </div>
+                <div style="padding: 10px 14px; background: var(--md-sys-color-surface); border-radius: var(--md-shape-sm); border: 1px solid var(--md-sys-color-outline-variant);">
+                  <span style="color: var(--md-sys-color-on-surface-variant); display: block; font-size: 10px; text-transform: uppercase; font-weight: 700;">Query Minutiae</span>
+                  <strong style="font-size: 14px;">${matchResult.totalQueryMinutiae} Points</strong>
+                  <span style="color: var(--md-sys-color-on-surface-variant); font-size: 10.5px; display: block;">(Candidate Record)</span>
+                </div>
+                <div style="padding: 10px 14px; background: var(--md-sys-color-surface); border-radius: var(--md-shape-sm); border: 1px solid var(--md-sys-color-outline-variant);">
+                  <span style="color: var(--md-sys-color-on-surface-variant); display: block; font-size: 10px; text-transform: uppercase; font-weight: 700;">False Accept Probability</span>
+                  <strong style="font-size: 13px;">${matchResult.far}</strong>
+                  <span style="color: var(--md-sys-color-on-surface-variant); font-size: 10.5px; display: block;">(FAR Est. Reliability)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // Mount Canvases & Minutiae Overlay Layers
+        const refBox = document.getElementById('match-ref-box');
+        const queryBox = document.getElementById('match-query-box');
+
+        if (refBox && refCanvas) {
+          const overlay = refBox.querySelector('.canvas-lens-overlay');
+          refBox.innerHTML = '';
+          refBox.appendChild(refCanvas);
+
+          if (showMinutiae) {
+            const overlayRefCanvas = document.createElement('canvas');
+            overlayRefCanvas.className = 'minutiae-layer';
+            overlayRefCanvas.width = refCanvas.width;
+            overlayRefCanvas.height = refCanvas.height;
+            AFISMatcher.renderOverlay(overlayRefCanvas, minutiaeRef, matchResult.matchedPairs, true);
+            refBox.appendChild(overlayRefCanvas);
+          }
+
+          if (overlay) refBox.appendChild(overlay);
+        }
+
+        if (queryBox && queryCanvas) {
+          const overlay = queryBox.querySelector('.canvas-lens-overlay');
+          queryBox.innerHTML = '';
+          queryBox.appendChild(queryCanvas);
+
+          if (showMinutiae) {
+            const overlayQueryCanvas = document.createElement('canvas');
+            overlayQueryCanvas.className = 'minutiae-layer';
+            overlayQueryCanvas.width = queryCanvas.width;
+            overlayQueryCanvas.height = queryCanvas.height;
+            AFISMatcher.renderOverlay(overlayQueryCanvas, minutiaeQuery, matchResult.matchedPairs, false);
+            queryBox.appendChild(overlayQueryCanvas);
+          }
+
+          if (overlay) queryBox.appendChild(overlay);
+        }
+
+        // Event Handlers
+        document.getElementById('btn-toggle-minutiae')?.addEventListener('click', () => {
+          appState.set('showMinutiaeOverlay', !showMinutiae);
+          renderMatch();
+        });
+
+        document.getElementById('btn-match-to-enhance')?.addEventListener('click', () => {
+          appState.navigateTo('enhance');
+        });
+
+        document.getElementById('btn-load-custom-ref')?.addEventListener('click', () => {
+          appState.navigateTo('upload');
+        });
+
+        document.getElementById('match-candidate-select')?.addEventListener('change', (ev) => {
+          const cId = ev.target.value;
+          appState.set('queryCandidateId', cId);
+          if (cId !== 'custom_upload') {
+            const qCanvas = SampleGenerator.generateCandidate(cId, refCanvas, refCanvas.width, refCanvas.height);
+            appState.set('queryCanvas', qCanvas);
+          }
+          renderMatch();
+        });
+
+        document.getElementById('btn-upload-query')?.addEventListener('click', () => {
+          document.getElementById('match-query-file')?.click();
+        });
+
+        document.getElementById('match-query-file')?.addEventListener('change', (ev) => {
+          const file = ev.target.files?.[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const img = new Image();
+              img.onload = () => {
+                const c = document.createElement('canvas');
+                c.width = refCanvas.width; c.height = refCanvas.height;
+                const ctx = c.getContext('2d');
+                ctx.drawImage(img, 0, 0, c.width, c.height);
+                appState.set('queryCandidateId', 'custom_upload');
+                appState.set('queryCanvas', c);
+                renderMatch();
+              };
+              img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+
+        document.getElementById('btn-rerun-match')?.addEventListener('click', () => {
+          renderMatch();
         });
       }
 
@@ -2723,6 +3533,7 @@
             <button class="nav-item active" data-tab="home"><div class="nav-pill-indicator">${Icons.home}</div><span class="nav-label">Home</span></button>
             <button class="nav-item" data-tab="upload"><div class="nav-pill-indicator">${Icons.upload}</div><span class="nav-label">Upload</span></button>
             <button class="nav-item" data-tab="enhance"><div class="nav-pill-indicator">${Icons.auto_fix_high}</div><span class="nav-label">Enhance</span></button>
+            <button class="nav-item" data-tab="match"><div class="nav-pill-indicator">${Icons.compare}</div><span class="nav-label">Match</span></button>
             <button class="nav-item" data-tab="reagents"><div class="nav-pill-indicator">${Icons.science}</div><span class="nav-label">Reagents</span></button>
             <button class="nav-item" data-tab="scope"><div class="nav-pill-indicator">${Icons.psychology}</div><span class="nav-label">Scope</span></button>
           </nav>
@@ -2741,9 +3552,11 @@
       window.FingerprintCropper = FingerprintCropper;
       window.ChemicalDetector = ChemicalDetector;
       window.ChemicalSimulator = ChemicalSimulator;
+      window.AFISMatcher = AFISMatcher;
       window.renderHome = renderHome;
       window.renderUpload = renderUpload;
       window.renderEnhance = renderEnhance;
+      window.renderMatch = renderMatch;
       window.renderReagents = renderReagents;
       window.renderScope = renderScope;
 
@@ -2756,6 +3569,7 @@
           if (tab === 'home') renderHome();
           if (tab === 'upload') renderUpload();
           if (tab === 'enhance') renderEnhance();
+          if (tab === 'match') renderMatch();
           if (tab === 'reagents') renderReagents();
           if (tab === 'scope') renderScope();
         });

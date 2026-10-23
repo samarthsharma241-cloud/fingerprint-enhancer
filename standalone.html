@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Fingerprint Enhancer — AI-Assisted Digital Enhancement for Chemically Developed Latent Friction Ridge Impressions.">
+  <meta name="theme-color" content="#1a56db">
+  <title>Fingerprint Enhancer — AI-Assisted Enhancement</title>
+
+  <!-- Google Fonts: Roboto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --md-sys-color-primary: #2563eb;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #dbeafe;
+      --md-sys-color-on-primary-container: #1e40af;
+      --md-sys-color-secondary: #0284c7;
+      --md-sys-color-on-secondary: #ffffff;
+      --md-sys-color-surface: #ffffff;
+      --md-sys-color-on-surface: #0f172a;
+      --md-sys-color-surface-variant: #f1f5f9;
+      --md-sys-color-on-surface-variant: #64748b;
+      --md-sys-color-surface-container-high: #f1f5f9;
+      --md-sys-color-outline: #cbd5e1;
+      --md-sys-color-outline-variant: #e2e8f0;
+      --md-sys-color-background: #f8fafc;
+      --md-sys-color-on-background: #0f172a;
+      --md-sys-color-success: #10b981;
+      --md-sys-color-error: #ef4444;
+      --md-shape-sm: 8px;
+      --md-shape-md: 12px;
+      --md-shape-lg: 16px;
+      --md-shape-xl: 24px;
+      --md-shape-full: 9999px;
+      --md-sys-elevation-1: 0 1px 3px rgba(0,0,0,0.1);
+      --md-sys-elevation-2: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    [data-theme="dark"] {
+      --md-sys-color-primary: #3b82f6;
+      --md-sys-color-primary-container: #1e3a8a;
+      --md-sys-color-on-primary-container: #bfdbfe;
+      --md-sys-color-surface: #0f172a;
+      --md-sys-color-on-surface: #f8fafc;
+      --md-sys-color-surface-variant: #1e293b;
+      --md-sys-color-surface-container-high: #1e293b;
+      --md-sys-color-on-surface-variant: #94a3b8;
+      --md-sys-color-outline: #334155;
+      --md-sys-color-outline-variant: #1e293b;
+      --md-sys-color-background: #020617;
+      --md-sys-color-on-background: #f8fafc;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+    html, body { background-color: #0b0f19; color: #f8fafc; min-height: 100vh; margin: 0; padding: 0; overflow-x: hidden; }
+
+    .device-stage {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      background: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 70%, #020617 100%);
+      position: relative;
+    }
+
+    .desktop-controls {
+      position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 100;
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px);
+      padding: 6px 16px; border-radius: var(--md-shape-full); border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .desktop-controls span { color: #94a3b8; font-size: 12px; font-weight: 500; }
+    .control-toggle-btn {
+      background: rgba(255, 255, 255, 0.08); color: #f1f5f9; border: none; padding: 6px 12px;
+      border-radius: var(--md-shape-full); font-size: 12px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+    }
+    .control-toggle-btn:hover { background: rgba(255, 255, 255, 0.16); color: #fff; }
+    .control-toggle-btn.active { background: #2563eb; color: #fff; }
+
+    .phone-mockup {
+      position: relative; width: 100%; max-width: 412px; height: 870px; max-height: 94vh;
+      background: var(--md-sys-color-background); border-radius: 46px;
+      box-shadow: 0 25px 60px -15px rgba(0,0,0,0.7), 0 0 0 12px #1e293b, 0 0 0 14px rgba(255,255,255,0.12);
+      display: flex; flex-direction: column; overflow: hidden; z-index: 10; transition: all 0.3s ease;
+    }
+    .phone-mockup.fullscreen { max-width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; box-shadow: none; }
+
+    .android-status-bar {
+      height: 38px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between;
+      background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); font-size: 12px; font-weight: 600;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant); flex-shrink: 0; z-index: 50;
+    }
+    .status-camera-punchhole {
+      position: absolute; left: 50%; top: 10px; transform: translateX(-50%);
+      width: 12px; height: 12px; background-color: #000; border-radius: 50%;
+    }
+    .status-icon-svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+
+    .app-screen-container {
+      flex: 1; overflow-y: auto; overflow-x: hidden; position: relative;
+      display: flex; flex-direction: column; background-color: var(--md-sys-color-background);
+      color: var(--md-sys-color-on-background);
+    }
+
+    .screen-view {
+      display: none; opacity: 0; transform: translateY(8px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      padding: 16px 18px 90px 18px; width: 100%;
+    }
+    .screen-view.active { display: block; opacity: 1; transform: translateY(0); }
+
+    .app-header { margin-bottom: 18px; }
+    .header-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .app-title { font-size: 22px; font-weight: 800; color: var(--md-sys-color-on-surface); }
+    .app-subtitle { font-size: 13px; color: var(--md-sys-color-on-surface-variant); }
+
+    .brand-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);
+      padding: 4px 10px; border-radius: var(--md-shape-full); font-size: 11px; font-weight: 700;
+    }
+    .brand-badge svg { width: 14px; height: 14px; fill: currentColor; }
+
+    .theme-toggle-btn {
+      background: var(--md-sys-color-surface-variant); border: none; width: 34px; height: 34px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .theme-toggle-btn svg { width: 18px; height: 18px; fill: var(--md-sys-color-on-surface); }
+
+    .forensic-disclaimer {
+      display: flex; gap: 8px; align-items: center; background: var(--md-sys-color-surface-variant);
+      border-left: 3px solid var(--md-sys-color-primary); padding: 10px 12px; border-radius: var(--md-shape-sm);
+      font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-top: 10px;
+    }
+    .forensic-disclaimer svg { width: 16px; height: 16px; fill: var(--md-sys-color-primary); flex-shrink: 0; }
+
+    .m3-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 20px; border-radius: var(--md-shape-full); font-size: 13px; font-weight: 700;
+      border: none; cursor: pointer; transition: all 0.2s;
+    }
+    .m3-btn-primary { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+    .m3-btn-tonal { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+    .m3-btn-outlined { background: transparent; border: 1px solid var(--md-sys-color-outline); color: var(--md-sys-color-primary); }
+    .m3-btn-icon { width: 36px; height: 36px; border-radius: 50%; padding: 0; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; border: none; }
+    .m3-btn-icon svg { width: 18px; height: 18px; fill: currentColor; }
+
+    .m3-card {
+      background: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-shape-xl); padding: 16px; margin-bottom: 16px;
+    }
+
+    .m3-chip {
+      display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+      border-radius: var(--md-shape-full); font-size: 10px; font-weight: 700;
+      background: var(--md-sys-color-surface-variant); color: var(--md-sys-color-on-surface-variant);
+    }
+    .m3-chip-primary { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+    .m3-chip-accent { background: #e0f2fe; color: #0369a1; }
+
+    /* Hero Card */
+    .hero-fingerprint-card {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #0369a1 100%);
+      border-radius: var(--md-shape-xl); padding: 20px; color: #fff; margin-bottom: 16px; position: relative; overflow: hidden;
+    }
+    .hero-chip {
+      display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.2);
+      padding: 4px 8px; border-radius: var(--md-shape-full); font-size: 10px; font-weight: 700; margin-bottom: 10px;
+    }
+    .hero-chip svg { width: 12px; height: 12px; fill: #fff; }
+    .hero-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+    .hero-desc { font-size: 12px; opacity: 0.9; margin-bottom: 14px; }
+    .hero-watermark-icon { position: absolute; right: -20px; bottom: -20px; opacity: 0.15; pointer-events: none; }
+    .hero-watermark-icon svg { width: 140px; height: 140px; fill: #fff; }
+
+    /* Home Navigation Cards */
+    .home-cards-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .nav-feature-card {
+      background: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-shape-lg); padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s;
+    }
+    .nav-card-icon { width: 40px; height: 40px; border-radius: var(--md-shape-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .icon-blue { background: #dbeafe; color: #1d4ed8; }
+    .icon-purple { background: #f3e8ff; color: #7e22ce; }
+    .icon-teal { background: #ccfbf1; color: #0f766e; }
+    .nav-card-icon svg { width: 22px; height: 22px; fill: currentColor; }
+    .nav-card-content { flex: 1; }
+    .nav-card-title { font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface); }
+    .nav-card-desc { font-size: 11px; color: var(--md-sys-color-on-surface-variant); }
+    .nav-card-arrow svg { width: 18px; height: 18px; fill: var(--md-sys-color-on-surface-variant); }
+
+    /* Bottom Nav */
+    .m3-bottom-nav {
+      position: absolute; bottom: 18px; left: 0; right: 0; height: 68px;
+      background: var(--md-sys-color-surface); display: flex; justify-content: space-around;
+      align-items: center; border-top: 1px solid var(--md-sys-color-outline-variant); z-index: 60;
+    }
+    .nav-item { background: none; border: none; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex: 1; }
+    .nav-pill-indicator { width: 48px; height: 28px; border-radius: var(--md-shape-full); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .nav-pill-indicator svg { width: 20px; height: 20px; fill: var(--md-sys-color-on-surface-variant); }
+    .nav-label { font-size: 10px; font-weight: 700; color: var(--md-sys-color-on-surface-variant); }
+    .nav-item.active .nav-pill-indicator { background: var(--md-sys-color-primary-container); }
+    .nav-item.active .nav-pill-indicator svg { fill: var(--md-sys-color-on-primary-container); }
+    .nav-item.active .nav-label { color: var(--md-sys-color-primary); }
+
+    /* Upload Area */
+    .upload-dropzone {
+      border: 2px dashed var(--md-sys-color-outline); border-radius: var(--md-shape-xl);
+      padding: 36px 16px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--md-sys-color-surface);
+    }
+    .upload-dropzone.dragover { border-color: var(--md-sys-color-primary); background: var(--md-sys-color-primary-container); }
+    .dropzone-icon-wrap { width: 56px; height: 56px; border-radius: 50%; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-primary); margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; }
+    .dropzone-icon-wrap svg { width: 28px; height: 28px; fill: currentColor; }
+
+    /* Demo Samples Grid */
+    .demo-samples-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+    .demo-sample-btn { background: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-shape-md); padding: 10px; cursor: pointer; text-align: center; color: var(--md-sys-color-on-surface); }
+    .demo-sample-btn:hover { border-color: var(--md-sys-color-primary); }
+    .demo-thumb-box { width: 100%; aspect-ratio: 1/1; background: #000; border-radius: var(--md-shape-sm); overflow: hidden; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; }
+    .demo-thumb-box canvas { width: 100%; height: 100%; }
+
+    /* Image Meta Box */
+    .image-meta-box { width: 100%; background: var(--md-sys-color-surface-container-high); border-radius: var(--md-shape-md); padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
+    .meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--md-sys-color-on-surface-variant); }
+    .meta-row strong { font-size: 12px; color: var(--md-sys-color-on-surface); }
+
+    /* Enhance View Mode Bar */
+    .view-mode-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .view-toggle-group { display: flex; background: var(--md-sys-color-surface-variant); padding: 3px; border-radius: var(--md-shape-full); gap: 2px; }
+    .view-toggle-btn { background: transparent; border: none; padding: 4px 12px; font-size: 11px; font-weight: 600; color: var(--md-sys-color-on-surface-variant); border-radius: var(--md-shape-full); cursor: pointer; }
+    .view-toggle-btn.active { background: var(--md-sys-color-surface); color: var(--md-sys-color-primary); box-shadow: var(--md-sys-elevation-1); }
+
+    /* Comparison Panes */
+    .comparison-container { display: flex; gap: 10px; flex-direction: column; margin-bottom: 14px; }
+    .comparison-pane { background: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-shape-lg); padding: 10px; }
+    .pane-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .pane-title { font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; color: var(--md-sys-color-on-surface); }
+    .pane-title svg { width: 16px; height: 16px; fill: currentColor; }
+    .pane-canvas-box { width: 100%; min-height: 220px; background: #000; border-radius: var(--md-shape-md); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .pane-canvas-box canvas { max-width: 100%; height: auto; display: block; }
+
+    /* Sliders & Controls */
+    .enhancement-controls-card { background: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-shape-xl); padding: 16px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 12px; }
+    .control-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+    .control-label { font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; color: var(--md-sys-color-on-surface); }
+    .control-label svg { width: 16px; height: 16px; fill: var(--md-sys-color-primary); }
+    .control-hint { font-size: 10px; color: var(--md-sys-color-on-surface-variant); }
+    .m3-slider { width: 100%; accent-color: var(--md-sys-color-primary); cursor: pointer; }
+    .m3-slider-badge { font-size: 11px; font-weight: 800; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); padding: 2px 6px; border-radius: 4px; }
+
+    /* Clarity Card */
+    .clarity-score-card { background: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-shape-xl); padding: 16px; margin-bottom: 14px; text-align: center; }
+    .clarity-header { font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 12px; color: var(--md-sys-color-on-surface); }
+    .clarity-header svg { width: 16px; height: 16px; fill: var(--md-sys-color-primary); }
+    .clarity-meter-wrap { position: relative; width: 110px; height: 110px; margin: 0 auto 12px auto; }
+    .circular-chart { display: block; margin: 0 auto; max-width: 100%; max-height: 100%; }
+    .circle-bg { fill: none; stroke: var(--md-sys-color-surface-variant); stroke-width: 3.2; }
+    .circle-progress { fill: none; stroke-width: 3.2; stroke-linecap: round; stroke: url(#clarityGradient); transition: stroke-dasharray 0.5s ease; }
+    .meter-inner-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .score-number { font-size: 26px; font-weight: 900; color: var(--md-sys-color-on-surface); }
+    .score-max { font-size: 10px; color: var(--md-sys-color-on-surface-variant); }
+    .clarity-comparison-row { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
+    .score-comparison-pill { padding: 4px 10px; border-radius: var(--md-shape-full); font-size: 11px; font-weight: 700; background: var(--md-sys-color-surface-variant); color: var(--md-sys-color-on-surface-variant); }
+    .score-delta-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: var(--md-shape-full); background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; margin-bottom: 10px; }
+    .score-delta-badge svg { width: 14px; height: 14px; fill: currentColor; }
+    .score-clarity-caption { font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 12px; }
+    .clarity-metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: left; }
+    .metric-factor-item { background: var(--md-sys-color-surface-variant); padding: 8px 10px; border-radius: var(--md-shape-sm); color: var(--md-sys-color-on-surface); }
+    .metric-factor-name { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 4px; font-weight: 600; }
+    .metric-bar-bg { height: 4px; background: rgba(0,0,0,0.1); border-radius: 2px; overflow: hidden; }
+    .metric-bar-fill { height: 100%; background: var(--md-sys-color-primary); border-radius: 2px; }
+
+    /* Reagents Grid */
+    .reagents-grid { display: flex; flex-direction: column; gap: 12px; }
+    .reagent-card { background: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-shape-xl); padding: 14px; display: flex; gap: 12px; cursor: pointer; transition: all 0.2s; }
+    .reagent-card:hover { border-color: var(--md-sys-color-primary); transform: translateY(-2px); }
+    .reagent-preview-box { width: 80px; height: 80px; border-radius: var(--md-shape-md); background: #000; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .reagent-preview-box canvas { width: 100%; height: 100%; }
+    .reagent-info { flex: 1; }
+    .reagent-title { font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface); }
+    .reagent-desc { font-size: 11px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 6px; }
+
+    /* Interactive Draggable Cropper Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center; z-index: 500;
+    }
+    .modal-overlay.active { display: flex; }
+    .cropper-sheet {
+      background: var(--md-sys-color-surface); width: 92%; max-width: 480px; border-radius: 28px;
+      padding: 18px; display: flex; flex-direction: column; color: var(--md-sys-color-on-surface);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    }
+    .cropper-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 6px; flex-wrap: wrap; }
+    .cropper-tool-btn { padding: 6px 12px; font-size: 11px; font-weight: 700; }
+    .cropper-canvas-container {
+      width: 100%; height: 360px; background: #080a0f; border-radius: var(--md-shape-lg);
+      overflow: hidden; position: relative; touch-action: none; display: flex; align-items: center; justify-content: center;
+    }
+    .cropper-canvas-container canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
+
+    .toast-container {
+      position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: rgba(15, 23, 42, 0.9); color: #fff; padding: 8px 16px; border-radius: var(--md-shape-full);
+      font-size: 12px; font-weight: 600; opacity: 0; transition: all 0.25s ease; pointer-events: none; z-index: 200;
+    }
+    .toast-container.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .android-gesture-bar {
+      height: 18px; background: var(--md-sys-color-surface); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .gesture-pill { width: 72px; height: 4px; background: var(--md-sys-color-on-surface-variant); opacity: 0.5; border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+  <div class="device-stage">
+    <!-- Desktop Toolbar Controls -->
+    <div class="desktop-controls">
+      <span>Android Device Simulation</span>
+      <button class="control-toggle-btn" id="toggle-frame-btn">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+        Full View
+      </button>
+      <button class="control-toggle-btn" id="toggle-theme-desktop-btn">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 4.97 4.03 9 9 9 4.97 0 9-4.03 9-9 0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+        Dark Mode
+      </button>
+    </div>
+
+    <!-- Android Smartphone Shell -->
+    <div class="phone-mockup">
+      <!-- Android Status Bar -->
+      <div class="android-status-bar">
+        <div class="status-bar-left">
+          <span id="status-time">9:41</span>
+        </div>
+        <div class="status-camera-punchhole"></div>
+        <div class="status-bar-right">
+          <svg class="status-icon-svg" style="width:14px;height:14px;" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"/></svg>
+          <svg class="status-icon-svg" style="width:14px;height:14px;" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+        </div>
+      </div>
+
+      <!-- App Screen Scrollable Body -->
+      <main class="app-screen-container" id="app-screen-container">
+        <section class="screen-view active" id="screen-home" role="tabpanel" aria-label="Home"></section>
+        <section class="screen-view" id="screen-upload" role="tabpanel" aria-label="Upload"></section>
+        <section class="screen-view" id="screen-enhance" role="tabpanel" aria-label="Enhance"></section>
+        <section class="screen-view" id="screen-reagents" role="tabpanel" aria-label="Reagents"></section>
+        <section class="screen-view" id="screen-scope" role="tabpanel" aria-label="Future Scope"></section>
+        <div class="toast-container" id="app-toast"></div>
+      </main>
+
+      <!-- Persistent M3 Bottom Navigation Bar -->
+      <div id="bottom-nav-container"></div>
+
+      <!-- Android Gesture Navigation Pill -->
+      <div class="android-gesture-bar">
+        <div class="gesture-pill"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // 1. Comprehensive Icons
+      const Icons = {
+        home: `<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>`,
+        upload: `<svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>`,
+        auto_fix_high: `<svg viewBox="0 0 24 24"><path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29c-.39-.39-1.02-.39-1.41 0L1.29 18.96c-.39.39-.39 1.02 0 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05c.39-.39.39-1.02 0-1.41l-2.33-2.35zm-1.06 3.4L12 9.35l1.35 1.35-1.35 1.35z"/></svg>`,
+        science: `<svg viewBox="0 0 24 24"><path d="M20.79 16.51l-4.79-6.4V4h1V2H7v2h1v6.11l-4.79 6.4C2.46 17.5 3.01 19 4.28 19H19.72c1.27 0 1.82-1.5 1.07-2.49zM6.54 17l3.46-4.61V4h4v8.39L17.46 17H6.54z"/></svg>`,
+        psychology: `<svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 20.7c-.39.78.17 1.7 1.05 1.7h7.6c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5c.83 0 1.5.67 1.5 1.5S12.83 11 12 11s-1.5-.67-1.5-1.5S11.17 8 12 8zm-2 7.5c0-.83.67-1.5 1.5-1.5h1c.83 0 1.5.67 1.5 1.5v1h-4v-1zm5 0c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5z"/></svg>`,
+        fingerprint: `<svg viewBox="0 0 24 24"><path d="M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.9 4.04 14.1 4.04 17.15 5.66c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4 0-1.36.7-2.5 1.69-3.4 2.95-.08.14-.23.22-.39.22zm6.25 12.07c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.87.62 1.11 1.05 1.62 1.83 2.4.2.2.2.51 0 .71-.11.11-.24.16-.36.16zm6.75-3.56c-.22 0-.43-.15-.48-.38-.28-1.24-.42-2.31-.42-3.19 0-2.2-.79-3.5-2.35-3.87-.27-.06-.44-.33-.37-.6.06-.27.33-.44.6-.37 1.98.47 3.12 2.1 3.12 4.84 0 .95.15 2.1.47 3.48.06.27-.1.54-.37.61-.07.02-.13.03-.2.03z"/></svg>`,
+        contrast: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18V4c4.41 0 8 3.59 8 8s-3.59 8-8 8z"/></svg>`,
+        blur_off: `<svg viewBox="0 0 24 24"><path d="M14 8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm-4 0c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm4 8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm-4 0c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm8-4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm-16 0c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm8-8c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 16c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1z"/></svg>`,
+        sharpen: `<svg viewBox="0 0 24 24"><path d="M12 2L6 8h4v8H6l6 6 6-6h-4V8h4L12 2z"/></svg>`,
+        auto_awesome: `<svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>`,
+        arrow_forward: `<svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>`,
+        check_circle: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`,
+        info: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`,
+        download: `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`,
+        dark_mode: `<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 4.97 4.03 9 9 9 4.97 0 9-4.03 9-9 0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>`,
+        crop: `<svg viewBox="0 0 24 24"><path d="M17 15h2V7c0-1.1-.9-2-2-2H9v2h8v8zM7 17V1H5v4H1v2h4v10c0 1.1.9 2 2 2h10v4h2v-4h4v-2H7z"/></svg>`,
+        restart_alt: `<svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>`
+      };
+
+      // 2. Reactive App State
+      class AppState {
+        constructor() {
+          this.listeners = new Map();
+          this.state = {
+            activeTab: 'home', theme: 'light', hasImage: false,
+            originalCanvas: null, enhancedCanvas: null, ridgeMapCanvas: null,
+            imageMetadata: { name: '', size: '', originalDimensions: '', processingDimensions: '', qualityLevel: 'Good' },
+            parameters: { contrast: 65, noiseReduction: 35, ridgeSharpening: 60 },
+            clarityScore: { rawScore: 0, enhancedScore: 0, delta: '+0', metrics: { contrast: 0, separation: 0, sharpness: 0, snr: 0 }, hasCalculated: false }
+          };
+        }
+        get(k) { return this.state[k]; }
+        set(k, v) { this.state[k] = v; this.emit(k, v); }
+        navigateTo(tabId) {
+          this.state.activeTab = tabId;
+          document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+          const target = document.getElementById(`screen-${tabId}`);
+          if (target) target.classList.add('active');
+          const nav = document.querySelector('.m3-bottom-nav');
+          if (nav) {
+            nav.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.tab === tabId));
+          }
+          this.emit('navigatedTo', tabId);
+        }
+        setImage(canvas, metadata = {}) {
+          this.state.hasImage = true;
+          this.state.originalCanvas = canvas;
+          const copy = document.createElement('canvas');
+          copy.width = canvas.width; copy.height = canvas.height;
+          copy.getContext('2d').drawImage(canvas, 0, 0);
+          this.state.enhancedCanvas = copy;
+          this.state.ridgeMapCanvas = null;
+          this.state.imageMetadata = {
+            name: metadata.name || 'Fingerprint.jpg',
+            size: metadata.size || '1.4 MB',
+            originalDimensions: metadata.originalDimensions || `${canvas.width} × ${canvas.height} px`,
+            processingDimensions: `${canvas.width} × ${canvas.height} px`,
+            qualityLevel: 'Good'
+          };
+          this.emit('imageLoaded', { canvas, metadata: this.state.imageMetadata });
+        }
+        setEnhancedResult(canvas, clarityScore, ridgeMapCanvas = null) {
+          this.state.enhancedCanvas = canvas;
+          this.state.clarityScore = clarityScore;
+          if (ridgeMapCanvas) this.state.ridgeMapCanvas = ridgeMapCanvas;
+          this.emit('enhancementCompleted', { canvas, clarityScore });
+        }
+        on(event, cb) {
+          if (!this.listeners.has(event)) this.listeners.set(event, []);
+          this.listeners.get(event).push(cb);
+        }
+        emit(event, data) {
+          if (this.listeners.has(event)) this.listeners.get(event).forEach(cb => { try { cb(data); } catch(e) {} });
+        }
+      }
+      const appState = new AppState();
+
+      // 3. Contrast & CLAHE Processor
+      class ContrastProcessor {
+        static toGrayscale(imageData) {
+          const { data, width, height } = imageData;
+          const gray = new Float32Array(width * height);
+          for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            gray[j] = 0.15 * data[i] + 0.60 * data[i + 1] + 0.25 * data[i + 2];
+          }
+          return gray;
+        }
+
+        static normalizeIllumination(gray, width, height, radius = 18) {
+          const len = width * height;
+          const bg = new Float32Array(len);
+          const output = new Float32Array(len);
+          const temp = new Float32Array(len);
+
+          for (let y = 0; y < height; y++) {
+            const yOffset = y * width;
+            let windowSum = 0, count = 0;
+            for (let dx = -radius; dx <= radius; dx++) {
+              const nx = Math.min(width - 1, Math.max(0, dx));
+              windowSum += gray[yOffset + nx];
+              count++;
+            }
+            temp[yOffset] = windowSum / count;
+            for (let x = 1; x < width; x++) {
+              const removeX = Math.max(0, x - radius - 1);
+              const addX = Math.min(width - 1, x + radius);
+              windowSum += gray[yOffset + addX] - gray[yOffset + removeX];
+              temp[yOffset + x] = windowSum / count;
+            }
+          }
+
+          for (let x = 0; x < width; x++) {
+            let windowSum = 0, count = 0;
+            for (let dy = -radius; dy <= radius; dy++) {
+              const ny = Math.min(height - 1, Math.max(0, dy));
+              windowSum += temp[ny * width + x];
+              count++;
+            }
+            bg[x] = windowSum / count;
+            for (let y = 1; y < height; y++) {
+              const removeY = Math.max(0, y - radius - 1);
+              const addY = Math.min(height - 1, y + radius);
+              windowSum += temp[addY * width + x] - temp[removeY * width + x];
+              bg[y * width + x] = windowSum / count;
+            }
+          }
+
+          for (let i = 0; i < len; i++) {
+            const normalized = (gray[i] - bg[i]) * 1.35 + 128;
+            output[i] = Math.max(0, Math.min(255, normalized));
+          }
+          return output;
+        }
+
+        static applyCLAHE(gray, width, height, intensity = 65) {
+          const len = width * height;
+          if (intensity <= 0) return new Float32Array(gray);
+
+          const numTilesX = 8, numTilesY = 8;
+          const tileW = width / numTilesX, tileH = height / numTilesY;
+          const clipFactor = 1.8 + (intensity / 100.0) * 2.8;
+          const cdfs = [];
+
+          for (let ty = 0; ty < numTilesY; ty++) {
+            cdfs[ty] = [];
+            for (let tx = 0; tx < numTilesX; tx++) {
+              const hist = new Int32Array(256);
+              const startX = Math.floor(tx * tileW);
+              const endX = Math.floor((tx + 1) * tileW);
+              const startY = Math.floor(ty * tileH);
+              const endY = Math.floor((ty + 1) * tileH);
+              let pixelCount = (endX - startX) * (endY - startY);
+
+              for (let y = startY; y < endY; y++) {
+                const yOff = y * width;
+                for (let x = startX; x < endX; x++) {
+                  const val = Math.max(0, Math.min(255, Math.round(gray[yOff + x])));
+                  hist[val]++;
+                }
+              }
+
+              const clipLimit = Math.max(1, Math.round((pixelCount / 256) * clipFactor));
+              let excess = 0;
+              for (let i = 0; i < 256; i++) {
+                if (hist[i] > clipLimit) {
+                  excess += hist[i] - clipLimit;
+                  hist[i] = clipLimit;
+                }
+              }
+              const bonus = Math.floor(excess / 256);
+              for (let i = 0; i < 256; i++) hist[i] += bonus;
+
+              const cdf = new Float32Array(256);
+              let acc = 0;
+              for (let i = 0; i < 256; i++) {
+                acc += hist[i];
+                cdf[i] = (acc / pixelCount) * 255.0;
+              }
+              cdfs[ty][tx] = cdf;
+            }
+          }
+
+          const output = new Float32Array(len);
+          for (let y = 0; y < height; y++) {
+            const yOff = y * width;
+            const normY = (y / height) * numTilesY - 0.5;
+            const ty0 = Math.max(0, Math.floor(normY));
+            const ty1 = Math.min(numTilesY - 1, ty0 + 1);
+            const dy = Math.max(0, Math.min(1, normY - ty0));
+
+            for (let x = 0; x < width; x++) {
+              const normX = (x / width) * numTilesX - 0.5;
+              const tx0 = Math.max(0, Math.floor(normX));
+              const tx1 = Math.min(numTilesX - 1, tx0 + 1);
+              const dx = Math.max(0, Math.min(1, normX - tx0));
+
+              const val = Math.max(0, Math.min(255, Math.round(gray[yOff + x])));
+              const mapTL = cdfs[ty0][tx0][val];
+              const mapTR = cdfs[ty0][tx1][val];
+              const mapBL = cdfs[ty1][tx0][val];
+              const mapBR = cdfs[ty1][tx1][val];
+
+              const top = mapTL * (1 - dx) + mapTR * dx;
+              const bottom = mapBL * (1 - dx) + mapBR * dx;
+              output[yOff + x] = Math.max(0, Math.min(255, top * (1 - dy) + bottom * dy));
+            }
+          }
+          return output;
+        }
+      }
+
+      // 4. Bilateral Edge-Preserving Denoising
+      class NoiseReducer {
+        static apply(grayBuffer, width, height, intensity = 35) {
+          if (intensity <= 0) return new Float32Array(grayBuffer);
+          const len = width * height;
+          const output = new Float32Array(len);
+          const radius = intensity > 60 ? 2 : 1;
+          const sigmaSpace = 1.5 + (intensity / 100) * 1.5;
+          const sigmaColor = 15.0 + (intensity / 100) * 45.0;
+          const twoSigmaSpaceSq = 2 * sigmaSpace * sigmaSpace;
+          const twoSigmaColorSq = 2 * sigmaColor * sigmaColor;
+
+          const spatialKernel = [];
+          for (let dy = -radius; dy <= radius; dy++) {
+            for (let dx = -radius; dx <= radius; dx++) {
+              spatialKernel.push({ dx, dy, weight: Math.exp(-(dx * dx + dy * dy) / twoSigmaSpaceSq) });
+            }
+          }
+
+          for (let y = 0; y < height; y++) {
+            const yOffset = y * width;
+            for (let x = 0; x < width; x++) {
+              const centerVal = grayBuffer[yOffset + x];
+              let sumWeights = 0, sumIntensity = 0;
+              for (let k = 0; k < spatialKernel.length; k++) {
+                const { dx, dy, weight: sWeight } = spatialKernel[k];
+                const nx = x + dx, ny = y + dy;
+                if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                  const neighborVal = grayBuffer[ny * width + nx];
+                  const diff = centerVal - neighborVal;
+                  const totalWeight = sWeight * Math.exp(-(diff * diff) / twoSigmaColorSq);
+                  sumWeights += totalWeight;
+                  sumIntensity += neighborVal * totalWeight;
+                }
+              }
+              output[yOffset + x] = sumWeights > 0 ? sumIntensity / sumWeights : centerVal;
+            }
+          }
+          return output;
+        }
+      }
+
+      // 5. Laplacian Ridge Sharpener & Ridge Map Binarizer
+      class RidgeSharpener {
+        static apply(grayBuffer, width, height, intensity = 60) {
+          if (intensity <= 0) return new Float32Array(grayBuffer);
+          const len = width * height;
+          const output = new Float32Array(len);
+          const alpha = (intensity / 50.0) * 0.75;
+
+          for (let y = 0; y < height; y++) {
+            const yOffset = y * width;
+            const yPrev = Math.max(0, y - 1) * width;
+            const yNext = Math.min(height - 1, y + 1) * width;
+            for (let x = 0; x < width; x++) {
+              const xPrev = Math.max(0, x - 1);
+              const xNext = Math.min(width - 1, x + 1);
+              const centerVal = grayBuffer[yOffset + x];
+              const laplacian = 4 * centerVal - (grayBuffer[yPrev + x] + grayBuffer[yNext + x] + grayBuffer[yOffset + xPrev] + grayBuffer[yOffset + xNext]);
+              output[yOffset + x] = Math.max(0, Math.min(255, centerVal + alpha * laplacian));
+            }
+          }
+          return output;
+        }
+
+        static generateRidgeMap(grayBuffer, width, height) {
+          const canvas = document.createElement('canvas');
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          const imgData = ctx.createImageData(width, height);
+          const data = imgData.data;
+
+          const localMean = new Float32Array(width * height);
+          const r = 5;
+          const temp = new Float32Array(width * height);
+
+          for (let y = 0; y < height; y++) {
+            const yOff = y * width;
+            let sum = 0, count = 0;
+            for (let dx = -r; dx <= r; dx++) {
+              sum += grayBuffer[yOff + Math.min(width - 1, Math.max(0, dx))];
+              count++;
+            }
+            temp[yOff] = sum / count;
+            for (let x = 1; x < width; x++) {
+              sum += grayBuffer[yOff + Math.min(width - 1, x + r)] - grayBuffer[yOff + Math.max(0, x - r - 1)];
+              temp[yOff + x] = sum / count;
+            }
+          }
+
+          for (let x = 0; x < width; x++) {
+            let sum = 0, count = 0;
+            for (let dy = -r; dy <= r; dy++) {
+              sum += temp[Math.min(height - 1, Math.max(0, dy)) * width + x];
+              count++;
+            }
+            localMean[x] = sum / count;
+            for (let y = 1; y < height; y++) {
+              sum += temp[Math.min(height - 1, y + r) * width + x] - temp[Math.max(0, y - r - 1) * width + x];
+              localMean[y * width + x] = sum / count;
+            }
+          }
+
+          for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            const isRidge = grayBuffer[j] < (localMean[j] - 2.5);
+            if (isRidge) {
+              data[i] = 34; data[i + 1] = 211; data[i + 2] = 238; data[i + 3] = 255;
+            } else {
+              data[i] = 11; data[i + 1] = 15; data[i + 2] = 25; data[i + 3] = 255;
+            }
+          }
+          ctx.putImageData(imgData, 0, 0);
+          return canvas;
+        }
+      }
+
+      // 6. Forensic Clarity Score Calculator
+      class ClarityScoreCalculator {
+        static calculate(grayBuffer, width, height) {
+          const len = width * height;
+          if (len === 0) return { score: 0, metrics: { contrast: 0, separation: 0, sharpness: 0, snr: 0 } };
+
+          let sum = 0, sumSq = 0;
+          const hist = new Int32Array(256);
+          for (let i = 0; i < len; i++) {
+            const val = Math.max(0, Math.min(255, Math.round(grayBuffer[i])));
+            sum += val; sumSq += val * val; hist[val]++;
+          }
+          const mean = sum / len;
+          const variance = sumSq / len - mean * mean;
+          const stdDev = Math.sqrt(Math.max(0, variance));
+          const contrastMetric = Math.min(100, Math.round((stdDev / 68.0) * 100));
+
+          let tenengradSum = 0, gradientCount = 0;
+          for (let y = 1; y < height - 1; y += 2) {
+            const yPrev = (y - 1) * width, yCurr = y * width, yNext = (y + 1) * width;
+            for (let x = 1; x < width - 1; x += 2) {
+              const gx = (grayBuffer[yPrev + x + 1] + 2 * grayBuffer[yCurr + x + 1] + grayBuffer[yNext + x + 1]) - (grayBuffer[yPrev + x - 1] + 2 * grayBuffer[yCurr + x - 1] + grayBuffer[yNext + x - 1]);
+              const gy = (grayBuffer[yNext + x - 1] + 2 * grayBuffer[yNext + x] + grayBuffer[yNext + x + 1]) - (grayBuffer[yPrev + x - 1] + 2 * grayBuffer[yPrev + x] + grayBuffer[yPrev + x + 1]);
+              tenengradSum += gx * gx + gy * gy;
+              gradientCount++;
+            }
+          }
+          const avgTenengrad = gradientCount > 0 ? tenengradSum / gradientCount : 0;
+          const sharpnessMetric = Math.min(100, Math.round((Math.sqrt(avgTenengrad) / 150.0) * 100));
+
+          let sumAll = 0;
+          for (let t = 0; t < 256; t++) sumAll += t * hist[t];
+          let sumB = 0, wB = 0, varMax = 0;
+          for (let t = 0; t < 256; t++) {
+            wB += hist[t];
+            if (wB === 0) continue;
+            const wF = len - wB;
+            if (wF === 0) break;
+            sumB += t * hist[t];
+            const mB = sumB / wB;
+            const mF = (sumAll - sumB) / wF;
+            const betweenVar = wB * wF * (mB - mF) * (mB - mF);
+            if (betweenVar > varMax) varMax = betweenVar;
+          }
+          const totalVar = variance * len * len;
+          const separationRatio = totalVar > 0 ? (varMax / totalVar) : 0;
+          const separationMetric = Math.min(100, Math.round(separationRatio * 110));
+
+          let overSharpenPenalty = 0;
+          if (sharpnessMetric > 88 && separationMetric < 70) {
+            overSharpenPenalty = (sharpnessMetric - 88) * 0.8;
+          }
+          const snrMetric = Math.min(100, Math.max(15, Math.round(100 - (100 - contrastMetric) * 0.4 - overSharpenPenalty)));
+
+          const composite = sharpnessMetric * 0.35 + separationMetric * 0.30 + contrastMetric * 0.25 + snrMetric * 0.10 - overSharpenPenalty;
+          const finalScore = Math.max(10, Math.min(99, Math.round(composite)));
+
+          return {
+            score: finalScore,
+            metrics: { contrast: contrastMetric, separation: separationMetric, sharpness: sharpnessMetric, snr: snrMetric }
+          };
+        }
+      }
+
+      // 7. Forensic Sample Generator
+      class SampleGenerator {
+        static generate(type = 'standard', width = 380, height = 380) {
+          const canvas = document.createElement('canvas');
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (type === 'ninhydrin') ctx.fillStyle = '#f6f3ee';
+          else if (type === 'cyanoacrylate') ctx.fillStyle = '#0f172a';
+          else ctx.fillStyle = '#eddcc6';
+          ctx.fillRect(0, 0, width, height);
+
+          const imgData = ctx.getImageData(0, 0, width, height);
+          const d = imgData.data;
+          const cx = width * 0.5, cy = height * 0.52;
+
+          for (let y = 0; y < height; y++) {
+            const dy = (y - cy) / (height * 0.42);
+            for (let x = 0; x < width; x++) {
+              const dx = (x - cx) / (width * 0.38);
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist > 1.15) continue;
+              const angle = Math.atan2(dy, dx);
+              const spiral = Math.sqrt(dx * dx * 1.3 + dy * dy * 0.85) * 40 + Math.sin(angle * 3.0) * 1.8;
+              const ridge = (Math.sin(spiral + Math.sin(x * 0.12) * 0.5) + 1) * 0.5;
+              const idx = (y * width + x) * 4;
+              if (type === 'ninhydrin') {
+                const t = (1 - ridge) * 0.8;
+                d[idx] = Math.round(246 * (1 - t) + 107 * t);
+                d[idx + 1] = Math.round(243 * (1 - t) + 33 * t);
+                d[idx + 2] = Math.round(238 * (1 - t) + 168 * t);
+              } else if (type === 'cyanoacrylate') {
+                const t = (1 - ridge) * 0.85;
+                d[idx] = Math.round(18 * (1 - t) + 240 * t);
+                d[idx + 1] = Math.round(22 * (1 - t) + 244 * t);
+                d[idx + 2] = Math.round(32 * (1 - t) + 255 * t);
+              } else {
+                const val = Math.round(ridge * 180 + 40);
+                d[idx] = val; d[idx + 1] = val; d[idx + 2] = val;
+              }
+            }
+          }
+          ctx.putImageData(imgData, 0, 0);
+          return canvas;
+        }
+      }
+
+      // 8. Interactive Draggable Cropper Component
+      class FingerprintCropper {
+        constructor(sourceCanvas, onConfirm, onCancel) {
+          this.sourceCanvas = sourceCanvas;
+          this.onConfirm = onConfirm;
+          this.onCancel = onCancel;
+          this.rotation = 0;
+          this.cropRect = { x: 0.15, y: 0.15, width: 0.7, height: 0.7 };
+          this.isDragging = false;
+          this.dragType = null;
+          this.dragStart = { x: 0, y: 0 };
+          this.initialCrop = { ...this.cropRect };
+
+          this.render();
+          this.initCanvas();
+          this.bindEvents();
+        }
+
+        render() {
+          this.modalEl = document.createElement('div');
+          this.modalEl.className = 'modal-overlay active';
+          this.modalEl.innerHTML = `
+            <div class="cropper-sheet">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div>
+                  <h2 style="font-size: 16px; font-weight: 800;">Crop Fingerprint</h2>
+                  <p style="font-size: 11px; color: var(--md-sys-color-on-surface-variant);">Drag box to isolate fingertip ridge area</p>
+                </div>
+                <button class="m3-btn-icon m3-btn-tonal" id="crop-close-btn">✕</button>
+              </div>
+
+              <div class="cropper-toolbar">
+                <button class="m3-btn m3-btn-tonal cropper-tool-btn" id="crop-auto-detect-btn">${Icons.auto_awesome} Auto Detect</button>
+                <div style="display: flex; gap: 6px;">
+                  <button class="control-toggle-btn" id="crop-rot-l">↺ 90°</button>
+                  <button class="control-toggle-btn" id="crop-rot-r">↻ 90°</button>
+                  <button class="control-toggle-btn" id="crop-rst">${Icons.restart_alt}</button>
+                </div>
+              </div>
+
+              <div class="cropper-canvas-container" id="cropper-viewport">
+                <canvas id="cropper-canvas"></canvas>
+              </div>
+
+              <div style="display: flex; gap: 10px; margin-top: 14px;">
+                <button class="m3-btn m3-btn-outlined" id="crop-cancel-btn" style="flex: 1;">Cancel</button>
+                <button class="m3-btn m3-btn-primary" id="crop-confirm-btn" style="flex: 2;">${Icons.check_circle} Confirm Crop</button>
+              </div>
+            </div>
+          `;
+          document.body.appendChild(this.modalEl);
+        }
+
+        initCanvas() {
+          this.canvas = this.modalEl.querySelector('#cropper-canvas');
+          this.viewport = this.modalEl.querySelector('#cropper-viewport');
+          this.ctx = this.canvas.getContext('2d');
+          const rect = this.viewport.getBoundingClientRect();
+          this.canvasWidth = rect.width || 380;
+          this.canvasHeight = rect.height || 340;
+          this.canvas.width = this.canvasWidth;
+          this.canvas.height = this.canvasHeight;
+          this.draw();
+        }
+
+        bindEvents() {
+          this.modalEl.querySelector('#crop-close-btn')?.addEventListener('click', () => this.destroy(false));
+          this.modalEl.querySelector('#crop-cancel-btn')?.addEventListener('click', () => this.destroy(false));
+          this.modalEl.querySelector('#crop-rot-l')?.addEventListener('click', () => { this.rotation = (this.rotation + 270) % 360; this.draw(); });
+          this.modalEl.querySelector('#crop-rot-r')?.addEventListener('click', () => { this.rotation = (this.rotation + 90) % 360; this.draw(); });
+          this.modalEl.querySelector('#crop-rst')?.addEventListener('click', () => { this.cropRect = { x: 0.1, y: 0.1, width: 0.8, height: 0.8 }; this.draw(); });
+          this.modalEl.querySelector('#crop-auto-detect-btn')?.addEventListener('click', () => {
+            this.cropRect = { x: 0.2, y: 0.18, width: 0.6, height: 0.64 };
+            this.draw();
+          });
+
+          this.modalEl.querySelector('#crop-confirm-btn')?.addEventListener('click', () => {
+            const cropped = this.generateCropped();
+            this.destroy(true);
+            if (this.onConfirm) this.onConfirm(cropped);
+          });
+
+          const onDown = (cx, cy) => {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = (cx - rect.left) / this.canvasWidth;
+            const y = (cy - rect.top) / this.canvasHeight;
+            this.isDragging = true;
+            this.dragStart = { x, y };
+            this.initialCrop = { ...this.cropRect };
+          };
+
+          const onMove = (cx, cy) => {
+            if (!this.isDragging) return;
+            const rect = this.canvas.getBoundingClientRect();
+            const dx = (cx - rect.left) / this.canvasWidth - this.dragStart.x;
+            const dy = (cy - rect.top) / this.canvasHeight - this.dragStart.y;
+            this.cropRect.x = Math.max(0, Math.min(1 - this.initialCrop.width, this.initialCrop.x + dx));
+            this.cropRect.y = Math.max(0, Math.min(1 - this.initialCrop.height, this.initialCrop.y + dy));
+            this.draw();
+          };
+
+          const onUp = () => { this.isDragging = false; };
+
+          this.canvas.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+          window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+          window.addEventListener('mouseup', onUp);
+
+          this.canvas.addEventListener('touchstart', e => { if (e.touches[0]) onDown(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault(); }, { passive: false });
+          window.addEventListener('touchmove', e => { if (this.isDragging && e.touches[0]) onMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+          window.addEventListener('touchend', onUp);
+        }
+
+        draw() {
+          const { ctx, canvasWidth, canvasHeight } = this;
+          ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+          const isSwapped = this.rotation === 90 || this.rotation === 270;
+          const srcW = isSwapped ? this.sourceCanvas.height : this.sourceCanvas.width;
+          const srcH = isSwapped ? this.sourceCanvas.width : this.sourceCanvas.height;
+          const scale = Math.min((canvasWidth * 0.9) / srcW, (canvasHeight * 0.9) / srcH);
+          const rW = srcW * scale, rH = srcH * scale;
+          const rx = (canvasWidth - rW) / 2, ry = (canvasHeight - rH) / 2;
+
+          ctx.save();
+          ctx.translate(canvasWidth / 2, canvasHeight / 2);
+          ctx.rotate((this.rotation * Math.PI) / 180);
+          const drawW = (this.rotation === 90 || this.rotation === 270) ? rH : rW;
+          const drawH = (this.rotation === 90 || this.rotation === 270) ? rW : rH;
+          ctx.drawImage(this.sourceCanvas, -drawW / 2, -drawH / 2, drawW, drawH);
+          ctx.restore();
+
+          const bx = rx + this.cropRect.x * rW;
+          const by = ry + this.cropRect.y * rH;
+          const bw = this.cropRect.width * rW;
+          const bh = this.cropRect.height * rH;
+
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+          ctx.fillRect(0, 0, canvasWidth, by);
+          ctx.fillRect(0, by + bh, canvasWidth, canvasHeight - (by + bh));
+          ctx.fillRect(0, by, bx, bh);
+          ctx.fillRect(bx + bw, by, canvasWidth - (bx + bw), bh);
+
+          ctx.strokeStyle = '#2563eb';
+          ctx.lineWidth = 2.5;
+          ctx.strokeRect(bx, by, bw, bh);
+
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(bx + bw / 3, by); ctx.lineTo(bx + bw / 3, by + bh);
+          ctx.moveTo(bx + (2 * bw) / 3, by); ctx.lineTo(bx + (2 * bw) / 3, by + bh);
+          ctx.moveTo(bx, by + bh / 3); ctx.lineTo(bx + bw, by + bh / 3);
+          ctx.moveTo(bx, by + (2 * bh) / 3); ctx.lineTo(bx + bw, by + (2 * bh) / 3);
+          ctx.stroke();
+
+          ctx.fillStyle = '#ffffff';
+          const hs = 8;
+          [[bx, by], [bx + bw, by], [bx, by + bh], [bx + bw, by + bh]].forEach(([hx, hy]) => {
+            ctx.fillRect(hx - hs/2, hy - hs/2, hs, hs);
+          });
+        }
+
+        generateCropped() {
+          const out = document.createElement('canvas');
+          const isSwapped = this.rotation === 90 || this.rotation === 270;
+          const fullW = isSwapped ? this.sourceCanvas.height : this.sourceCanvas.width;
+          const fullH = isSwapped ? this.sourceCanvas.width : this.sourceCanvas.height;
+
+          const rotCanvas = document.createElement('canvas');
+          rotCanvas.width = fullW; rotCanvas.height = fullH;
+          const rCtx = rotCanvas.getContext('2d');
+          rCtx.translate(fullW / 2, fullH / 2);
+          rCtx.rotate((this.rotation * Math.PI) / 180);
+          rCtx.drawImage(this.sourceCanvas, -this.sourceCanvas.width / 2, -this.sourceCanvas.height / 2);
+
+          const cropX = Math.round(this.cropRect.x * fullW);
+          const cropY = Math.round(this.cropRect.y * fullH);
+          const cropW = Math.round(this.cropRect.width * fullW);
+          const cropH = Math.round(this.cropRect.height * fullH);
+
+          out.width = cropW; out.height = cropH;
+          out.getContext('2d').drawImage(rotCanvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+          return out;
+        }
+
+        destroy() {
+          if (this.modalEl && document.body.contains(this.modalEl)) {
+            document.body.removeChild(this.modalEl);
+          }
+        }
+      }
+
+      // 9. Master Forensic Pipeline
+      class Pipeline {
+        static process(canvas, params) {
+          const w = canvas.width, h = canvas.height;
+          const ctx = canvas.getContext('2d');
+          const srcData = ctx.getImageData(0, 0, w, h);
+
+          // Step 1: Raw Clarity Score
+          const rawGray = ContrastProcessor.toGrayscale(srcData);
+          const rawClarity = ClarityScoreCalculator.calculate(rawGray, w, h);
+
+          // Step 2: Illumination Normalization
+          const normGray = ContrastProcessor.normalizeIllumination(rawGray, w, h, 18);
+
+          // Step 3: CLAHE Adaptive Contrast Equalization
+          const claheGray = ContrastProcessor.applyCLAHE(normGray, w, h, params.contrast);
+
+          // Step 4: Edge-Preserving Bilateral Smoothing
+          const denoisedGray = NoiseReducer.apply(claheGray, w, h, params.noiseReduction);
+
+          // Step 5: Laplacian Ridge Minutiae Sharpening
+          const sharpenedGray = RidgeSharpener.apply(denoisedGray, w, h, params.ridgeSharpening);
+
+          // Step 6: Enhanced Clarity Score
+          const enhClarity = ClarityScoreCalculator.calculate(sharpenedGray, w, h);
+
+          // Step 7: Ridge Map
+          const ridgeMapCanvas = RidgeSharpener.generateRidgeMap(sharpenedGray, w, h);
+
+          // Output Canvas
+          const outCanvas = document.createElement('canvas');
+          outCanvas.width = w; outCanvas.height = h;
+          const outCtx = outCanvas.getContext('2d');
+          const outData = outCtx.createImageData(w, h);
+          for (let i = 0, j = 0; i < outData.data.length; i += 4, j++) {
+            const v = Math.round(sharpenedGray[j]);
+            outData.data[i] = v; outData.data[i + 1] = v; outData.data[i + 2] = v; outData.data[i + 3] = 255;
+          }
+          outCtx.putImageData(outData, 0, 0);
+
+          const deltaVal = enhClarity.score - rawClarity.score;
+          return {
+            enhancedCanvas: outCanvas,
+            ridgeMapCanvas: ridgeMapCanvas,
+            clarityScore: {
+              rawScore: rawClarity.score,
+              enhancedScore: enhClarity.score,
+              delta: deltaVal >= 0 ? `+${deltaVal}` : `${deltaVal}`,
+              metrics: enhClarity.metrics,
+              hasCalculated: true
+            }
+          };
+        }
+      }
+
+      // 10. UI Screen Renderers
+      function renderHome() {
+        const h = document.getElementById('screen-home');
+        h.innerHTML = `
+          <div class="screen-content">
+            <header class="app-header">
+              <div class="header-top-row">
+                <span class="brand-badge">${Icons.fingerprint} FORENSIC DIGITAL SUITE</span>
+                <button class="theme-toggle-btn" id="home-theme-toggle">${Icons.dark_mode}</button>
+              </div>
+              <h1 class="app-title">Fingerprint Enhancer</h1>
+              <p class="app-subtitle">AI-Assisted Fingerprint Image Enhancement</p>
+              <div class="forensic-disclaimer">
+                ${Icons.info}
+                <span>Educational demonstration only. Enhancement does not guarantee accurate fingerprint identification.</span>
+              </div>
+            </header>
+
+            <div class="hero-fingerprint-card">
+              <div class="hero-chip">${Icons.auto_awesome} PROTOTYPE v1.0</div>
+              <h2 class="hero-title">Digital Ridge Optimization</h2>
+              <p class="hero-desc">Transform latent and chemically developed friction ridge impressions through high-precision spatial filters.</p>
+              <button class="m3-btn m3-btn-primary" id="hero-quick-start-btn">${Icons.upload} Start Enhancing</button>
+              <div class="hero-watermark-icon">${Icons.fingerprint}</div>
+            </div>
+
+            <div class="home-cards-grid">
+              <div class="nav-feature-card" id="home-card-upload"><div class="nav-card-icon icon-blue">${Icons.upload}</div><div class="nav-card-content"><h3 class="nav-card-title">Upload Fingerprint</h3><p class="nav-card-desc">Import photo or select developer sample.</p></div><div class="nav-card-arrow">${Icons.arrow_forward}</div></div>
+              <div class="nav-feature-card" id="home-card-reagents"><div class="nav-card-icon icon-purple">${Icons.science}</div><div class="nav-card-content"><h3 class="nav-card-title">Chemical Reagents</h3><p class="nav-card-desc">Simulate Ninhydrin, Silver Nitrate, and Superglue.</p></div><div class="nav-card-arrow">${Icons.arrow_forward}</div></div>
+              <div class="nav-feature-card" id="home-card-scope"><div class="nav-card-icon icon-teal">${Icons.psychology}</div><div class="nav-card-content"><h3 class="nav-card-title">Future Scope</h3><p class="nav-card-desc">Explore AI ridge reconstruction & AFIS matching.</p></div><div class="nav-card-arrow">${Icons.arrow_forward}</div></div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('hero-quick-start-btn')?.addEventListener('click', () => appState.navigateTo('upload'));
+        document.getElementById('home-card-upload')?.addEventListener('click', () => appState.navigateTo('upload'));
+        document.getElementById('home-card-reagents')?.addEventListener('click', () => appState.navigateTo('reagents'));
+        document.getElementById('home-card-scope')?.addEventListener('click', () => appState.navigateTo('scope'));
+        document.getElementById('home-theme-toggle')?.addEventListener('click', () => {
+          const next = appState.get('theme') === 'dark' ? 'light' : 'dark';
+          appState.set('theme', next);
+          document.documentElement.setAttribute('data-theme', next);
+        });
+      }
+
+      function renderUpload() {
+        const u = document.getElementById('screen-upload');
+        const hasImg = appState.get('hasImage');
+        const meta = appState.get('imageMetadata');
+
+        u.innerHTML = `
+          <div class="screen-content">
+            <header class="app-header">
+              <h1 class="app-title">Upload Fingerprint</h1>
+              <p class="app-subtitle">Select photo or explore forensic developer samples</p>
+            </header>
+
+            ${!hasImg ? `
+              <div class="upload-dropzone" id="upload-dropzone">
+                <input type="file" id="file-input-hidden" accept="image/*" style="display: none;">
+                <div class="dropzone-icon-wrap">${Icons.upload}</div>
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Choose Image</h3>
+                <p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 16px;">Supports smartphone photos, JPEG, and PNG</p>
+                <button class="m3-btn m3-btn-primary" id="btn-browse-file">Browse Device</button>
+              </div>
+
+              <div style="margin-top: 24px;">
+                <h3 style="font-size: 13px; font-weight: 700; color: var(--md-sys-color-on-surface); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">${Icons.science} Or Select Chemical Sample</h3>
+                <div class="demo-samples-grid">
+                  <div class="demo-sample-btn" data-demo="ninhydrin"><div class="demo-thumb-box" id="t-nin"></div><span style="font-size: 11px; font-weight: 700;">Ninhydrin</span></div>
+                  <div class="demo-sample-btn" data-demo="cyanoacrylate"><div class="demo-thumb-box" id="t-cy"></div><span style="font-size: 11px; font-weight: 700;">Superglue</span></div>
+                  <div class="demo-sample-btn" data-demo="silver_nitrate"><div class="demo-thumb-box" id="t-sn"></div><span style="font-size: 11px; font-weight: 700;">Silver Nitrate</span></div>
+                </div>
+              </div>
+            ` : `
+              <div class="m3-card">
+                <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 10px;">Selected Image</h3>
+                <div class="pane-canvas-box" id="u-prev-box"></div>
+                <div class="image-meta-box">
+                  <div class="meta-row"><span>Original:</span><strong>${meta.originalDimensions}</strong></div>
+                  <div class="meta-row"><span>Processing:</span><strong style="color: var(--md-sys-color-primary);">${meta.processingDimensions}</strong></div>
+                  <div class="meta-row"><span>Quality:</span><span class="m3-chip m3-chip-primary">${meta.qualityLevel}</span></div>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; gap: 10px;">
+                  <button class="m3-btn m3-btn-tonal" id="crop-image-btn" style="flex: 1;">${Icons.crop} Crop Fingerprint</button>
+                  <button class="m3-btn m3-btn-outlined" id="replace-image-btn" style="flex: 1;">Replace Image</button>
+                </div>
+                <button class="m3-btn m3-btn-primary" id="continue-to-enhance-btn" style="padding: 14px;">Continue to Enhance</button>
+              </div>
+            `}
+          </div>
+        `;
+
+        if (!hasImg) {
+          document.getElementById('t-nin')?.appendChild(SampleGenerator.generate('ninhydrin', 100, 100));
+          document.getElementById('t-cy')?.appendChild(SampleGenerator.generate('cyanoacrylate', 100, 100));
+          document.getElementById('t-sn')?.appendChild(SampleGenerator.generate('silver_nitrate', 100, 100));
+
+          const fi = document.getElementById('file-input-hidden');
+          document.getElementById('btn-browse-file')?.addEventListener('click', () => fi?.click());
+          fi?.addEventListener('change', (e) => {
+            const f = e.target.files?.[0];
+            if (f) {
+              const r = new FileReader();
+              r.onload = () => {
+                const img = new Image();
+                img.onload = () => {
+                  const maxDim = 1200;
+                  let targetW = img.width, targetH = img.height;
+                  if (targetW > maxDim || targetH > maxDim) {
+                    const ratio = Math.min(maxDim / targetW, maxDim / targetH);
+                    targetW = Math.round(targetW * ratio);
+                    targetH = Math.round(targetH * ratio);
+                  }
+                  const c = document.createElement('canvas');
+                  c.width = targetW; c.height = targetH;
+                  c.getContext('2d').drawImage(img, 0, 0, targetW, targetH);
+                  appState.setImage(c, { name: f.name, originalDimensions: `${img.width} × ${img.height} px` });
+                  renderUpload();
+                };
+                img.src = r.result;
+              };
+              r.readAsDataURL(f);
+            }
+          });
+
+          document.querySelectorAll('.demo-sample-btn').forEach(b => {
+            b.addEventListener('click', () => {
+              const t = b.dataset.demo;
+              const c = SampleGenerator.generate(t, 400, 400);
+              appState.setImage(c, { name: `${t}_sample.png` });
+              renderUpload();
+            });
+          });
+        } else {
+          const pb = document.getElementById('u-prev-box');
+          if (pb) pb.appendChild(appState.get('originalCanvas'));
+
+          document.getElementById('replace-image-btn')?.addEventListener('click', () => {
+            appState.set('hasImage', false);
+            renderUpload();
+          });
+
+          document.getElementById('continue-to-enhance-btn')?.addEventListener('click', () => {
+            appState.navigateTo('enhance');
+          });
+
+          document.getElementById('crop-image-btn')?.addEventListener('click', () => {
+            const orig = appState.get('originalCanvas');
+            if (orig) {
+              new FingerprintCropper(orig, (croppedCanvas) => {
+                appState.setImage(croppedCanvas, { name: 'cropped.png' });
+                renderUpload();
+              });
+            }
+          });
+        }
+      }
+
+      function renderEnhance() {
+        const e = document.getElementById('screen-enhance');
+        const hasImg = appState.get('hasImage');
+        const params = appState.get('parameters');
+        const clarity = appState.get('clarityScore');
+
+        if (!hasImg) {
+          e.innerHTML = `
+            <div class="screen-content">
+              <header class="app-header"><h1 class="app-title">Enhance Fingerprint</h1></header>
+              <div class="m3-card" style="text-align: center; padding: 40px 20px;">
+                <p style="margin-bottom: 16px;">Please upload or select an image first.</p>
+                <button class="m3-btn m3-btn-primary" id="enh-goto-upload">${Icons.upload} Go to Upload</button>
+              </div>
+            </div>
+          `;
+          document.getElementById('enh-goto-upload')?.addEventListener('click', () => appState.navigateTo('upload'));
+          return;
+        }
+
+        e.innerHTML = `
+          <div class="screen-content">
+            <header class="app-header">
+              <div class="header-top-row">
+                <h1 class="app-title">Fingerprint Enhancement</h1>
+                <button class="m3-btn-icon m3-btn-tonal" id="btn-dl" title="Download PNG">${Icons.download}</button>
+              </div>
+              <p class="app-subtitle">Illumination normalization, CLAHE local contrast & ridge sharpening</p>
+            </header>
+
+            <div class="view-mode-bar">
+              <span style="font-size: 11px; font-weight: 700;">OUTPUT VIEW</span>
+              <div class="view-toggle-group">
+                <button class="view-toggle-btn active" id="v-enh">Enhanced</button>
+                <button class="view-toggle-btn" id="v-ridge">Ridge Map</button>
+              </div>
+            </div>
+
+            <div class="comparison-container">
+              <div class="comparison-pane"><div class="pane-header"><span class="pane-title">${Icons.fingerprint} Original</span><span class="m3-chip">Raw</span></div><div class="pane-canvas-box" id="e-orig-box"></div></div>
+              <div class="comparison-pane"><div class="pane-header"><span class="pane-title" style="color: var(--md-sys-color-primary);">${Icons.auto_fix_high} Processed</span><span class="m3-chip m3-chip-primary">Enhanced</span></div><div class="pane-canvas-box" id="e-enh-box"></div></div>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+              <button class="m3-btn m3-btn-tonal" id="btn-rec-preset" style="flex: 1; font-size: 11px;">${Icons.auto_awesome} Recommended</button>
+              <button class="m3-btn m3-btn-outlined" id="btn-high-contrast" style="flex: 1; font-size: 11px;">High Contrast</button>
+            </div>
+
+            <div class="enhancement-controls-card">
+              <div style="display: flex; justify-content: space-between;"><h3 style="font-size: 13px; font-weight: 700;">Controls</h3><button class="m3-btn m3-btn-outlined" id="c-rst" style="padding: 2px 10px; font-size: 11px;">Reset</button></div>
+              <div><div class="control-title-row"><span class="control-label">${Icons.contrast} Local Contrast (CLAHE)</span><span class="m3-slider-badge" id="val-c">${params.contrast}</span></div><input type="range" class="m3-slider" id="sl-c" min="0" max="100" value="${params.contrast}"></div>
+              <div><div class="control-title-row"><span class="control-label">${Icons.blur_off} Edge-Preserving Denoise</span><span class="m3-slider-badge" id="val-n">${params.noiseReduction}</span></div><input type="range" class="m3-slider" id="sl-n" min="0" max="100" value="${params.noiseReduction}"></div>
+              <div><div class="control-title-row"><span class="control-label">${Icons.sharpen} Ridge Sharpening (Laplacian)</span><span class="m3-slider-badge" id="val-s">${params.ridgeSharpening}</span></div><input type="range" class="m3-slider" id="sl-s" min="0" max="100" value="${params.ridgeSharpening}"></div>
+            </div>
+
+            <button class="m3-btn m3-btn-primary" id="btn-do-enhance" style="width: 100%; padding: 14px; margin-bottom: 16px;">${Icons.auto_fix_high} Enhance Fingerprint</button>
+
+            <div class="clarity-score-card">
+              <div class="clarity-header">${Icons.auto_awesome} Forensic Clarity Score</div>
+              <div class="clarity-meter-wrap">
+                <svg viewBox="0 0 36 36" class="circular-chart"><defs><linearGradient id="clarityGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3b82f6" /><stop offset="100%" stop-color="#06b6d4" /></linearGradient></defs><path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path class="circle-progress" stroke-dasharray="${clarity.enhancedScore || 0}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
+                <div class="meter-inner-content"><span class="score-number">${clarity.enhancedScore || 0}</span><span class="score-max">/ 100</span></div>
+              </div>
+              <div class="clarity-comparison-row">
+                <div class="score-comparison-pill">Before: <strong>${clarity.rawScore || 0}</strong>/100</div>
+                <div class="score-comparison-pill">After: <strong>${clarity.enhancedScore || 0}</strong>/100</div>
+              </div>
+              ${clarity.hasCalculated ? `<div class="score-delta-badge">${Icons.check_circle} Clarity Boost: ${clarity.delta}</div>` : ''}
+              <div class="clarity-metrics-grid">
+                <div class="metric-factor-item"><div class="metric-factor-name"><span>Ridge Sharpness</span><strong>${clarity.metrics?.sharpness || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.sharpness || 0}%;"></div></div></div>
+                <div class="metric-factor-item"><div class="metric-factor-name"><span>Valley Separability</span><strong>${clarity.metrics?.separation || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.separation || 0}%;"></div></div></div>
+                <div class="metric-factor-item"><div class="metric-factor-name"><span>Contrast Dynamic</span><strong>${clarity.metrics?.contrast || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.contrast || 0}%;"></div></div></div>
+                <div class="metric-factor-item"><div class="metric-factor-name"><span>Signal-to-Noise</span><strong>${clarity.metrics?.snr || 0}%</strong></div><div class="metric-bar-bg"><div class="metric-bar-fill" style="width: ${clarity.metrics?.snr || 0}%;"></div></div></div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('e-orig-box')?.appendChild(appState.get('originalCanvas'));
+        const enhBox = document.getElementById('e-enh-box');
+        if (enhBox) {
+          const enhC = appState.get('enhancedCanvas');
+          if (enhC) enhBox.appendChild(enhC);
+        }
+
+        document.getElementById('sl-c')?.addEventListener('input', (ev) => {
+          appState.get('parameters').contrast = Number(ev.target.value);
+          document.getElementById('val-c').textContent = ev.target.value;
+        });
+        document.getElementById('sl-n')?.addEventListener('input', (ev) => {
+          appState.get('parameters').noiseReduction = Number(ev.target.value);
+          document.getElementById('val-n').textContent = ev.target.value;
+        });
+        document.getElementById('sl-s')?.addEventListener('input', (ev) => {
+          appState.get('parameters').ridgeSharpening = Number(ev.target.value);
+          document.getElementById('val-s').textContent = ev.target.value;
+        });
+
+        const runEnh = () => {
+          const orig = appState.get('originalCanvas');
+          if (orig) {
+            const res = Pipeline.process(orig, appState.get('parameters'));
+            appState.setEnhancedResult(res.enhancedCanvas, res.clarityScore, res.ridgeMapCanvas);
+            renderEnhance();
+          }
+        };
+
+        // Manual enhancement trigger
+        document.getElementById('btn-do-enhance')?.addEventListener('click', runEnh);
+        document.getElementById('btn-rec-preset')?.addEventListener('click', () => {
+          appState.state.parameters = { contrast: 65, noiseReduction: 35, ridgeSharpening: 60 };
+          runEnh();
+        });
+        document.getElementById('btn-high-contrast')?.addEventListener('click', () => {
+          appState.state.parameters = { contrast: 85, noiseReduction: 20, ridgeSharpening: 75 };
+          runEnh();
+        });
+        document.getElementById('c-rst')?.addEventListener('click', () => {
+          appState.state.parameters = { contrast: 50, noiseReduction: 30, ridgeSharpening: 50 };
+          runEnh();
+        });
+
+        document.getElementById('v-enh')?.addEventListener('click', () => {
+          document.getElementById('v-enh').classList.add('active');
+          document.getElementById('v-ridge').classList.remove('active');
+          const box = document.getElementById('e-enh-box');
+          if (box) { box.innerHTML = ''; box.appendChild(appState.get('enhancedCanvas')); }
+        });
+        document.getElementById('v-ridge')?.addEventListener('click', () => {
+          document.getElementById('v-ridge').classList.add('active');
+          document.getElementById('v-enh').classList.remove('active');
+          const box = document.getElementById('e-enh-box');
+          if (box && appState.get('ridgeMapCanvas')) { box.innerHTML = ''; box.appendChild(appState.get('ridgeMapCanvas')); }
+        });
+
+        document.getElementById('btn-dl')?.addEventListener('click', () => {
+          const link = document.createElement('a');
+          link.download = 'enhanced_fingerprint.png';
+          link.href = appState.get('enhancedCanvas').toDataURL();
+          link.click();
+        });
+      }
+
+      function renderReagents() {
+        const r = document.getElementById('screen-reagents');
+        r.innerHTML = `
+          <div class="screen-content">
+            <header class="app-header"><h1 class="app-title">Chemical Reagents</h1><p class="app-subtitle">Forensic latent print development methods</p></header>
+            <div class="reagents-grid">
+              <div class="reagent-card" data-id="ninhydrin"><div class="reagent-preview-box" id="rb-nin"></div><div class="reagent-info"><h3 class="reagent-title">Ninhydrin</h3><span class="m3-chip m3-chip-primary">Porous (Paper)</span><p class="reagent-desc">Produces Ruhemann's Purple with amino acids.</p><button class="m3-btn m3-btn-tonal" style="padding: 4px 10px; font-size: 11px;">Enhance</button></div></div>
+              <div class="reagent-card" data-id="cyanoacrylate"><div class="reagent-preview-box" id="rb-cy"></div><div class="reagent-info"><h3 class="reagent-title">Cyanoacrylate</h3><span class="m3-chip m3-chip-primary">Non-Porous (Glass/Metal)</span><p class="reagent-desc">White 3D polycyanoacrylate ridge fuming.</p><button class="m3-btn m3-btn-tonal" style="padding: 4px 10px; font-size: 11px;">Enhance</button></div></div>
+              <div class="reagent-card" data-id="silver_nitrate"><div class="reagent-preview-box" id="rb-sn"></div><div class="reagent-info"><h3 class="reagent-title">Silver Nitrate</h3><span class="m3-chip m3-chip-primary">Porous (Wood/Paper)</span><p class="reagent-desc">Forms photoreactive dark silver chloride.</p><button class="m3-btn m3-btn-tonal" style="padding: 4px 10px; font-size: 11px;">Enhance</button></div></div>
+            </div>
+          </div>
+        `;
+        document.getElementById('rb-nin')?.appendChild(SampleGenerator.generate('ninhydrin', 80, 80));
+        document.getElementById('rb-cy')?.appendChild(SampleGenerator.generate('cyanoacrylate', 80, 80));
+        document.getElementById('rb-sn')?.appendChild(SampleGenerator.generate('silver_nitrate', 80, 80));
+
+        r.querySelectorAll('.reagent-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const id = card.dataset.id;
+            const fullC = SampleGenerator.generate(id, 400, 400);
+            appState.setImage(fullC, { name: `${id}.png` });
+            appState.navigateTo('enhance');
+          });
+        });
+      }
+
+      function renderScope() {
+        const s = document.getElementById('screen-scope');
+        s.innerHTML = `
+          <div class="screen-content">
+            <header class="app-header"><h1 class="app-title">Future Scope & AI</h1><p class="app-subtitle">Biometric & deep learning roadmap</p></header>
+            <div class="m3-card"><h3 class="section-card-title">${Icons.psychology} Neural Ridge Reconstruction</h3><p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 10px;">Deep CNNs to interpolate missing ridge flow across damaged prints.</p><span class="m3-chip m3-chip-primary">Phase 2</span></div>
+            <div class="m3-card"><h3 class="section-card-title">${Icons.auto_awesome} Automated Minutiae Extraction</h3><p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 10px;">Automatic Level 2 & Level 3 biometric feature detection.</p><span class="m3-chip m3-chip-accent">Phase 3</span></div>
+            <div class="m3-card"><h3 class="section-card-title">${Icons.fingerprint} AFIS Interoperability</h3><p style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 10px;">Exporting standardized ANSI/NIST-ITL feature templates.</p><span class="m3-chip">Phase 4</span></div>
+          </div>
+        `;
+      }
+
+      function renderBottomNav() {
+        const nav = document.getElementById('bottom-nav-container');
+        nav.innerHTML = `
+          <nav class="m3-bottom-nav">
+            <button class="nav-item active" data-tab="home"><div class="nav-pill-indicator">${Icons.home}</div><span class="nav-label">Home</span></button>
+            <button class="nav-item" data-tab="upload"><div class="nav-pill-indicator">${Icons.upload}</div><span class="nav-label">Upload</span></button>
+            <button class="nav-item" data-tab="enhance"><div class="nav-pill-indicator">${Icons.auto_fix_high}</div><span class="nav-label">Enhance</span></button>
+            <button class="nav-item" data-tab="reagents"><div class="nav-pill-indicator">${Icons.science}</div><span class="nav-label">Reagents</span></button>
+            <button class="nav-item" data-tab="scope"><div class="nav-pill-indicator">${Icons.psychology}</div><span class="nav-label">Scope</span></button>
+          </nav>
+        `;
+        nav.addEventListener('click', (e) => {
+          const btn = e.target.closest('.nav-item');
+          if (btn) appState.navigateTo(btn.dataset.tab);
+        });
+      }
+
+      // Expose to window for testing, QA, and DevTools console inspection
+      window.appState = appState;
+      window.Icons = Icons;
+      window.SampleGenerator = SampleGenerator;
+      window.Pipeline = Pipeline;
+      window.FingerprintCropper = FingerprintCropper;
+      window.renderHome = renderHome;
+      window.renderUpload = renderUpload;
+      window.renderEnhance = renderEnhance;
+      window.renderReagents = renderReagents;
+      window.renderScope = renderScope;
+
+      // Initial Clean Mount (Home screen appears immediately with ZERO background execution)
+      const initApp = () => {
+        renderHome();
+        renderBottomNav();
+
+        appState.on('navigatedTo', (tab) => {
+          if (tab === 'home') renderHome();
+          if (tab === 'upload') renderUpload();
+          if (tab === 'enhance') renderEnhance();
+          if (tab === 'reagents') renderReagents();
+          if (tab === 'scope') renderScope();
+        });
+
+        // Mockup controls
+        document.getElementById('toggle-frame-btn')?.addEventListener('click', () => {
+          document.querySelector('.phone-mockup')?.classList.toggle('fullscreen');
+        });
+        document.getElementById('toggle-theme-desktop-btn')?.addEventListener('click', () => {
+          const next = appState.get('theme') === 'dark' ? 'light' : 'dark';
+          appState.set('theme', next);
+          document.documentElement.setAttribute('data-theme', next);
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+        initApp();
+      }
+    })();
+  </script>
+</body>
+</html>

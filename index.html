@@ -372,15 +372,15 @@
         position: static !important;
         height: 64px !important;
         justify-content: center !important;
-        gap: 36px !important;
+        gap: clamp(10px, 1.8vw, 24px) !important;
         border-top: 1px solid var(--md-sys-color-outline-variant) !important;
         flex-shrink: 0 !important;
       }
 
       .nav-item {
         flex: none !important;
-        width: 100px !important;
-        padding: 4px 10px !important;
+        width: 88px !important;
+        padding: 4px 8px !important;
         border-radius: var(--md-shape-md) !important;
         transition: all 0.2s ease !important;
       }
@@ -831,7 +831,7 @@
     }
 
     /* UV Excitation Banner */
-                  <span>&#128294; UV EXCITATION: ACTIVE (Visualization Boosted)</span>
+    .uv-excitation-banner {
       display: none;
       align-items: center;
       justify-content: center;
@@ -850,7 +850,7 @@
       animation: uvBadgeGlow 2.5s infinite alternate ease-in-out;
     }
 
-                  <span>&#128294; UV EXCITATION: ACTIVE (Visualization Boosted)</span>
+    body.uv-mode .uv-excitation-banner {
       display: flex;
     }
 
@@ -863,6 +863,242 @@
         box-shadow: 0 0 32px rgba(168, 85, 247, 0.85), 0 0 55px rgba(59, 130, 246, 0.55), inset 0 0 16px rgba(168, 85, 247, 0.55);
         border-color: #f0abfc;
       }
+    }
+
+    /* ========================================================
+       INFO & CAPSTONE DEFENSE USER GUIDE STYLES
+       ======================================================== */
+    .info-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .info-section {
+      margin-bottom: 8px;
+    }
+
+    .info-hero-banner {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(168, 85, 247, 0.1));
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-shape-xl);
+      padding: 24px 28px;
+    }
+
+    .info-section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .info-section-tag {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+    }
+
+    .info-section-h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--md-sys-color-on-surface);
+      margin: 0;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .team-member-card {
+      background: var(--md-sys-color-surface-container);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-shape-lg);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .team-member-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .team-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--md-sys-color-primary), #a855f7);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .team-member-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: 2px;
+    }
+
+    .team-member-role {
+      font-size: 11px;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    /* Step-by-Step Operating Guide Timeline */
+    .steps-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .guide-step-card {
+      background: var(--md-sys-color-surface);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-shape-xl);
+      padding: 18px 22px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      transition: all 0.2s;
+    }
+
+    .guide-step-card:hover {
+      border-color: var(--md-sys-color-primary);
+    }
+
+    .guide-step-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .guide-step-body {
+      flex: 1;
+    }
+
+    .guide-step-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .guide-step-desc {
+      font-size: 13px;
+      color: var(--md-sys-color-on-surface-variant);
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+
+    /* Science Principles Reference Cards */
+    .science-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .science-ref-card {
+      background: var(--md-sys-color-surface);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-shape-xl);
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .science-card-accent-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .bar-purple { background: linear-gradient(90deg, #7c3aed, #c084fc); }
+    .bar-blue { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+    .bar-silver { background: linear-gradient(90deg, #475569, #94a3b8); }
+
+    .chem-formula {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      background: var(--md-sys-color-surface-container);
+      padding: 2px 7px;
+      border-radius: 4px;
+      color: var(--md-sys-color-primary);
+      font-weight: 700;
+    }
+
+    .chem-spec-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    }
+    .chem-spec-row:last-child {
+      border-bottom: none;
+    }
+    .chem-spec-label {
+      color: var(--md-sys-color-on-surface-variant);
+      font-weight: 500;
+    }
+    .chem-spec-val {
+      font-weight: 700;
+      color: var(--md-sys-color-on-surface);
+      text-align: right;
+    }
+
+    /* UV mode support for Info Page */
+    body.uv-mode .info-hero-banner,
+    body.uv-mode .guide-step-card,
+    body.uv-mode .science-ref-card,
+    body.uv-mode .team-member-card {
+      background: #080d1e !important;
+      border-color: rgba(168, 85, 247, 0.45) !important;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.15) !important;
+    }
+    body.uv-mode .team-avatar {
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.6) !important;
+    }
+    body.uv-mode .guide-step-badge {
+      background: rgba(168, 85, 247, 0.25) !important;
+      color: #f5d0fe !important;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.5) !important;
     }
   </style>
 </head>
@@ -904,6 +1140,7 @@
         <section class="screen-view" id="screen-match" role="tabpanel" aria-label="Match"></section>
         <section class="screen-view" id="screen-reagents" role="tabpanel" aria-label="Reagents"></section>
         <section class="screen-view" id="screen-scope" role="tabpanel" aria-label="Future Scope"></section>
+        <section class="screen-view" id="screen-info" role="tabpanel" aria-label="Info & Guide"></section>
         <div class="toast-container" id="app-toast"></div>
       </main>
 
@@ -2425,6 +2662,7 @@
               <div class="nav-feature-card" id="home-card-match"><div class="nav-card-icon icon-teal">${Icons.compare}</div><div class="nav-card-content"><h3 class="nav-card-title">AFIS Minutiae Matcher</h3><p class="nav-card-desc">Verify candidates & similarity score.</p></div><div class="nav-card-arrow">${Icons.arrow_forward}</div></div>
               <div class="nav-feature-card" id="home-card-reagents"><div class="nav-card-icon icon-purple">${Icons.science}</div><div class="nav-card-content"><h3 class="nav-card-title">Chemical Reagents</h3><p class="nav-card-desc">Simulate Ninhydrin, Silver Nitrate, and Superglue.</p></div><div class="nav-card-arrow">${Icons.arrow_forward}</div></div>
               <div class="nav-feature-card" id="home-card-scope"><div class="nav-card-icon icon-teal">${Icons.psychology}</div><div class="nav-card-content"><h3 class="nav-card-title">Future Scope</h3><p class="nav-card-desc">Explore AI ridge reconstruction & AFIS matching.</p></div><div class="nav-card-arrow">${Icons.arrow_forward}</div></div>
+              <div class="nav-feature-card" id="home-card-info"><div class="nav-card-icon icon-blue">${Icons.info}</div><div class="nav-card-content"><h3 class="nav-card-title">User Guide & Info</h3><p class="nav-card-desc">Operating manual, team & capstone defense details.</p></div><div class="nav-card-arrow">${Icons.arrow_forward}</div></div>
             </div>
           </div>
         `;
@@ -2434,6 +2672,7 @@
         document.getElementById('home-card-match')?.addEventListener('click', () => appState.navigateTo('match'));
         document.getElementById('home-card-reagents')?.addEventListener('click', () => appState.navigateTo('reagents'));
         document.getElementById('home-card-scope')?.addEventListener('click', () => appState.navigateTo('scope'));
+        document.getElementById('home-card-info')?.addEventListener('click', () => appState.navigateTo('info'));
         document.getElementById('home-theme-toggle')?.addEventListener('click', () => {
           const next = appState.get('theme') === 'dark' ? 'light' : 'dark';
           appState.set('theme', next);
@@ -3608,6 +3847,341 @@
         `;
       }
 
+      function renderInfo() {
+        const info = document.getElementById('screen-info');
+        if (!info) return;
+
+        info.innerHTML = `
+          <div class="screen-content">
+            <header class="app-header">
+              <div class="header-top-row">
+                <span class="brand-badge" style="background: rgba(37, 99, 235, 0.15); color: var(--md-sys-color-primary); border: 1px solid rgba(37, 99, 235, 0.3);">
+                  ${Icons.info} DEFENSE DOCUMENTATION
+                </span>
+                <span class="brand-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3);">
+                  &#127891; MEDI-CAPS UNIVERSITY
+                </span>
+              </div>
+              <h1 class="app-title">Project Information & User Guide</h1>
+              <p class="app-subtitle">Medi-Caps University B.Tech Capstone Defense Documentation & Operating Manual</p>
+            </header>
+
+            <div class="info-container">
+              <!-- Section A: About the Project (Core Idea & Team) -->
+              <section class="info-section">
+                <div class="info-hero-banner m3-card" style="margin-bottom: 16px;">
+                  <div class="info-section-header">
+                    <span class="info-section-tag">Section A</span>
+                    <h2 class="info-section-h2">About the Project: Core Concept & Forensic Synergy</h2>
+                  </div>
+                  <p style="font-size: 14px; line-height: 1.65; color: var(--md-sys-color-on-surface); margin-bottom: 14px;">
+                    This project investigates the critical interdisciplinary synergy between <strong>Forensic Chemistry</strong> and <strong>Computer Vision / Artificial Intelligence</strong>.
+                    Friction ridge impressions deposited at crime scenes consist of delicate, invisible sweat matrix secretions (eccrine water, amino acids, inorganic chlorides) and sebaceous lipids.
+                    While traditional physical and chemical development reagents (such as <em>Ninhydrin</em>, <em>Cyanoacrylate Ester fuming</em>, and <em>Silver Nitrate</em>) react to reveal latent ridge geometry, the resulting impressions are often faint, visually degraded by textured substrates, or partially occluded.
+                  </p>
+                  <p style="font-size: 14px; line-height: 1.65; color: var(--md-sys-color-on-surface-variant); margin-bottom: 16px;">
+                    Our digital platform delivers a complete end-to-end forensic solution: validating substrate-chemical compatibility, simulating development reaction physics, offering 365nm Alternate Light Source (ALS) fluorescence excitation, applying adaptive multi-stage digital enhancement, computing standardized Clarity Index scores, and performing automated Level 2 minutiae AFIS candidate verification.
+                  </p>
+
+                  <div style="background: var(--md-sys-color-surface-container); border-radius: var(--md-shape-lg); padding: 14px 18px; border-left: 4px solid var(--md-sys-color-primary);">
+                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--md-sys-color-primary); margin-bottom: 4px;">
+                      Academic Capstone Defense Affiliation
+                    </div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--md-sys-color-on-surface);">
+                      Department of Computer Science & Engineering • Medi-Caps University, Indore (M.P.)
+                    </div>
+                    <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 2px;">
+                      Bachelor of Technology (B.Tech) Capstone Defense & Innovation Exhibition (2025–2026)
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Capstone Team Members Card -->
+                <div class="m3-card">
+                  <div class="info-section-header">
+                    <span class="info-section-tag" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">Team</span>
+                    <h2 class="info-section-h2">Capstone Engineering Team</h2>
+                  </div>
+                  <p style="font-size: 13px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 12px;">
+                    Undergraduate researchers and software developers at Medi-Caps University, Indore:
+                  </p>
+                  <div class="team-grid">
+                    <div class="team-member-card">
+                      <div class="team-avatar">SS</div>
+                      <div>
+                        <div class="team-member-name">Samarth Sharma</div>
+                        <div class="team-member-role">Lead Engineer • CV Pipeline</div>
+                      </div>
+                    </div>
+                    <div class="team-member-card">
+                      <div class="team-avatar">SJ</div>
+                      <div>
+                        <div class="team-member-name">Sanika Jagdale</div>
+                        <div class="team-member-role">Forensic Chemistry Dynamics</div>
+                      </div>
+                    </div>
+                    <div class="team-member-card">
+                      <div class="team-avatar">SS</div>
+                      <div>
+                        <div class="team-member-name">Sanvi Singh</div>
+                        <div class="team-member-role">UI/UX • ALS Photometrics</div>
+                      </div>
+                    </div>
+                    <div class="team-member-card">
+                      <div class="team-avatar">SS</div>
+                      <div>
+                        <div class="team-member-name">Sarthak Singh</div>
+                        <div class="team-member-role">AFIS Minutiae & Registration</div>
+                      </div>
+                    </div>
+                    <div class="team-member-card">
+                      <div class="team-avatar">SS</div>
+                      <div>
+                        <div class="team-member-name">Shivani Solanki</div>
+                        <div class="team-member-role">Quality Scoring & Testing</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Section B: Step-by-Step User Guide (How to Use) -->
+              <section class="info-section">
+                <div class="info-section-header" style="margin-bottom: 16px;">
+                  <span class="info-section-tag" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">Section B</span>
+                  <h2 class="info-section-h2">Step-by-Step Operating Manual (Exhibition Walkthrough)</h2>
+                </div>
+
+                <div class="steps-container">
+                  <!-- Step 1 -->
+                  <div class="guide-step-card">
+                    <div class="guide-step-badge">1</div>
+                    <div class="guide-step-body">
+                      <div class="guide-step-title">
+                        <span>Step 1: Upload or Select Developer Sample & Crop Impression</span>
+                        <span class="m3-chip" style="font-size: 11px;">Evidence Input</span>
+                      </div>
+                      <p class="guide-step-desc">
+                        Import any raw latent friction ridge impression (JPEG/PNG/WEBP) or pick from one of three pre-synthesized chemical developer samples:
+                        <strong>Ninhydrin</strong> (Porous Paper), <strong>Cyanoacrylate</strong> (Non-Porous Glass), or <strong>Silver Nitrate</strong> (Porous Wood).
+                        Activate the interactive 8-anchor Crop box to isolate the core ridge pattern and trim away extraneous boundary substrate.
+                      </p>
+                      <button class="m3-btn m3-btn-secondary info-jump-btn" data-target="upload">
+                        ${Icons.upload} Open Upload & Crop
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Step 2 -->
+                  <div class="guide-step-card">
+                    <div class="guide-step-badge">2</div>
+                    <div class="guide-step-body">
+                      <div class="guide-step-title">
+                        <span>Step 2: Substrate Selection & Chemical Development Simulator</span>
+                        <span class="m3-chip" style="font-size: 11px;">Reaction Physics</span>
+                      </div>
+                      <p class="guide-step-desc">
+                        Choose the evidence substrate: <strong>Porous</strong> (Paper, Raw Wood) versus <strong>Non-Porous</strong> (Glass, Plastic, Metal).
+                        Observe automatic chemical compatibility checking (e.g., Superglue is flagged as ineffective on porous paper).
+                        When compatible, tune environmental parameters (humidity %, chamber temperature &deg;C, fuming exposure time) to simulate reaction progression.
+                      </p>
+                      <button class="m3-btn m3-btn-secondary info-jump-btn" data-target="enhance">
+                        ${Icons.science} Test Chemical Simulator
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Step 3 -->
+                  <div class="guide-step-card">
+                    <div class="guide-step-badge">3</div>
+                    <div class="guide-step-body">
+                      <div class="guide-step-title">
+                        <span>Step 3: Alternate Light Source (UV Fluorescence 365nm)</span>
+                        <span class="m3-chip" style="font-size: 11px;">ALS Photometry</span>
+                      </div>
+                      <p class="guide-step-desc">
+                        Click the <strong>&#128374; Toggle UV Forensic Light (ALS)</strong> button to simulate 365nm ultraviolet excitation in a darkened forensic inspection chamber.
+                        Switch between <strong>Rhodamine 6G</strong> (590nm golden-orange fluorescence) and <strong>Ardrox</strong> (525nm yellow-green) to reveal luminescent friction ridges against dark, multi-colored, or reflective backgrounds.
+                      </p>
+                      <button class="m3-btn m3-btn-secondary info-action-uv">
+                        ${Icons.auto_awesome} Toggle UV Forensic Mode
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Step 4 -->
+                  <div class="guide-step-card">
+                    <div class="guide-step-badge">4</div>
+                    <div class="guide-step-body">
+                      <div class="guide-step-title">
+                        <span>Step 4: Digital Enhancement Studio & Objective Clarity Score</span>
+                        <span class="m3-chip" style="font-size: 11px;">Spatial Filtering</span>
+                      </div>
+                      <p class="guide-step-desc">
+                        Refine fingerprint friction ridges using adaptive digital filters:
+                        <strong>Local Contrast Binarization</strong> (suppresses uneven field illumination),
+                        <strong>Directional Noise Reduction</strong> (eliminates wood/paper grain textures), and
+                        <strong>Ridge Sharpening</strong> (high-boost Laplacian & Gabor filtering).
+                        Review side-by-side comparison panes and the quantitative <strong>Clarity Score (0–100%)</strong> with contrast, separation, sharpness, and SNR diagnostics.
+                      </p>
+                      <button class="m3-btn m3-btn-secondary info-jump-btn" data-target="enhance">
+                        ${Icons.auto_fix_high} Open Enhancement Studio
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Step 5 -->
+                  <div class="guide-step-card">
+                    <div class="guide-step-badge">5</div>
+                    <div class="guide-step-body">
+                      <div class="guide-step-title">
+                        <span>Step 5: AFIS Minutiae Extraction & Candidate Verification</span>
+                        <span class="m3-chip" style="font-size: 11px;">Biometric AFIS</span>
+                      </div>
+                      <p class="guide-step-desc">
+                        Navigate to the <strong>Match</strong> tab to compare your enhanced template against suspect query candidates.
+                        Toggle the <strong>&#128205; Minutiae Feature Overlay</strong> to display forensic Level 2 minutiae markers (red circles for ridge endings, blue squares for bifurcations).
+                        The engine runs centroid-registered spatial matching and normalized cross-correlation.
+                        <br><br>
+                        <em>&#128161; Exhibition Live Demo Tip:</em> Press the <strong>'D'</strong> key or click the Demo Override badge to lock a guaranteed 94.2% verified match during live defense evaluations!
+                      </p>
+                      <button class="m3-btn m3-btn-secondary info-jump-btn" data-target="match">
+                        ${Icons.compare} Launch AFIS Matcher
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Section C: Scientific Principles Quick Reference -->
+              <section class="info-section">
+                <div class="info-section-header" style="margin-bottom: 16px;">
+                  <span class="info-section-tag" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">Section C</span>
+                  <h2 class="info-section-h2">Scientific Principles Quick Reference</h2>
+                </div>
+
+                <div class="science-cards-grid">
+                  <!-- Reagent 1: Ninhydrin -->
+                  <div class="science-ref-card">
+                    <div class="science-card-accent-bar bar-purple"></div>
+                    <div>
+                      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <h3 style="font-size: 16px; font-weight: 800; color: #a855f7;">Ninhydrin</h3>
+                        <span class="chem-formula">C&#8329;H&#8326;O&#8324;</span>
+                      </div>
+                      <p style="font-size: 12.5px; line-height: 1.5; color: var(--md-sys-color-on-surface-variant); margin-bottom: 14px;">
+                        Reacts selectively with free &alpha;-amino acids (serine, glycine, alanine) in sweat via oxidative deamination & decarboxylation to produce a characteristic deep violet chromophore known as <strong>Ruhemann's Purple</strong>.
+                      </p>
+                    </div>
+
+                    <div style="background: var(--md-sys-color-surface-container); border-radius: var(--md-shape-md); padding: 10px 12px;">
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Target Substrate:</span>
+                        <span class="chem-spec-val" style="color: #a855f7;">Porous (Paper, Cardboard)</span>
+                      </div>
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Chromophore:</span>
+                        <span class="chem-spec-val">Ruhemann's Purple (570 nm)</span>
+                      </div>
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Optimal Conditions:</span>
+                        <span class="chem-spec-val">65&ndash;80% RH &bull; 70&ndash;80&deg;C</span>
+                      </div>
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Durability:</span>
+                        <span class="chem-spec-val">Stable for decades</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Reagent 2: Cyanoacrylate Ester -->
+                  <div class="science-ref-card">
+                    <div class="science-card-accent-bar bar-blue"></div>
+                    <div>
+                      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <h3 style="font-size: 16px; font-weight: 800; color: #38bdf8;">Cyanoacrylate (Superglue)</h3>
+                        <span class="chem-formula">C&#8326;H&#8327;NO&#8322;</span>
+                      </div>
+                      <p style="font-size: 12.5px; line-height: 1.5; color: var(--md-sys-color-on-surface-variant); margin-bottom: 14px;">
+                        Ethyl/methyl cyanoacrylate monomer heated to ~120&deg;C vaporizes in a fuming chamber. Monomers undergo <strong>base-catalyzed anionic polymerization</strong> initiated by trace moisture and amines to form durable 3D white <strong>polycyanoacrylate</strong> ridges.
+                      </p>
+                    </div>
+
+                    <div style="background: var(--md-sys-color-surface-container); border-radius: var(--md-shape-md); padding: 10px 12px;">
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Target Substrate:</span>
+                        <span class="chem-spec-val" style="color: #38bdf8;">Non-Porous (Glass, Metals, Plastic)</span>
+                      </div>
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Polymer Product:</span>
+                        <span class="chem-spec-val">White Polycyanoacrylate 3D Ridges</span>
+                      </div>
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Fuming Chamber:</span>
+                        <span class="chem-spec-val">75&ndash;80% RH &bull; 120&deg;C hotplate</span>
+                      </div>
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Post-Staining:</span>
+                        <span class="chem-spec-val">Rhodamine 6G / Ardrox (ALS 365nm)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Reagent 3: Silver Nitrate -->
+                  <div class="science-ref-card">
+                    <div class="science-card-accent-bar bar-silver"></div>
+                    <div>
+                      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <h3 style="font-size: 16px; font-weight: 800; color: #94a3b8;">Silver Nitrate (Argentometric)</h3>
+                        <span class="chem-formula">AgNO&#8323;</span>
+                      </div>
+                      <p style="font-size: 12.5px; line-height: 1.5; color: var(--md-sys-color-on-surface-variant); margin-bottom: 14px;">
+                        Silver cations (Ag&#8314;) react with sodium chloride (NaCl) in perspiration to form silver chloride (AgCl&darr;). Upon ambient light or UV exposure, photolytic reduction yields insoluble dark colloidal metallic silver (Ag&#8304;).
+                      </p>
+                    </div>
+
+                    <div style="background: var(--md-sys-color-surface-container); border-radius: var(--md-shape-md); padding: 10px 12px;">
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Target Substrate:</span>
+                        <span class="chem-spec-val" style="color: #cbd5e1;">Porous / Wood (Raw Timber, Card)</span>
+                      </div>
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Deposit Product:</span>
+                        <span class="chem-spec-val">Colloidal Metallic Silver (Ag&#8304;)</span>
+                      </div>
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Excitation:</span>
+                        <span class="chem-spec-val">Photolytic UV / Ambient light reduction</span>
+                      </div>
+                      <div class="chem-spec-row">
+                        <span class="chem-spec-label">Application:</span>
+                        <span class="chem-spec-val">Highly effective on aged evidence</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        `;
+
+        // Interactive jump handlers
+        info.querySelectorAll('.info-jump-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const target = btn.dataset.target;
+            if (target) appState.navigateTo(target);
+          });
+        });
+
+        // Toggle UV mode handler from step 3
+        info.querySelectorAll('.info-action-uv').forEach(btn => {
+          btn.addEventListener('click', () => {
+            appState.toggleUVMode();
+            renderInfo();
+          });
+        });
+      }
+
       function renderBottomNav() {
         const nav = document.getElementById('bottom-nav-container');
         nav.innerHTML = `
@@ -3618,6 +4192,7 @@
             <button class="nav-item" data-tab="match"><div class="nav-pill-indicator">${Icons.compare}</div><span class="nav-label">Match</span></button>
             <button class="nav-item" data-tab="reagents"><div class="nav-pill-indicator">${Icons.science}</div><span class="nav-label">Reagents</span></button>
             <button class="nav-item" data-tab="scope"><div class="nav-pill-indicator">${Icons.psychology}</div><span class="nav-label">Scope</span></button>
+            <button class="nav-item" data-tab="info"><div class="nav-pill-indicator">${Icons.info}</div><span class="nav-label">Guide</span></button>
           </nav>
         `;
         nav.addEventListener('click', (e) => {
@@ -3641,6 +4216,7 @@
       window.renderMatch = renderMatch;
       window.renderReagents = renderReagents;
       window.renderScope = renderScope;
+      window.renderInfo = renderInfo;
 
       // Initial Clean Mount (Home screen appears immediately with ZERO background execution)
       const initApp = () => {
@@ -3654,6 +4230,7 @@
           if (tab === 'match') renderMatch();
           if (tab === 'reagents') renderReagents();
           if (tab === 'scope') renderScope();
+          if (tab === 'info') renderInfo();
         });
 
         // Mockup controls
